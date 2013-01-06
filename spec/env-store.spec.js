@@ -13,7 +13,7 @@ describe('EnvStore', function() {
       }).toThrow();
     });
 
-    it('should commit an env on commit event', function() {
+    it('should commit temp on commit event', function() {
       e.write({ event:"temp", env:{ a:1 } });
       e.write({ event:"commit" });
       expect(e.latest()).toEqual({ a:1 });
@@ -64,6 +64,30 @@ describe('EnvStore', function() {
       e.write({ event:"commit" });
       e.write({ event:"temp", env:{ b:2 } });
       expect(e.latest()).toEqual({ b:2 });
+    });
+
+    it('should return committed if no temp', function() {
+      e.write({ event:"temp", env:{ a:1 } });
+      e.write({ event:"commit" });
+      expect(e.latest()).toEqual({ a:1 });
+    });
+  });
+
+  describe('latestCommitted', function() {
+    it('should return latest committed', function() {
+      e.write({ event:"temp", env:{ a:1 } });
+      e.write({ event:"commit" });
+      expect(e.latestCommitted()).toEqual({ a:1 });
+      e.write({ event:"temp", env:{ b:2 } });
+      e.write({ event:"commit" });
+      expect(e.latestCommitted()).toEqual({ b:2 });
+    });
+
+    it('should return latest committed even if newer temp', function() {
+      e.write({ event:"temp", env:{ a:1 } });
+      e.write({ event:"commit" });
+      e.write({ event:"temp", env:{ b:2 } });
+      expect(e.latestCommitted()).toEqual({ a:1 });
     });
   });
 });

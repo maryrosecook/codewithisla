@@ -27,6 +27,10 @@
       }
     },
 
+    this.latestCommitted = function() {
+      return extend(true, {}, committedEnvs[committedEnvs.length - 1]);
+    };
+
     this.latest = function() {
       var env;
       if (tempEnv === undefined) {
@@ -36,7 +40,7 @@
       }
 
       return extend(true, {}, env);
-    }
+    };
   };
 
   // copied from jquery to avoid plugin dependency on jq.
