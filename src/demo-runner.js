@@ -51,7 +51,7 @@
   //   random vals when code re-run).
   var runDemoCode = function(line, envStore) {
     try {
-      var env = Isla.Interpreter.interpret(line, envStore.latest());
+      var env = Isla.Interpreter.interpret(line, envStore.latestCommitted());
       env.ctx = demo.write(env.ctx);
       envStore.write({ event:"temp", env:env });
     } catch(e) {
