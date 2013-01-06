@@ -41,6 +41,15 @@
 
     getText: function() {
       return textGrabber.getText();
+    },
+
+    getOffset: function() {
+      var innerConsole = $('.jquery-console-inner');
+      var padding = { t:0, l:17 };
+      return {
+        t: padding.t - innerConsole.scrollTop(),
+        l: padding.l - innerConsole.scrollLeft()
+      };
     }
   };
 
