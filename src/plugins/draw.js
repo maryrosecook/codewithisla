@@ -157,7 +157,7 @@
       var objSize = size(obj.size);
       canvasCtx.fillStyle = color(obj.color);
       canvasCtx.beginPath();
-      canvasCtx.arc(obj.x, obj.y, objSize, 0, Math.PI * 2, true);
+      canvasCtx.arc(obj.x, obj.y, objSize / 2, 0, Math.PI * 2, true);
       canvasCtx.closePath();
       canvasCtx.fill();
     },
