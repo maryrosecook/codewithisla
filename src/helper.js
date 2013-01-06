@@ -5,25 +5,24 @@
     _ = require("Underscore");
     codeAnalyzer = require('../src/code-analyzer').codeAnalyzer;
     nodeDescriber = require('../src/node-describer').nodeDescriber;
-    mapper = require('../src/mapper').mapper;
+    Mapper = require('../src/mapper').Mapper;
   } else { // browser
     Isla = window.Isla;
     _ = window._;
     codeAnalyzer = window.codeAnalyzer;
     nodeDescriber = window.nodeDescriber;
-    mapper = window.mapper;
+    Mapper = window.Mapper;
   }
 
   var Helper = function(terminal, envStore, steps) {
     //this.steps
+    var mapper = new Mapper(terminal);
     var characterDimensions = { x:11, y:18 };
-    var padding = { t:0, l:17 };
     var mouser = new Mouser("div.jquery-console-inner");
     mouser.events.bind(this, "data", function(e) {
       if (e.event === "mousemove") {
         var text = terminal.getText();
-        var index = mapper.getIndex(text, mapper.offset(e.point, padding),
-                                    characterDimensions);
+        var index = mapper.getIndex(text, e.point, characterDimensions);
         indicate(text, index);
         displayHelp(text, index, envStore);
       }

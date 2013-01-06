@@ -6,16 +6,14 @@
     codeAnalyzer = window.codeAnalyzer;
   }
 
-  var mapper = {
-    offset: function(point, padding) {
-      return {
-        x: point.x - padding.l,
-        y: point.y - padding.t
-      };
-    },
+  var Mapper = function(terminal) {
+    this.terminal = terminal;
+  };
 
+  Mapper.prototype = {
     // returns cell that text point is at
-    getIndex: function(text, point, characterDimensions) {
+    getIndex: function(text, relativePoint, characterDimensions) {
+      var point = offset(relativePoint, this.terminal.getOffset());
       for (var i = 0, x = 0, y = characterDimensions.y; i < text.length; i++) {
         if (codeAnalyzer.isAtNewlineStart(text, i)) {
           y += characterDimensions.y;
@@ -35,5 +33,12 @@
     }
   };
 
-  exports.mapper = mapper;
+  var offset = function(point, offset) {
+    return {
+      x: point.x - offset.l,
+      y: point.y - offset.t
+    };
+  };
+
+  exports.Mapper = Mapper;
 })(typeof exports === 'undefined' ? this : exports)
