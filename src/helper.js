@@ -16,7 +16,7 @@
 
   var Helper = function(terminal, envStore, steps) {
     //this.steps
-    var characterDimensions = { x:11, y:17 };
+    var characterDimensions = { x:11, y:18 };
     var padding = { t:0, l:17 };
     var mouser = new Mouser("div.jquery-console-inner");
     mouser.events.bind(this, "data", function(e) {
