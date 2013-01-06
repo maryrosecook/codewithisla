@@ -1,0 +1,18 @@
+{
+  "name": "programwithisla",
+  "description": "Write Isla code to interact with demos.",
+  "author": "Mary Rose Cook <maryrosecook@maryrosecook.com>",
+  "version": "0.1.0",
+  "scripts": {
+    "test":"node_modules/jasmine-node/bin/jasmine-node spec/"
+  },
+  "dependencies": {
+    "underscore": "1.3.3",
+    "multimethod": "0.1.0",
+    "isla": "0.1.3"
+  },
+  "devDependencies": {
+    "jasmine-node": "1.0.26"
+  }
+}
+

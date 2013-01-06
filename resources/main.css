@@ -1,0 +1,123 @@
+body {
+  font-family:courier;
+  letter-spacing:1px;
+  font-size:14px;
+  width: 810px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align: justify;
+}
+
+.title a { text-decoration:none; border-bottom:1px solid black; color:black;}
+a:hover { color:black; border-bottom:none; }
+
+a { text-decoration:none; color:black; }
+
+h1 { font-size: 30px; font-weight:normal;
+     margin-left:auto; margin-right:auto; text-align:center;
+     margin-top:5px; margin-bottom:8px;
+     padding-bottom:5px;
+   }
+h2 { font-size: 30px; font-weight:normal; margin: 16px 0 2px -2px; }
+h3 { font-size: 21px; font-weight:normal; margin-top:16px; margin-bottom:16px;}
+h4 { font-size: 15px; font-weight:normal; margin-top:16px; margin-bottom:16px;}
+
+p { line-height:15px; margin:16px 0 16px 0; }
+
+hr { color: #aaa; background-color:#aaa; height:1px; border:0; }
+
+.footer { width:100px; margin-left: auto; margin-right: auto; }
+
+ol { padding-left: 16px; }
+li { padding: 5px 0 5px 0; }
+
+.title a { border-bottom:none; }
+
+.demo { width:400px; }
+.demo .title {
+  margin-left:auto; margin-right:auto; text-align:center;
+  width:400px;
+}
+
+.grid {
+  width: 810px;
+  margin-left:auto; margin-right:auto; text-align:center;
+}
+
+.grid-element{
+  width:200px;
+  padding:30px;
+  float:left;
+}
+
+.grid_1 { float:left; }
+.grid_middle {  }
+.grid_2 { float:right; }
+
+span.jquery-console-prompt span.keyword { color: #FFF286; }
+span.jquery-console-prompt span.literal { color: white; }
+span.jquery-console-prompt span.type { color: #89FB95; }
+span.jquery-console-prompt span.variable { color: #F3AFFF; }
+span.jquery-console-prompt span.attribute { color: #87C4FF; }
+span.jquery-console-prompt span.function { color: #B0A5FF; }
+
+#help {
+  border:1px solid black;
+  height:64px;
+  width:388px;
+  padding:5px;
+}
+
+.console-canvas-container {
+  height:400px;
+  margin-bottom:10px;
+}
+
+#canvas {
+  border:1px solid black;
+  float:right;
+}
+
+#console {
+  color:white;
+  width:398px;
+  background-color:black;
+  height: 398px;
+  border: 1px solid #000;
+  float:left;
+  font-size: 16px;
+  font-family:'courier';
+}
+
+#console div.jquery-console-inner {
+ width:380px;
+ height:380px;
+ margin: 10px 10px;
+ overflow:auto;
+ text-align:left;
+ cursor:default;
+}
+#console span.jquery-console-prompt-label {
+padding:0 6px 0 0;
+}
+
+#console div.jquery-console-message-value {
+  padding-left:17px;
+}
+
+#console div.jquery-console-message-error {
+ color:#f33;
+ padding-left:17px;
+}
+#console div.jquery-console-message-success {
+ color:#187718;
+ padding:0.1em;
+}
+#console span.jquery-console-prompt-label {
+ font-weight:bold;
+}
+
+#console span.jquery-console-cursor {
+  background: rgb(0, 0, 0); /* Fall-back for browsers that don't support rgba */
+  background: rgba(0, 0, 0, 0);
+}
