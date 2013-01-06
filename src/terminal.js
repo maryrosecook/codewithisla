@@ -52,7 +52,6 @@
         terminal.events.emit('submit', line);
       },
       autofocus:true,
-      animateScroll:true,
       promptHistory:true
     });
 
