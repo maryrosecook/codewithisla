@@ -7,7 +7,7 @@
   }
 
   var demo, terminal, textGrabber;
-  var DemoRunner = function(Demo, initialCode) {
+  var DemoRunner = function(Demo) {
     $(document).ready(function() {
       demo = new Demo($('#canvas')[0].getContext('2d'));
       var envStore = new EnvStore();
@@ -42,13 +42,6 @@
       });
 
       var helper = new Helper(terminal, envStore);
-
-      for (var i = 0; i < initialCode.length; i++) {
-        var env = Isla.Interpreter.interpret(initialCode[i],
-                                             envStore.latest());
-        env.ctx = draw.write(env.ctx);
-        env.write({ event:"commit", env:env });
-      }
     });
   };
 
