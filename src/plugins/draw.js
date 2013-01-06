@@ -101,9 +101,9 @@
   };
 
   var SIZES = {
-    small: 30,
-    medium: 60,
-    big: 120
+    small: 50,
+    medium: 100,
+    big: 150
   };
 
   var size = function(sizeStr) {
