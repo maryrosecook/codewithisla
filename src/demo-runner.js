@@ -16,17 +16,25 @@
 
       terminal = new Terminal();
       terminal.events.bind(this, 'keypress', function(line) {
-        runDemoCode(line, envStore);
+        terminal.setPromptText({
+          html: getHighlightedSyntax(line),
+          cursor: true
+        });
       });
 
       terminal.events.bind(this, 'history', function(line) {
-        runDemoCode(line, envStore);
+        terminal.setPromptText({
+          html: getHighlightedSyntax(line),
+          cursor: true
+        });
       });
 
       terminal.events.bind(this, 'submit', function(line) {
         var result;
         try {
-          var env = Isla.Interpreter.interpret(line, envStore.latest());
+          var env = Isla.Interpreter.interpret(line, envStore.latestCommitted());
+          env.ctx = demo.write(env.ctx);
+          envStore.write({ event:"temp", env:env });
           envStore.write({ event:"commit" });
           result = { msg: env.ret || "", error: false };
         } catch(e) {
