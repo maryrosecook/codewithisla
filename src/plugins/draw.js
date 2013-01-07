@@ -120,8 +120,8 @@
   var basicDefaults = function(canvasCtx, obj) {
     var retObj = EnvStore.extend(true, {}, obj);
     retObj.color = retObj.color || randomColor();
-    retObj.x = retObj.x || random(canvasCtx.canvas.width - 100);
-    retObj.y = retObj.y || random(canvasCtx.canvas.height - 100);
+    retObj.x = retObj.x || random(canvasCtx.canvas.width);
+    retObj.y = retObj.y || random(canvasCtx.canvas.height);
     return retObj;
   };
 
