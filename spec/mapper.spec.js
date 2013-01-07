@@ -74,7 +74,7 @@ describe('Mapper', function() {
 
         it('should hit when y on last px of last line', function() {
           expect(m.getIndex("a is b\nc is d", { x:1,y:19 }, c))
-          .toEqual(8);
+          .toEqual(7);
         });
 
         it('should hit first line when on last px', function() {
@@ -84,7 +84,7 @@ describe('Mapper', function() {
 
         it('should hit second line when on first px', function() {
           expect(m.getIndex("a is b\nc is d", { x:1,y:10 }, c))
-          .toEqual(8);
+          .toEqual(7);
         });
       });
     });

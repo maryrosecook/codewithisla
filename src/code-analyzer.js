@@ -33,7 +33,7 @@
       if (index !== undefined) {
         lineNumber = 0;
         for (var i = 0; i < text.length; i++) {
-          if (codeAnalyzer.isAtNewlineStart(text, i)) {
+          if (codeAnalyzer.isAtNewline(text, i)) {
             lineNumber++;
           } else if (i === index) {
             break;
@@ -51,10 +51,6 @@
     },
 
     getSyntaxTokenIndex: function(text, index) {
-      if (codeAnalyzer.isInNewline(text, index)) {
-        return undefined; // abort if on line but hovering over nl
-      }
-
       var line = codeAnalyzer.getLine(text, index);
       var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
       if (syntaxTokens === undefined) {
@@ -62,19 +58,21 @@
       }
 
       var lineIndex = getLineIndex(text, index);
-      return _.reduce(syntaxTokens, function(acc, x, i) {
-        return lineIndex >= x.index - 1 ? i : acc;
-      }, 0);
+      var tokenIndex = undefined;
+      for (var i = 0; i < syntaxTokens.length; i++) {
+        var tok = syntaxTokens[i];
+        if(lineIndex >= tok.index && lineIndex < tok.index + tok.code.length) {
+          tokenIndex = i;
+          break;
+        }
+      }
+
+      return tokenIndex;
     },
 
-    isAtNewlineStart: function(text, index) {
-      return text.substring(index, index + 1) === "\n"
-    },
-
-    isInNewline: function(text, index) {
-      return text.substring(index, index + 1) === "\n" ||
-        text.substring(index - 1, index) === "\n";
-    },
+    isAtNewline: function(text, index) {
+      return text.substring(index, index + 1) === "\n";
+    }
   };
 
   var expressionSyntaxTokens = function(tokens, pieces) {
@@ -98,7 +96,7 @@
     var lineNumber = codeAnalyzer.getLineNumber(text, index);
     return index - _.reduce(text.split("\n"), function(acc, x, i) {
       return i < lineNumber ? acc + x + "\n" : acc;
-    }, "\n").length - 1; // start w nl because all subsequent lines have them
+    }, "").length;
   };
 
   var getCode = function(token) {
