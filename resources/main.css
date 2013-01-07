@@ -50,9 +50,6 @@ li { padding: 5px 0 5px 0; }
   float:left;
 }
 
-.grid_1 { float:left; }
-.grid_middle {  }
-.grid_2 { float:right; }
 #help { text-align: left; }
 
 span.jquery-console-prompt span.keyword { color: #FFF286; }
