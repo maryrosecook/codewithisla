@@ -21,7 +21,7 @@
       if (val !== undefined) {
         body = val.toString();
         if(Isla.Utils.type(val) === "String") {
-          body = "A thing: '" + val + "'";
+          body = "The words: '" + val + "'";
         }
       }
 

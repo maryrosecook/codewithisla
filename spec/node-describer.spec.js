@@ -8,7 +8,7 @@ describe('nodeDescriber', function() {
       var code = "age is '1'";
       var node = codeAnalyzer.expressionTokens(code)[0];
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(node, env).body).toEqual("1");
+      expect(nodeDescriber.describe(node, env).body).toEqual("The words: '1'");
     });
 
     it('should set value in description for obj', function() {
