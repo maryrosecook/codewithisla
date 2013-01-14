@@ -50,8 +50,6 @@ li { padding: 5px 0 5px 0; }
   float:left;
 }
 
-#help { text-align: left; }
-
 span.jquery-console-prompt span.keyword { color: #FFF286; }
 span.jquery-console-prompt span.literal { color: white; }
 span.jquery-console-prompt span.type { color: #89FB95; }
@@ -64,6 +62,7 @@ span.jquery-console-prompt span.function { color: #B0A5FF; }
   height:64px;
   width:388px;
   padding:5px;
+  text-align: left;
 }
 
 .console-canvas-container {
