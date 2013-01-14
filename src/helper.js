@@ -5,12 +5,14 @@
     _ = require("Underscore");
     codeAnalyzer = require('../src/code-analyzer').codeAnalyzer;
     nodeDescriber = require('../src/node-describer').nodeDescriber;
+    expressionDescriber = require('../src/expression-describer').expressionDescriber;
     Mapper = require('../src/mapper').Mapper;
   } else { // browser
     Isla = window.Isla;
     _ = window._;
     codeAnalyzer = window.codeAnalyzer;
     nodeDescriber = window.nodeDescriber;
+    expressionDescriber = window.expressionDescriber;
     Mapper = window.Mapper;
   }
 
