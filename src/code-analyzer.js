@@ -77,6 +77,16 @@
 
     isAtNewline: function(text, index) {
       return text.substring(index, index + 1) === "\n";
+    },
+
+    getCode: function(token) {
+      if (token.c[0].tag !== undefined) { // explore down ast
+        return codeAnalyzer.getCode(token.c[0]);
+      } else {
+        return token.code || token.c[0];
+      }
+    },
+
     getLineIndex: function(text, index) {
       var lineNumber = codeAnalyzer.getLineNumber(text, index);
       return index - _.reduce(text.split("\n"), function(acc, x, i) {
@@ -90,7 +100,7 @@
       var token = tokens[i];
       if (token.syntax !== undefined) {
         var piece = {};
-        piece.code = getCode(token);
+        piece.code = codeAnalyzer.getCode(token);
         piece.syntax = token.syntax;
         piece.index = token.index;
         pieces.push(piece);
@@ -100,14 +110,6 @@
     }
 
     return pieces;
-  };
-
-  var getCode = function(token) {
-    if (token.c[0].tag !== undefined) { // explore down ast
-      return getCode(token.c[0]);
-    } else {
-      return token.code || token.c[0];
-    }
   };
 
   exports.codeAnalyzer = codeAnalyzer;
