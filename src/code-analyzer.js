@@ -62,7 +62,7 @@
         return undefined;
       }
 
-      var lineIndex = getLineIndex(text, index);
+      var lineIndex = codeAnalyzer.getLineIndex(text, index);
       var tokenIndex = undefined;
       for (var i = 0; i < syntaxTokens.length; i++) {
         var tok = syntaxTokens[i];
@@ -77,6 +77,11 @@
 
     isAtNewline: function(text, index) {
       return text.substring(index, index + 1) === "\n";
+    getLineIndex: function(text, index) {
+      var lineNumber = codeAnalyzer.getLineNumber(text, index);
+      return index - _.reduce(text.split("\n"), function(acc, x, i) {
+        return i < lineNumber ? acc + x + "\n" : acc;
+      }, "").length;
     }
   };
 
@@ -95,13 +100,6 @@
     }
 
     return pieces;
-  };
-
-  var getLineIndex = function(text, index) {
-    var lineNumber = codeAnalyzer.getLineNumber(text, index);
-    return index - _.reduce(text.split("\n"), function(acc, x, i) {
-      return i < lineNumber ? acc + x + "\n" : acc;
-    }, "").length;
   };
 
   var getCode = function(token) {
