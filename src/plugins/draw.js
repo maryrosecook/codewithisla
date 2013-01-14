@@ -222,11 +222,24 @@
     }
   };
 
+  var line = {
+    fn: function(canvasCtx, obj) {
+      throw "implement me";
+    },
+
+    defaults: function(canvasCtx, obj) {
+      return {};
+    }
+  };
+
+
+
   var shapes = {
     circle: circle,
     triangle: triangle,
     square: square,
     rectangle: rectangle,
+    line: line,
     oblong: rectangle
   };
 
