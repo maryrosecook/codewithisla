@@ -2,12 +2,8 @@
   var Isla, _, multimethod;
   if(typeof module !== 'undefined' && module.exports) { // node
     Isla = require('../node_modules/isla/src/isla.js').Isla;
-    _ = require("Underscore");
-    multimethod = require('multimethod');
   } else { // browser
     Isla = window.Isla;
-    _ = window._;
-    multimethod = window.multimethod;
   }
 
   var describe = multimethod()
