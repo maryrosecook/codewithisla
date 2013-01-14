@@ -9,14 +9,19 @@
   }
 
   var codeAnalyzer = {
-    expressionTokens: function(line) {
+    expression: function(code) {
       try {
-        var ast = Isla.Parser.parse(line);
+        var ast = Isla.Parser.parse(code);
         return Isla.Parser.extract(ast, "root", 0, "block", 0,
-                                        "expression", 0).c;
+                                        "expression", 0);
       } catch(e) {
         return undefined;
       }
+    },
+
+    expressionTokens: function(code) {
+      var expression = codeAnalyzer.expression(code);
+      return expression !== undefined ? expression.c : undefined;
     },
 
     expressionSyntaxTokens: function(line) {
