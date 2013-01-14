@@ -30,6 +30,23 @@
       }
 
       return undefined;
+    },
+
+    getLineNumber: function(text, relativePoint, characterDimensions) {
+      var point = offset(relativePoint, this.terminal.getLineOffset());
+      if (point.x < 0 || point.x >= this.terminal.getWidth()) {
+        return undefined;
+      }
+
+      var lines = text.split("\n");
+      for (var i = 0, y = characterDimensions.y; i < lines.length; i++) {
+        if (point.y >= y - characterDimensions.y && point.y < y) {
+          return i;
+        }
+        y += characterDimensions.y;
+      }
+
+      return undefined;
     }
   };
 
