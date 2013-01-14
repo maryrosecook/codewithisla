@@ -50,6 +50,18 @@
         t: padding.t - innerConsole.scrollTop(),
         l: padding.l - innerConsole.scrollLeft()
       };
+    },
+
+    getLineOffset: function() {
+      var innerConsole = $('.jquery-console-inner');
+      return {
+        t: innerConsole.scrollTop(),
+        l: innerConsole.scrollLeft()
+      };
+    },
+
+    getWidth: function() {
+      return $('.jquery-console-inner').width();
     }
   };
 
