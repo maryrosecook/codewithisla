@@ -15,10 +15,9 @@
     getIndex: function(text, relativePoint, characterDimensions) {
       var point = offset(relativePoint, this.terminal.getOffset());
       for (var i = 0, x = 0, y = characterDimensions.y; i < text.length; i++) {
-        if (codeAnalyzer.isAtNewlineStart(text, i)) {
+        if (codeAnalyzer.isAtNewline(text, i)) {
           y += characterDimensions.y;
           x = 0;
-          i++; // skip over nl char
         } else  { // not reached end of line
           x += characterDimensions.x
         }
