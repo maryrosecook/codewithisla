@@ -18,50 +18,99 @@
 
   var Helper = function(terminal, envStore, steps) {
     //this.steps
-    var mapper = new Mapper(terminal);
-    var characterDimensions = { x:11, y:18 };
+    this.mapper = new Mapper(terminal);
+    var charDimes = { x:11, y:18 };
     var mouser = new Mouser("div.jquery-console-inner");
+    var self = this;
     mouser.events.bind(this, "data", function(e) {
       if (e.event === "mousemove") {
-        var text = terminal.getText();
-        var index = mapper.getIndex(text, e.point, characterDimensions);
-        indicate(text, index);
-        displayHelp(text, index, envStore);
+        self.handleHelp(terminal.getText(), e.point, charDimes, envStore);
+      } else if (e.event === "mouseout") {
+        clearHelp();
       }
     });
   };
 
-  var indicate = function(text, index) {
-    // lowlight all tokens in whole console
+  Helper.prototype = {
+    // handle help mouse point
+    handleHelp: function(text, point, charDimes, envStore) {
+      clearHelp();
+      var index = this.mapper.getIndex(text, point, charDimes);
+      if (index !== undefined &&
+          codeAnalyzer.getSyntaxTokenIndex(text, index) !== undefined &&
+          getTokenHelp(text, index, envStore) !== undefined) {
+        // show help for token
+        indicateToken(text, index);
+        displayHelp(getTokenHelp(text, index, envStore));
+      } else if (this.mapper.getLineNumber(text, point, charDimes) !== undefined &&
+                 (index === undefined ||
+                  codeAnalyzer.expressionTokens(text) === undefined)) {
+        // show help for whole line
+        var lineNumber = this.mapper.getLineNumber(text, point, charDimes);
+        var line = text.split("\n")[lineNumber];
+        if (line.length > 0) {
+          indicateLine(this.mapper.getLineNumber(text, point, charDimes));
+          displayHelp(getLineHelp(line, envStore));
+        }
+      }
+    }
+  };
+
+  var clearHelp = function() {
+    $('#help').text("");
+    unindicateAllTokens();
+    unindicateAllLines();
+  };
+
+  // lowlight all tokens in whole console
+  var unindicateAllTokens = function() {
     var tokens = $('.jquery-console-prompt').children('span')
                  .not('.jquery-console-cursor');
     _.map(tokens, function(x) {
       $(x).css({ "background-color": "#000" })
     });
-
-    if (index !== undefined) { // highlight current token
-      var lineNumber = codeAnalyzer.getLineNumber(text, index);
-      var tokens = $($('.jquery-console-prompt')[lineNumber]).children()
-                   .not('.jquery-console-cursor');
-
-      var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
-      $(tokens[syntaxTokenIndex]).css({ "background-color": "#444" });
-    }
   };
 
-  var displayHelp = function(text, index, envStore) {
-    if (index !== undefined) { // highlight current token
-      var line = codeAnalyzer.getLine(text, index);
-      var tokens = codeAnalyzer.expressionTokens(line);
-      var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
-      if (syntaxTokenIndex !== undefined) { // not over nl char
-        var node = tokens[syntaxTokenIndex];
-        var description = nodeDescriber.describe(node, envStore.latest());
-        $('#help').text(description.body);
-      }
-    } else {
-      $('#help').text("");
-    }
+  var unindicateAllLines = function() {
+    _.map($('.jquery-console-prompt-box'), function(x) {
+      $(x).css({ "background-color": "#000" })
+    });
+  };
+
+  // draw attention to current token
+  var indicateToken = function(text, index) {
+    var lineNumber = codeAnalyzer.getLineNumber(text, index);
+    var syntaxTokens = $($('.jquery-console-prompt')[lineNumber]).children()
+                         .not('.jquery-console-cursor');
+    var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
+    $(syntaxTokens[syntaxTokenIndex]).css({ "background-color": "#444" });
+  };
+
+  var getTokenHelp = function(text, index, envStore) {
+    return nodeDescriber.describe(text, index, envStore.latest());
+  };
+
+  // draw attention to current line
+  var indicateLine = function(lineNumber) {
+    // line background
+    $($('.jquery-console-prompt-box')[lineNumber])
+      .css({ "background-color": "#444" });
+
+    // backgrounds of tokens in line
+    var tokens = $($('.jquery-console-prompt')[lineNumber]).children()
+                   .not('.jquery-console-cursor');
+    _.map(tokens, function(x) {
+      $(x).css({ "background-color": "#444" })
+    });
+  };
+
+  var getLineHelp = function(line, envStore) {
+    var node = codeAnalyzer.expression(line);
+    return expressionDescriber.describe(node, envStore.latest());
+  };
+
+  var displayHelp = function(help) {
+    $('#help').text(help.body);
   };
 
   exports.Helper = Helper;
