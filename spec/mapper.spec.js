@@ -93,7 +93,7 @@ describe('Mapper', function() {
       it('should apply offset to point', function() {
         var p = { x:-1, y:-1 };
         expect(m.getIndex("a is b", p, c)).toBeUndefined(); // no offset
-        m = mapper({ l: -1, t: -1 }); // new mapper w offset to put point on char
+        m = mapper({ l: -1, t: -1 }); // w offset that puts point on char
         expect(m.getIndex("a is b", p, c)).toEqual(0);
       });
     });
