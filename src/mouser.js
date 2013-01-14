@@ -10,6 +10,12 @@
       });
     });
 
+    $(id).mouseout(function(e) {
+      self.events.emit('data', {
+        event: 'mouseout'
+      });
+    });
+
     $(id).click(function(e) {
       self.events.emit('data', {
         event: 'click',
