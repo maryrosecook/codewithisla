@@ -103,6 +103,7 @@
         piece.code = codeAnalyzer.getCode(token);
         piece.syntax = token.syntax;
         piece.index = token.index;
+        piece.node = token;
         pieces.push(piece);
       } else {
         expressionSyntaxTokens(token.c, pieces);
