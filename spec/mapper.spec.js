@@ -4,6 +4,14 @@ var mapper = function(offset) {
   var terminal = {
     getOffset: function() {
       return offset;
+    },
+
+    getLineOffset: function() {
+      return offset;
+    },
+
+    getWidth: function() {
+      return 380;
     }
   };
   return new Mapper(terminal);
