@@ -18,12 +18,11 @@ var mapper = function(offset) {
 };
 
 describe('Mapper', function() {
-  describe('getIndex', function() {
-    var c, m;
-    beforeEach(function() {
-      c = { x: 5, y: 10 };
-      m = mapper({ l: 0, t: 0 });
-    });
+  var c, m;
+  beforeEach(function() {
+    c = { x: 5, y: 10 };
+    m = mapper({ l: 0, t: 0 });
+  });
 
   describe('getIndex', function() {
     describe('x coord', function() {
@@ -104,6 +103,48 @@ describe('Mapper', function() {
         expect(m.getIndex("a is b", p, c)).toBeUndefined(); // no offset
         m = mapper({ l: -1, t: -1 }); // w offset that puts point on char
         expect(m.getIndex("a is b", p, c)).toEqual(0);
+      });
+    });
+  });
+
+  describe('getLine', function() {
+    describe('first line', function() {
+      it('should get first line in top left', function() {
+        expect(m.getLineNumber("a is b", { x:0, y:0 }, c)).toEqual(0);
+      });
+
+      it('should get first line in top right', function() {
+        expect(m.getLineNumber("a is b", { x:379, y:0 }, c)).toEqual(0);
+      });
+
+      it('should get first line in bottom', function() {
+        expect(m.getLineNumber("a is b", { x:0, y:9 }, c)).toEqual(0);
+      });
+
+      it('should miss line when to left of top left', function() {
+        expect(m.getLineNumber("a is b", { x:-1, y:0 }, c)).toBeUndefined();
+      });
+
+      it('should miss line when to right of top right', function() {
+        expect(m.getLineNumber("a is b", { x:380, y:0 }, c)).toBeUndefined();
+      });
+
+      it('should miss line when above top', function() {
+        expect(m.getLineNumber("a is b", { x:0, y:-1 }, c)).toBeUndefined();
+      });
+    });
+
+    describe('second line', function() {
+      it('should get second line in top', function() {
+        expect(m.getLineNumber("a is b\na is b", { x:0, y:10 }, c)).toEqual(1);
+      });
+
+      it('should get second line in bottom', function() {
+        expect(m.getLineNumber("a is b\na is b", { x:379, y:19 }, c)).toEqual(1);
+      });
+
+      it('should miss second line when below', function() {
+        expect(m.getLineNumber("a is b\na is b", { x:0, y:20 }, c)).toBeUndefined();
       });
     });
   });
