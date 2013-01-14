@@ -25,6 +25,7 @@ describe('Mapper', function() {
       m = mapper({ l: 0, t: 0 });
     });
 
+  describe('getIndex', function() {
     describe('x coord', function() {
       describe('line pixel extremeties', function() {
         it('should miss first char on line when x = -1', function() {
