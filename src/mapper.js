@@ -12,18 +12,19 @@
 
   Mapper.prototype = {
     // returns cell that text point is at
-    getIndex: function(text, relativePoint, characterDimensions) {
+    getIndex: function(text, relativePoint) {
+      var charDimes = this.terminal.getCharDimes();
       var point = offset(relativePoint, this.terminal.getOffset());
-      for (var i = 0, x = 0, y = characterDimensions.y; i < text.length; i++) {
+      for (var i = 0, x = 0, y = charDimes.y; i < text.length; i++) {
         if (codeAnalyzer.isAtNewline(text, i)) {
-          y += characterDimensions.y;
+          y += charDimes.y;
           x = 0;
         } else  { // not reached end of line
-          x += characterDimensions.x
+          x += charDimes.x
         }
 
-        if (point.x >= x - characterDimensions.x && point.x < x &&
-            point.y >= y - characterDimensions.y && point.y < y) {
+        if (point.x >= x - charDimes.x && point.x < x &&
+            point.y >= y - charDimes.y && point.y < y) {
           return i;
         }
       }
@@ -31,18 +32,19 @@
       return undefined;
     },
 
-    getLineNumber: function(text, relativePoint, characterDimensions) {
+    getLineNumber: function(text, relativePoint) {
+      var charDimes = this.terminal.getCharDimes();
       var point = offset(relativePoint, this.terminal.getLineOffset());
       if (point.x < 0 || point.x >= this.terminal.getWidth()) {
         return undefined;
       }
 
       var lines = text.split("\n");
-      for (var i = 0, y = characterDimensions.y; i < lines.length; i++) {
-        if (point.y >= y - characterDimensions.y && point.y < y) {
+      for (var i = 0, y = charDimes.y; i < lines.length; i++) {
+        if (point.y >= y - charDimes.y && point.y < y) {
           return i;
         }
-        y += characterDimensions.y;
+        y += charDimes.y;
       }
 
       return undefined;

@@ -18,43 +18,42 @@
 
   var Helper = function(terminal, envStore, steps) {
     //this.steps
-    this.mapper = new Mapper(terminal);
-    var charDimes = { x:11, y:18 };
     var mouser = new Mouser("div.jquery-console-inner");
     var self = this;
     mouser.events.bind(this, "data", function(e) {
       if (e.event === "mousemove") {
-        self.handleHelp(terminal.getText(), e.point, charDimes, envStore);
+        handleHelp(terminal, e.point, envStore, mapper);
       } else if (e.event === "mouseout") {
         clearHelp();
       }
     });
   };
 
-  Helper.prototype = {
-    // handle help mouse point
-    handleHelp: function(text, point, charDimes, envStore) {
-      clearHelp();
-      var index = this.mapper.getIndex(text, point, charDimes);
-      if (index !== undefined &&
-          codeAnalyzer.getSyntaxTokenIndex(text, index) !== undefined &&
-          getTokenHelp(text, index, envStore) !== undefined) {
-        // show help for token
-        indicateToken(text, index);
-        displayHelp(getTokenHelp(text, index, envStore));
-      } else if (this.mapper.getLineNumber(text, point, charDimes) !== undefined &&
-                 (index === undefined ||
-                  codeAnalyzer.expressionTokens(text) === undefined)) {
-        // show help for whole line
-        var lineNumber = this.mapper.getLineNumber(text, point, charDimes);
-        var line = text.split("\n")[lineNumber];
-        if (line.length > 0) {
-          indicateLine(this.mapper.getLineNumber(text, point, charDimes));
-          displayHelp(getLineHelp(line, envStore));
-        }
+  // handle help mouse point
+  var handleHelp = function(terminal, point, envStore) {
+    clearHelp();
+    var mapper = new Mapper(terminal);
+    var text = terminal.getText();
+    var charDimes = terminal.getCharDimes();
+    var index = mapper.getIndex(text, point);
+    if (index !== undefined &&
+        codeAnalyzer.getSyntaxTokenIndex(text, index) !== undefined &&
+        getTokenHelp(text, index, envStore) !== undefined) {
+      // show help for token
+      indicateToken(text, index);
+      displayHelp(getTokenHelp(text, index, envStore));
+    } else if (mapper.getLineNumber(text, point, charDimes) !== undefined &&
+               (index === undefined ||
+                codeAnalyzer.expressionTokens(text) === undefined)) {
+      // show help for whole line
+      var lineNumber = mapper.getLineNumber(text, point, charDimes);
+      var line = text.split("\n")[lineNumber];
+      if (line.length > 0) {
+        indicateLine(mapper.getLineNumber(text, point, charDimes));
+        displayHelp(getLineHelp(line, envStore));
       }
     }
-  };
+  }
 
   var clearHelp = function() {
     $('#help').text("");

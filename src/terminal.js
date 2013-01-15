@@ -62,6 +62,10 @@
 
     getWidth: function() {
       return $('.jquery-console-inner').width();
+    },
+
+    getCharDimes: function() {
+      return { x:11, y:18 };
     }
   };
 
