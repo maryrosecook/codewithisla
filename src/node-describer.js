@@ -45,7 +45,7 @@
 
       description = val.toString();
       if(Isla.Utils.type(val) === "String") {
-        description = "Some text: '" + val + "'";
+        description = "'" + val + "'";
       }
     }
 

@@ -13,7 +13,7 @@ describe('nodeDescriber', function() {
       //          ___
       var env = Isla.Interpreter.interpret(code);
       expect(nodeDescriber.describe(code, 0, env).body)
-        .toEqual("Some text: '1'");
+        .toEqual("'1'");
     });
 
     it('should describe obj type assignee', function() {
@@ -37,7 +37,7 @@ describe('nodeDescriber', function() {
       //                                 ___
       var env = Isla.Interpreter.interpret(code);
       expect(nodeDescriber.describe(code, 22, env).body)
-        .toEqual("Some text: '31'");
+        .toEqual("'31'");
     });
   });
 
@@ -55,7 +55,7 @@ describe('nodeDescriber', function() {
       //                                                           ___
       var env = Isla.Interpreter.interpret(code);
       expect(nodeDescriber.describe(code, 46, env).body)
-        .toEqual("Some text: '1'");
+        .toEqual("'1'");
     });
   });
 
@@ -65,7 +65,7 @@ describe('nodeDescriber', function() {
       //                          _
       var env = Isla.Interpreter.interpret(code);
       expect(nodeDescriber.describe(code, 15, env).body)
-        .toEqual("Some text: '1'");
+        .toEqual("'1'");
     });
 
     it('should describe obj', function() {
@@ -81,7 +81,7 @@ describe('nodeDescriber', function() {
       //                                            ___
       var env = Isla.Interpreter.interpret(code);
       expect(nodeDescriber.describe(code, 32, env).body)
-        .toEqual("Some text: '1'");
+        .toEqual("'1'");
     });
   });
 
@@ -91,7 +91,7 @@ describe('nodeDescriber', function() {
       //                                          _
       var env = Isla.Interpreter.interpret(code);
       expect(nodeDescriber.describe(code, 30, env).body)
-        .toEqual("Some text: '1'");
+        .toEqual("'1'");
     });
 
     it('should describe obj', function() {
@@ -107,7 +107,7 @@ describe('nodeDescriber', function() {
       //                                                        _
       var env = Isla.Interpreter.interpret(code);
       expect(nodeDescriber.describe(code, 43, env).body)
-        .toEqual("Some text: '1'");
+        .toEqual("'1'");
     });
   });
 
