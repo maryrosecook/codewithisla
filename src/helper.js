@@ -19,7 +19,6 @@
   var Helper = function(terminal, envStore, steps) {
     //this.steps
     var mouser = new Mouser("div.jquery-console-inner");
-    var self = this;
     mouser.events.bind(this, "data", function(e) {
       if (e.event === "mousemove") {
         handleHelp(terminal, e.point, envStore, mapper);
