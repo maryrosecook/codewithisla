@@ -33,7 +33,6 @@
     clearHelp();
     var mapper = new Mapper(terminal);
     var text = terminal.getText();
-    var charDimes = terminal.getCharDimes();
     var index = mapper.getIndex(text, point);
     if (index !== undefined &&
         codeAnalyzer.getSyntaxTokenIndex(text, index) !== undefined &&
@@ -41,14 +40,14 @@
       // show help for token
       indicateToken(text, index);
       displayHelp(getTokenHelp(text, index, envStore));
-    } else if (mapper.getLineNumber(text, point, charDimes) !== undefined &&
+    } else if (mapper.getLineNumber(text, point) !== undefined &&
                (index === undefined ||
                 codeAnalyzer.expressionTokens(text) === undefined)) {
       // show help for whole line
-      var lineNumber = mapper.getLineNumber(text, point, charDimes);
+      var lineNumber = mapper.getLineNumber(text, point);
       var line = text.split("\n")[lineNumber];
       if (line.length > 0) {
-        indicateLine(mapper.getLineNumber(text, point, charDimes));
+        indicateLine(mapper.getLineNumber(text, point));
         displayHelp(getLineHelp(line, envStore));
       }
     }
