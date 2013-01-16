@@ -21,9 +21,11 @@
               "src/eventer.js",
               "src/code-analyzer.js",
               "src/expression-describer.js",
+              "src/node-describer.js",
               "src/mapper.js",
               "src/mouser.js",
-              "src/node-describer.js",
+              "src/console-indicator.js",
+              "src/text-helper.js",
               "src/helper.js",
               "src/text-grabber.js",
               "src/highlighter.js",
@@ -38,7 +40,10 @@
   <body>
     <h1>Program with Isla</h1>
     <div class="console-canvas-container">
-      <div class="console" id="console"></div>
+      <div id="suggestions">Write <strong>sun is a circle</strong> below</div>
+      <div id="left">
+        <div class="console" id="console"></div>
+      </div>
       <canvas id="canvas" width="398" height="398"></canvas>
     </div>
     <div id="help"></div>
