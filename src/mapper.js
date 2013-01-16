@@ -6,15 +6,11 @@
     codeAnalyzer = window.codeAnalyzer;
   }
 
-  var Mapper = function(terminal) {
-    this.terminal = terminal;
-  };
-
-  Mapper.prototype = {
+  mapper = {
     // returns cell that text point is at
-    getIndex: function(text, relativePoint) {
-      var charDimes = this.terminal.getCharDimes();
-      var point = offset(relativePoint, this.terminal.getOffset());
+    getIndex: function(terminal, text, relativePoint) {
+      var charDimes = terminal.getCharDimes();
+      var point = offset(relativePoint, terminal.getOffset());
       for (var i = 0, x = 0, y = charDimes.y; i < text.length; i++) {
         if (codeAnalyzer.isAtNewline(text, i)) {
           y += charDimes.y;
@@ -32,10 +28,10 @@
       return undefined;
     },
 
-    getLineNumber: function(text, relativePoint) {
-      var charDimes = this.terminal.getCharDimes();
-      var point = offset(relativePoint, this.terminal.getLineOffset());
-      if (point.x < 0 || point.x >= this.terminal.getWidth()) {
+    getLineNumber: function(terminal, text, relativePoint) {
+      var charDimes = terminal.getCharDimes();
+      var point = offset(relativePoint, terminal.getLineOffset());
+      if (point.x < 0 || point.x >= terminal.getWidth()) {
         return undefined;
       }
 
@@ -58,5 +54,5 @@
     };
   };
 
-  exports.Mapper = Mapper;
+  exports.mapper = mapper;
 })(typeof exports === 'undefined' ? this : exports)
