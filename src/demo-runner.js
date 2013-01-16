@@ -1,18 +1,22 @@
 ;(function(exports) {
-  var Isla;
-  if(typeof module !== 'undefined' && module.exports) { // node
-    Isla = require('../node_modules/isla/src/isla.js').Isla;
-  } else { // browser
-    Isla = window.Isla;
-  }
+  // no imports because only used in browser - no tests for now
 
   var demo, terminal, textGrabber;
   var DemoRunner = function(Demo) {
     $(document).ready(function() {
-      demo = new Demo($('#canvas')[0].getContext('2d'));
+      demo = new Demo($('#canvas')[0].getContext('2d'), this);
       var envStore = new EnvStore();
       envStore.write({ event:"temp", env:Isla.Library.getInitialEnv() });
       envStore.write({ event:"commit" });
+
+      this.write = function(e) {
+        if (e.event === "newctx") {
+          var env = Isla.Library.getInitialEnv();
+          env.ctx = e.ctx;
+          envStore.write({ event:"temp", env: env });
+          envStore.write({ event:"commit" });
+        }
+      };
 
       terminal = new Terminal();
       terminal.events.bind(this, 'keypress', function(line) {
@@ -33,9 +37,7 @@
         var result;
         try {
           var env = Isla.Interpreter.interpret(line, envStore.latestCommitted());
-          env.ctx = demo.write(env.ctx);
-          envStore.write({ event:"temp", env:env });
-          envStore.write({ event:"commit" });
+          demo.write({ event:"newctx", ctx:env.ctx });
           result = { msg: env.ret || "", error: false };
         } catch(e) {
           result = { msg: e.message, error: true };
@@ -52,6 +54,7 @@
       var helper = new Helper(terminal, envStore);
     });
   };
+
 
   // Two code run scenarios:
   // - As you type (fn below). Fails silently. Updates demo w new env.

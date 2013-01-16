@@ -8,7 +8,7 @@
     _ = window._;
   }
 
-  function Draw(canvasCtx) {
+  function Draw(canvasCtx, runner) {
     if (canvasCtx == null) {
       throw "You must provide a canvas context to draw to.";
     }
@@ -20,32 +20,38 @@
     this.operations = [];
     this.canvasCtx = canvasCtx;
 
-    // start drawing
     var self = this;
+    var newCtx = function(ctx) {
+      // NB: ctx is unresolved so will not wk for complex assocs
+      var retCtx = EnvStore.extend(true, {}, ctx);
+      self.operations = [];
+      for (var i in retCtx) {
+        if (retCtx[i]._meta !== undefined) {
+          var type = retCtx[i]._meta.type;
+          if (shapes[type] !== undefined) {
+            retCtx[i] = shapes[type].defaults(self.canvasCtx, retCtx[i]);
+            self.operations.push(makeOperation(self.canvasCtx, retCtx[i]))
+          }
+        }
+      }
+
+      runner.write({ event:"newctx", ctx: retCtx });
+    };
+
+    // takes latest Isla execution ctx and makes draw ops from objects
+    this.write = function(e) {
+      if (e.event === "newctx") {
+        newCtx(e.ctx);
+      }
+    };
+
+    // start drawing
     this.interval = setInterval(function() {
       self._draw();
     }, 50);
   }
 
   Draw.prototype = {
-    // takes latest Isla execution ctx and makes draw ops from objects
-    write: function(ctx) {
-      // NB: ctx is unresolved so will not wk for complex assocs
-      var retCtx = EnvStore.extend(true, {}, ctx);
-      this.operations = [];
-      for (var i in retCtx) {
-        if (retCtx[i]._meta !== undefined) {
-          var type = retCtx[i]._meta.type;
-          if (shapes[type] !== undefined) {
-            retCtx[i] = shapes[type].defaults(this.canvasCtx, retCtx[i]);
-            this.operations.push(makeOperation(this.canvasCtx, retCtx[i]))
-          }
-        }
-      }
-
-      return retCtx;
-    },
-
     // stop drawing
     end: function() {
       clearInterval(this.interval);
@@ -231,8 +237,6 @@
       return {};
     }
   };
-
-
 
   var shapes = {
     circle: circle,
