@@ -18,44 +18,46 @@
         }
       };
 
-      terminal = new Terminal();
-      terminal.events.bind(this, 'keypress', function(line) {
-        terminal.setPromptText({
-          html: getHighlightedSyntax(line),
-          cursor: true
-        });
-      });
-
-      terminal.events.bind(this, 'history', function(line) {
-        terminal.setPromptText({
-          html: getHighlightedSyntax(line),
-          cursor: true
-        });
-      });
-
-      terminal.events.bind(this, 'submit', function(line) {
-        var result;
-        try {
-          var env = Isla.Interpreter.interpret(line, envStore.latestCommitted());
-          demo.write({ event:"newctx", ctx:env.ctx });
-          result = { msg: env.ret || "", error: false };
-        } catch(e) {
-          result = { msg: e.message, error: true };
-        }
-
-        terminal.setPromptText({
-          html: getHighlightedSyntax(line),
-          cursor: false
-        });
-
-        terminal.setResult(result);
-      });
-
-      var helper = new Helper(terminal, envStore);
+      var terminal = setupTerminal(demo, envStore);
+      var helper = new Helper(terminal, demo, envStore);
     });
   };
 
-    terminal.setPromptText({ html: getHighlightedSyntax(line), cursor: true });
+  var setupTerminal = function(demo, envStore) {
+    var terminal = new Terminal();
+    terminal.events.bind(this, 'keypress', function(line) {
+      terminal.setPromptText({
+        html: getHighlightedSyntax(line),
+        cursor: true
+      });
+    });
+
+    terminal.events.bind(this, 'history', function(line) {
+      terminal.setPromptText({
+        html: getHighlightedSyntax(line),
+        cursor: true
+      });
+    });
+
+    terminal.events.bind(this, 'submit', function(line) {
+      var result;
+      try {
+        var env = Isla.Interpreter.interpret(line, envStore.latestCommitted());
+        demo.write({ event:"newctx", ctx:env.ctx });
+        result = { msg: env.ret || "", error: false };
+      } catch(e) {
+        result = { msg: e.message, error: true };
+      }
+
+      terminal.setPromptText({
+        html: getHighlightedSyntax(line),
+        cursor: false
+      });
+
+      terminal.setResult(result);
+    });
+
+    return terminal;
   };
 
   var getHighlightedSyntax = function(code) {
