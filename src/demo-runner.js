@@ -24,21 +24,21 @@
 
   var setupTerminal = function(demo, envStore) {
     var terminal = new Terminal();
-    terminal.events.bind(this, 'keypress', function(line) {
+    terminal.events.on(this, 'keypress', function(line) {
       terminal.setPromptText({
         html: getHighlightedSyntax(line),
         cursor: true
       });
     });
 
-    terminal.events.bind(this, 'history', function(line) {
+    terminal.events.on(this, 'history', function(line) {
       terminal.setPromptText({
         html: getHighlightedSyntax(line),
         cursor: true
       });
     });
 
-    terminal.events.bind(this, 'submit', function(line) {
+    terminal.events.on(this, 'submit', function(line) {
       var result;
       try {
         var env = Isla.Interpreter.interpret(line, envStore.latestCommitted());

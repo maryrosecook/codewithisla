@@ -5,13 +5,13 @@
     this.events = new Eventer();
 
     textGrabber = new TextGrabber();
-    this.events.bind(this, "submit", function(line) {
+    this.events.on(this, "submit", function(line) {
       textGrabber.write({ event: "submit", text: line });
     });
-    this.events.bind(this, "keypress", function(line) {
+    this.events.on(this, "keypress", function(line) {
       textGrabber.write({ event: "keypress", text: line });
     });
-    this.events.bind(this, "history", function(line) {
+    this.events.on(this, "history", function(line) {
       textGrabber.write({ event: "keypress", text: line });
     });
   };
