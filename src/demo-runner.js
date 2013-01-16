@@ -1,10 +1,9 @@
 ;(function(exports) {
   // no imports because only used in browser - no tests for now
 
-  var demo, terminal, textGrabber;
   var DemoRunner = function(Demo) {
     $(document).ready(function() {
-      demo = new Demo($('#canvas')[0].getContext('2d'), this);
+      var demo = new Demo($('#canvas')[0].getContext('2d'), this);
       var envStore = new EnvStore();
       envStore.write({ event:"temp", env:Isla.Library.getInitialEnv() });
       envStore.write({ event:"commit" });
