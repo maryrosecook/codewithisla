@@ -1,44 +1,41 @@
 ;(function(exports) {
   function Eventer() {
-    this.callbacks = {};
-  }
+    var callbacks = {};
 
-  var addListener = function(obj, event, callback) {
-    this.callbacks[event] = this.callbacks[event] || [];
-    this.callbacks[event].push({
-      obj: obj,
-      callback: callback
-    });
+    this.addListener = function(obj, event, callback) {
+      callbacks[event] = callbacks[event] || [];
+      callbacks[event].push({
+        obj: obj,
+        callback: callback
+      });
 
-    return this;
-  };
+      return this;
+    };
 
-  var removeListener = function(obj, event) {
-    for(var i in this.callbacks) {
-      if(this.callbacks[i].obj === obj) {
-        delete this.callbacks[i];
-        break;
+    this.addListener
+    this.on = this.addListener;
+
+    this.removeListener = function(obj, event) {
+      for(var i in callbacks) {
+        if(callbacks[i].obj === obj) {
+          delete callbacks[i];
+          break;
+        }
       }
-    }
-  };
+    };
 
-  Eventer.prototype = {
-    addListener: addListener,
-    removeListener: removeListener,
-    on: addListener,
-
-    emit: function(event, data) {
-      var callbacks = this.callbacks[event];
-      if(callbacks !== undefined) {
-        for(var i = 0; i < callbacks.length; i++) {
-          var callbackObj = callbacks[i];
+    this.emit = function(event, data) {
+      var eventCallbacks = callbacks[event];
+      if(eventCallbacks !== undefined) {
+        for(var i = 0; i < eventCallbacks.length; i++) {
+          var callbackObj = eventCallbacks[i];
           callbackObj.callback.call(callbackObj.obj, data);
         }
       }
 
       return this;
-    }
-  };
+    };
+  }
 
   exports.Eventer = Eventer;
 })(typeof exports === 'undefined' ? this : exports)
