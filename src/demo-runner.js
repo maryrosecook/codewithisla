@@ -3,26 +3,26 @@
 
   var DemoRunner = function(Demo) {
     $(document).ready(function() {
-      var demo = new Demo($('#canvas')[0].getContext('2d'), this);
+      var demoTalker = new Eventer();
+      var demo = new Demo($('#canvas')[0].getContext('2d'), demoTalker);
+
       var envStore = new EnvStore();
       envStore.write({ event:"temp", env:Isla.Library.getInitialEnv() });
       envStore.write({ event:"commit" });
 
-      this.write = function(e) {
-        if (e.event === "newctx") {
-          var env = Isla.Library.getInitialEnv();
-          env.ctx = e.ctx;
-          envStore.write({ event:"temp", env: env });
-          envStore.write({ event:"commit" });
-        }
-      };
+      demoTalker.on(this, "demo:ctx:new", function(ctx) {
+        var env = Isla.Library.getInitialEnv();
+        env.ctx = ctx;
+        envStore.write({ event:"temp", env: env });
+        envStore.write({ event:"commit" });
+      });
 
-      var terminal = setupTerminal(demo, envStore);
       var helper = new Helper(terminal, demo, envStore);
+      var terminal = setupTerminal(demoTalker, envStore);
     });
   };
 
-  var setupTerminal = function(demo, envStore) {
+  var setupTerminal = function(demoTalker, envStore) {
     var terminal = new Terminal();
     terminal.events.on(this, 'keypress', function(line) {
       terminal.setPromptText({
@@ -42,7 +42,7 @@
       var result;
       try {
         var env = Isla.Interpreter.interpret(line, envStore.latestCommitted());
-        demo.write({ event:"newctx", ctx:env.ctx });
+        demoTalker.emit("isla:ctx:new", env.ctx);
         result = { msg: env.ret || "", error: false };
       } catch(e) {
         result = { msg: e.message, error: true };

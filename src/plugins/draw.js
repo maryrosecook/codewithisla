@@ -8,7 +8,7 @@
     _ = window._;
   }
 
-  function Draw(canvasCtx, runner) {
+  function Draw(canvasCtx, demoTalker) {
     if (canvasCtx == null) {
       throw "You must provide a canvas context to draw to.";
     }
@@ -21,7 +21,8 @@
     this.canvasCtx = canvasCtx;
 
     var self = this;
-    var newCtx = function(ctx) {
+    // takes latest Isla execution ctx and makes draw ops from objects
+    demoTalker.on(this, "isla:ctx:new", function(ctx) {
       // NB: ctx is unresolved so will not wk for complex assocs
       var retCtx = EnvStore.extend(true, {}, ctx);
       self.operations = [];
@@ -35,8 +36,8 @@
         }
       }
 
-      runner.write({ event:"newctx", ctx: retCtx });
-    };
+      demoTalker.emit("demo:ctx:new", retCtx);
+    });
 
     // takes latest Isla execution ctx and makes draw ops from objects
     this.write = function(e) {
