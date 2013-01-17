@@ -17,7 +17,7 @@
       throw "The variable you passed does not appear to be an actual canvas context.";
     }
 
-    this.operations = [];
+    this.operations;
     this.canvasCtx = canvasCtx;
 
     var self = this;
@@ -25,13 +25,13 @@
     demoTalker.on(this, "isla:ctx:new", function(ctx) {
       // NB: ctx is unresolved so will not wk for complex assocs
       var retCtx = EnvStore.extend(true, {}, ctx);
-      self.operations = [];
+      self.operations = {};
       for (var i in retCtx) {
         if (retCtx[i]._meta !== undefined) {
           var type = retCtx[i]._meta.type;
           if (shapes[type] !== undefined) {
             retCtx[i] = shapes[type].defaults(self.canvasCtx, retCtx[i]);
-            self.operations.push(makeOperation(self.canvasCtx, retCtx[i]))
+            self.operations[i] = makeOperation(self.canvasCtx, retCtx[i]);
           }
         }
       }
@@ -39,12 +39,7 @@
       demoTalker.emit("demo:ctx:new", retCtx);
     });
 
-    // takes latest Isla execution ctx and makes draw ops from objects
-    this.write = function(e) {
-      if (e.event === "newctx") {
-        newCtx(e.ctx);
-      }
-    };
+    setupHelp(demoTalker, this);
 
     // start drawing
     this.interval = setInterval(function() {
@@ -64,15 +59,42 @@
       this.canvasCtx.fillStyle = "#fff";
       this.canvasCtx.fillRect(0, 0, this.canvasCtx.canvas.width,
                               this.canvasCtx.canvas.height);
-      for(var i = 0; i < this.operations.length; i++) {
-        this.operations[i]();
+      for(var i in this.operations) {
+        this.operations[i].fn(this.operations[i].indicate);
       }
     }
-  }
+  };
+
+  var setupHelp = function(demoTalker, demo) {
+    demoTalker.on(this, "isla:mouse:mouseover", function(data) {
+      if (data.thing === "token" && data.syntaxNode.syntax === "variable") {
+        // shortcut to var name
+        demo.operations[data.syntaxNode.code].indicate = true;
+      }
+    });
+
+    demoTalker.on(this, "isla:mouse:mouseout", function() {
+      for (var i in demo.operations) {
+        demo.operations[i].indicate = false;
+      }
+    });
+  };
+
+  var clearHelp = function() {
+    // clear
+    indicate("clear");
+  };
+
+  var indicate = function(event, data) {
+    consoleIndicator.write({ event: event, data: data, id: id});
+  };
 
   var makeOperation = function(canvasCtx, obj) {
-    return function() {
-      shapes[obj._meta.type].fn(canvasCtx, obj);
+    return {
+      indicate: false,
+      fn: function(indicate) {
+        shapes[obj._meta.type].fn(canvasCtx, obj, indicate);
+      }
     };
   };
 
@@ -160,13 +182,17 @@
   };
 
   var circle = {
-    fn: function(canvasCtx, obj) {
+    fn: function(canvasCtx, obj, indicate) {
       var objSize = size(obj.size);
       canvasCtx.fillStyle = color(obj.color);
       canvasCtx.beginPath();
       canvasCtx.arc(obj.x, obj.y, objSize / 2, 0, Math.PI * 2, true);
       canvasCtx.closePath();
       canvasCtx.fill();
+      if (indicate) {
+        canvasCtx.lineWidth = 4;
+        canvasCtx.stroke();
+      }
     },
 
     defaults: function(canvasCtx, obj) {
