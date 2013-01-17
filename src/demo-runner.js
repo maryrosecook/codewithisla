@@ -17,8 +17,8 @@
         envStore.write({ event:"commit" });
       });
 
-      var helper = new Helper(terminal, demo, envStore);
       var terminal = setupTerminal(demoTalker, envStore);
+      var helper = new Helper(terminal, envStore, demoTalker);
     });
   };
 
