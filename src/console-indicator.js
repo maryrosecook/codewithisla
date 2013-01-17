@@ -14,12 +14,14 @@
     var controllerId;
 
     this.write = function(e) {
-      if (e.event === "token") {
-        controllerId = e.id;
-        indicateToken(terminal.getText(), e.data.index);
-      } else if (e.event === "line") {
-        controllerId = e.id;
-        indicateLine(e.data.lineNumber);
+      if (e.event === "indicate") {
+        if (e.data.thing === "token") {
+          controllerId = e.id;
+          indicateToken(terminal.getText(), e.data.index);
+        } else if (e.data.thing === "line") {
+          controllerId = e.id;
+          indicateLine(e.data.lineNumber);
+        }
       } else if (e.event === "clear") {
         if (e.id === controllerId) {
           unindicate();

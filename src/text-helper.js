@@ -28,12 +28,12 @@
     };
 
     var indicate = function(event, data) {
-      consoleIndicator.write({ event: event, data: data, id: id});
+      consoleIndicator.write({ event:event, data:data, id:id });
     };
 
     var clearHelp = function() {
       $('#help').text("");
-      indicate("clear");
+      indicate("clear", { });
     };
 
     var handleHelp = function(terminal, point, envStore) {
@@ -41,7 +41,7 @@
       if (isThereHelpForToken(terminal, point, envStore)) {
         var index = mapper.getIndex(terminal, text, point);
         clearHelp();
-        indicate("token", { index: index });
+        indicate("indicate", { thing:"token", index: index });
         displayHelp(getTokenHelp(text, index, envStore));
         return;
       } else if (isOverLine(terminal, point)) {
@@ -49,7 +49,7 @@
         var line = text.split("\n")[lineNumber];
         if (line.length > 0) {
           clearHelp();
-          indicate("line", { lineNumber: lineNumber });
+          indicate("indicate", { thing:"line", lineNumber: lineNumber });
           displayHelp(getLineHelp(line, envStore));
           return;
         }
