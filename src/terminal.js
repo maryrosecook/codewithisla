@@ -18,6 +18,7 @@
 
   Terminal.prototype = {
     setResult: function(result) {
+      result.msg = formatResult(result.msg, this.getCharsPerLine());
       var className = "jquery-console-message-value";
       if (result.error === true) {
         className = "jquery-console-message-error";
@@ -63,6 +64,10 @@
 
     getWidth: function() {
       return $('.jquery-console-inner').width();
+    },
+
+    getCharsPerLine: function() {
+      return (this.getWidth() - this.getPadding().l) / this.getCharDimes().x;
     },
 
     getCharDimes: function() {
@@ -116,6 +121,21 @@
     });
 
     return consoleController;
+  };
+
+  // prepares execution result for console
+  var formatResult = function(result, charsPerLine) {
+    var out = "";
+    for (var i = 0, curLineChars = 0; i < result.length; i++, curLineChars++) {
+      if (result[i] === "\n") {
+        curLineChars = 0;
+      } else if (curLineChars === charsPerLine) {
+        curLineChars = 0;
+        out += "\n";
+      }
+      out += result[i];
+    }
+    return out;
   };
 
   var toHtml = function(str) {
