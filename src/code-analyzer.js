@@ -50,7 +50,7 @@
 
     getLine: function(text, index) {
       var lineNumber = codeAnalyzer.getLineNumber(text, index);
-      if(lineNumber !== undefined) {
+      if (lineNumber !== undefined) {
         return text.split("\n")[lineNumber];
       }
     },
