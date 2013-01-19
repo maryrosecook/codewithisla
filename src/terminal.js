@@ -41,23 +41,23 @@
 
     getText: function() {
       return textGrabber.getText();
+    getPadding: function() {
+      return { t:0, l:17 };
     },
 
     getOffset: function() {
       var innerConsole = $('.jquery-console-inner');
-      var padding = { t:0, l:17 };
       return {
-        t: padding.t - innerConsole.scrollTop(),
-        l: padding.l - innerConsole.scrollLeft()
+        t: this.getPadding().t - innerConsole.scrollTop(),
+        l: this.getPadding().l - innerConsole.scrollLeft()
       };
     },
 
     getLineOffset: function() {
       var innerConsole = $('.jquery-console-inner');
-      var padding = { t:0, l:-17 }; // include chevron
       return {
-        t: padding.t - innerConsole.scrollTop(),
-        l: padding.l - innerConsole.scrollLeft()
+        t: -innerConsole.scrollTop(),
+        l: -innerConsole.scrollLeft()
       };
     },
 
