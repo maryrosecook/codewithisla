@@ -60,7 +60,6 @@
     };
   };
 
-
   var isThereHelpForToken = function(terminal, point, envStore) {
     var text = terminal.getText();
     var index = mapper.getIndex(terminal, text, point);
@@ -71,9 +70,10 @@
 
   var isOverLine = function(terminal, point) {
     var text = terminal.getText();
+    var line = mapper.getLine(terminal, text, point);
     return mapper.getLineNumber(terminal, text, point) !== undefined &&
-      (mapper.getIndex(terminal, text, point) === undefined ||
-       codeAnalyzer.expressionTokens(text) === undefined);
+      codeAnalyzer.expression(line) !== undefined &&
+      (mapper.getIndex(terminal, text, point) === undefined);
   };
 
   var getTokenHelp = function(text, index, envStore) {
