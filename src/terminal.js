@@ -6,13 +6,18 @@
 
     textGrabber = new TextGrabber();
     this.events.on(this, "submit", function(line) {
-      textGrabber.write({ event: "submit", text: line });
+      textGrabber.write({ event: "permanent", text: line, io:"input" });
     });
     this.events.on(this, "keypress", function(line) {
-      textGrabber.write({ event: "keypress", text: line });
+      textGrabber.write({ event: "impermanent", text: line, io:"input" });
     });
     this.events.on(this, "history", function(line) {
-      textGrabber.write({ event: "keypress", text: line });
+      textGrabber.write({ event: "impermanent", text: line, io:"input" });
+    });
+    this.events.on(this, "result", function(result) {
+      if (result !== "") {
+        textGrabber.write({ event: "permanent", text: result, io:"output" });
+      }
     });
   };
 
@@ -28,6 +33,8 @@
       consoleController.commandResult([{
         msg: toHtml(result.msg), className: className
       }]);
+
+      this.events.emit("result", result.msg);
     },
 
     setPromptText: function(data) {
