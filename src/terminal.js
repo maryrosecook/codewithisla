@@ -41,7 +41,13 @@
     },
 
     getText: function() {
-      return textGrabber.getText();
+      return textGrabber.getPlainText();
+    },
+
+    getCategorisedText: function() {
+      return textGrabber.getCategorisedText();
+    },
+
     getPadding: function() {
       return { t:0, l:17 };
     },
