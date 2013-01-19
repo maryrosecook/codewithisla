@@ -68,8 +68,10 @@
   var setupHelp = function(demoTalker, demo) {
     demoTalker.on(this, "isla:mouse:mouseover", function(data) {
       if (data.thing === "token" && data.syntaxNode.syntax === "variable") {
-        // shortcut to var name
-        demo.operations[data.syntaxNode.code].indicate = true;
+        if (demo.operations[data.syntaxNode.code] !== undefined) {
+          // shortcut to var name
+          demo.operations[data.syntaxNode.code].indicate = true;
+        }
       }
     });
 
