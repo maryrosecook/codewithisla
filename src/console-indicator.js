@@ -15,17 +15,26 @@
 
     this.write = function(e) {
       if (e.event === "indicate") {
+        var text = terminal.getText();
         if (e.data.thing === "token") {
-          controllerId = e.id;
-          indicateToken(terminal.getText(), e.data.index);
+          var lineNumber = codeAnalyzer.getLineNumber(text, e.data.index);
+          var lineBox = getLineBox(terminal.getCategorisedText(), lineNumber,
+                                   $('.jquery-console-prompt'));
+          if (lineBox !== undefined) {
+            controllerId = e.id;
+            indicateToken(lineBox, terminal.getText(), e.data.index);
+          }
         } else if (e.data.thing === "line") {
           controllerId = e.id;
-          indicateLine(e.data.lineNumber);
+          var lineBox = getLineBox(terminal.getCategorisedText(),
+                                   e.data.lineNumber,
+                                   $('.jquery-console-prompt-box'));
+          if (lineBox !== undefined) {
+            indicateLine(lineBox);
+          }
         }
-      } else if (e.event === "clear") {
-        if (e.id === controllerId) {
-          unindicate();
-        }
+      } else if (e.event === "clear" && e.id === controllerId) {
+        unindicate();
       }
     };
   };
@@ -35,24 +44,30 @@
     unindicateAllLines();
   };
 
+  var getLineBox = function(categorisedText, lineNumber, elements) {
+    for (var i = 0, iPrompt; i < categorisedText.length; i++) {
+      if (categorisedText[i].io === "input") {
+        iPrompt = iPrompt === undefined ? 0 : iPrompt + 1;
+        if (i === lineNumber) {
+          return $(elements[iPrompt]);
+        }
+      }
+    }
+  };
+
   // draw attention to current token
-  var indicateToken = function(text, index) {
-    var lineNumber = codeAnalyzer.getLineNumber(text, index);
-    var syntaxTokens = $($('.jquery-console-prompt')[lineNumber]).children()
-                         .not('.jquery-console-cursor');
+  var indicateToken = function(lineBox, text, index) {
+    var syntaxTokens = lineBox.children().not('.jquery-console-cursor');
     var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
     $(syntaxTokens[syntaxTokenIndex]).css({ "background-color": "#444" });
   };
 
   // draw attention to current line
-  var indicateLine = function(lineNumber) {
+  var indicateLine = function(lineBox) {
     // line background
-    $($('.jquery-console-prompt-box')[lineNumber])
-      .css({ "background-color": "#444" });
-
+    lineBox.css({ "background-color": "#444" });
     // backgrounds of tokens in line
-    var tokens = $($('.jquery-console-prompt')[lineNumber]).children()
-                   .not('.jquery-console-cursor');
+    var tokens = lineBox.children().children().not('.jquery-console-cursor');
     _.map(tokens, function(x) {
       $(x).css({ "background-color": "#444" })
     });
