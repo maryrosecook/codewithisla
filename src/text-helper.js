@@ -46,14 +46,15 @@
         displayHelp(getTokenHelp(text, index, envStore));
         return;
       } else if (isOverLine(terminal, point)) {
-        var lineNumber = mapper.getLineNumber(terminal, text, point);
-        var line = text.split("\n")[lineNumber];
-        if (line.length > 0) {
-          clearHelp();
-          indicate("indicate", { thing:"line", lineNumber: lineNumber });
-          displayHelp(getLineHelp(line, envStore));
-          return;
-        }
+        clearHelp();
+        indicate("indicate", {
+          thing:"line",
+          lineNumber: mapper.getLineNumber(terminal, text, point)
+        });
+
+        displayHelp(getLineHelp(mapper.getLine(terminal, text, point),
+                                envStore));
+        return;
       }
 
       clearHelp();
