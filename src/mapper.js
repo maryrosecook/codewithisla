@@ -31,6 +31,7 @@
     getLineNumber: function(terminal, text, relativePoint) {
       var charDimes = terminal.getCharDimes();
       var point = offset(relativePoint, terminal.getLineOffset());
+
       if (point.x < 0 || point.x >= terminal.getWidth()) {
         return undefined;
       }
@@ -44,6 +45,11 @@
       }
 
       return undefined;
+    },
+
+    getLine: function(terminal, text, point) {
+      var lineNumber = mapper.getLineNumber(terminal, text, point);
+      return text.split("\n")[lineNumber];
     }
   };
 
