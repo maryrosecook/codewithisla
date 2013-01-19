@@ -5,7 +5,8 @@
     _ = require("Underscore");
     codeAnalyzer = require('../src/code-analyzer').codeAnalyzer;
     nodeDescriber = require('../src/node-describer').nodeDescriber;
-    expressionDescriber = require('../src/expression-describer').expressionDescriber;
+    expressionDescriber = require('../src/expression-describer')
+                          .expressionDescriber;
     mapper = require('../src/mapper').mapper;
   } else { // browser
     Isla = window.Isla;
@@ -33,7 +34,7 @@
 
     var clearHelp = function() {
       $('#help').text("");
-      indicate("clear", { });
+      indicate("clear", {});
     };
 
     var handleHelp = function(terminal, point, envStore) {
