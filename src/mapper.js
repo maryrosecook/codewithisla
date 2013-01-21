@@ -49,7 +49,7 @@
 
     getLine: function(terminal, text, relativePoint) {
       var lineNumber = mapper.getLineNumber(terminal, text, relativePoint);
-      return text.split("\n")[lineNumber];
+      return codeAnalyzer.getLine(text, lineNumber);
     }
   };
 

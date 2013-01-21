@@ -10,7 +10,8 @@
 
   var nodeDescriber = {
     describe: function(text, index, env) {
-      var line = codeAnalyzer.getLine(text, index);
+      var lineNumber = codeAnalyzer.getLineNumber(text, index);
+      var line = codeAnalyzer.getLine(text, lineNumber);
       var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
       var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
       var syntaxNode = syntaxTokens[syntaxTokenIndex];
@@ -56,7 +57,8 @@
   // does not dive below surface into sub tokens
   var getTokenIndex = function(text, index) {
     var tokenIndex = undefined;
-    var line = codeAnalyzer.getLine(text, index);
+    var lineNumber = codeAnalyzer.getLineNumber(text, index);
+    var line = codeAnalyzer.getLine(text, lineNumber);
     var tokens = codeAnalyzer.expressionTokens(line);
     if (tokens !== undefined) {
       var lineIndex = codeAnalyzer.getLineIndex(text, index);

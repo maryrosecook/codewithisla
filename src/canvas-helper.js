@@ -25,7 +25,8 @@
       var text = terminal.getText();
       var index = mapper.getIndex(terminal, text, point);
       if (isOverToken(terminal, point)) {
-        var line = codeAnalyzer.getLine(text, index);
+        var lineNumber = codeAnalyzer.getLineNumber(text, index);
+        var line = codeAnalyzer.getLine(text, lineNumber);
         var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
         var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
         var syntaxNode = syntaxTokens[syntaxTokenIndex];
@@ -56,7 +57,7 @@
     var text = terminal.getText();
     return mapper.getLineNumber(terminal, text, point) !== undefined &&
       (mapper.getIndex(terminal, text, point) === undefined ||
-       codeAnalyzer.expressionTokens(text) === undefined);
+       codeAnalyzer.parses(text) === undefined);
   };
 
   exports.CanvasHelper = CanvasHelper;

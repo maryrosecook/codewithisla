@@ -9,13 +9,28 @@
   }
 
   var codeAnalyzer = {
+    parses: function(code) {
+      try {
+        Isla.Parser.parse(code);
+        return true;
+      } catch(e) {
+        return false;
+      }
+    },
+
     expression: function(code) {
+      var block;
       try {
         var ast = Isla.Parser.parse(code);
-        return Isla.Parser.extract(ast, "root", 0, "block", 0,
-                                        "expression", 0);
+        block = Isla.Parser.extract(ast, "root", 0, "block");
       } catch(e) {
         return undefined;
+      }
+
+      if (block.length > 1) {
+        throw "You passed code with more than one expression.";
+      } else {
+        return Isla.Parser.extract(block, 0, "expression", 0);
       }
     },
 
@@ -34,29 +49,29 @@
     },
 
     getLineNumber: function(text, index) {
-      var lineNumber;
       if (index !== undefined) {
-        lineNumber = 0;
+        var lineNumber = 0;
         for (var i = 0; i < text.length; i++) {
-          if (codeAnalyzer.isAtNewline(text, i)) {
+          if (i === index && codeAnalyzer.isAtNewline(text, i)) {
+            return undefined;
+          } else if (codeAnalyzer.isAtNewline(text, i)) {
             lineNumber++;
           } else if (i === index) {
-            break;
+            return lineNumber;
           }
         }
       }
-      return lineNumber;
     },
 
-    getLine: function(text, index) {
-      var lineNumber = codeAnalyzer.getLineNumber(text, index);
+    getLine: function(text, lineNumber) {
       if (lineNumber !== undefined) {
-        return text.split("\n")[lineNumber];
+        return splitLines(text)[lineNumber];
       }
     },
 
     getSyntaxTokenIndex: function(text, index) {
-      var line = codeAnalyzer.getLine(text, index);
+      var lineNumber = codeAnalyzer.getLineNumber(text, index);
+      var line = codeAnalyzer.getLine(text, lineNumber);
       var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
       if (syntaxTokens === undefined) {
         return undefined;
@@ -89,10 +104,14 @@
 
     getLineIndex: function(text, index) {
       var lineNumber = codeAnalyzer.getLineNumber(text, index);
-      return index - _.reduce(text.split("\n"), function(acc, x, i) {
+      return index - _.reduce(splitLines(text), function(acc, x, i) {
         return i < lineNumber ? acc + x + "\n" : acc;
       }, "").length;
     }
+  };
+
+  var splitLines = function(text) {
+    return text.split("\n");
   };
 
   var expressionSyntaxTokens = function(tokens, pieces) {
