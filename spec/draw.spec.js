@@ -2,6 +2,7 @@ var _ = require('Underscore');
 
 var Draw = require('../src/plugins/draw').Draw;
 var Interpreter = require('../node_modules/isla/src/interpreter').Interpreter;
+var Eventer = require('../src/eventer').Eventer;
 
 var ctx = function() {
   return {
@@ -9,8 +10,18 @@ var ctx = function() {
       width: 300,
       height: 300,
     },
-    fillRect: function() {}
+    fillRect: function() {},
+    beginPath: function() {},
+    closePath: function() {},
+    lineTo: function() {},
+    fill: function() {},
+    arc: function() {},
+    moveTo: function() {}
   };
+};
+
+var demoTalker = function() {
+  return new Eventer();
 };
 
 describe('Draw', function() {
@@ -21,141 +32,184 @@ describe('Draw', function() {
       }).toThrow("You must provide a canvas context to draw to.");
     });
 
-    it('should not complain if canvas passed', function() {
-      (new Draw(ctx())).end();
+    it('should complain if no demoTalker passed', function() {
+      expect(function(){
+        new Draw(ctx());
+      }).toThrow("You must provide a demo talker to communicate with.");
+    });
+
+    it('should not complain if canvas and demoTalker passed', function() {
+      (new Draw(ctx(), demoTalker())).end();
     });
   });
 
   describe('draw loop', function() {
     it('should start drawing upon instantiation', function() {
+      var ran;
       runs(function() {
-        var draw = new Draw(ctx());
-        var i = 0;
+        var draw = new Draw(ctx(), demoTalker());
         draw._draw = function() {
-          i++;
+          ran = true;
           this.end();
         }
+      });
 
-        setTimeout(function() {
-          expect(i > 0).toEqual(true);
-        }, 100);
+      waits(100);
+      runs(function() {
+        expect(ran).toEqual(true);
       });
     });
 
     it('should stop drawing when told stream has ended', function() {
+      var i = 0;
       runs(function() {
-        var draw = new Draw(ctx());
-        var i = 0;
+        var draw = new Draw(ctx(), demoTalker());
         draw._draw = function() {
           i++;
           this.end();
         }
-
-        setTimeout(function() {
-          expect(i === 1).toEqual(true);
-        }, 100);
       });
-    });
-  });
 
-  describe('stream api', function(){
-    it('should accept an environment via the write stream', function() {
-      var draw = new Draw(ctx());
-      draw.write({ a: { _meta: { type: "circle" } }});
-      draw.end();
-    });
-
-    it('should allow end to be called', function() {
-      var draw = new Draw(ctx());
-      draw.end();
+      waits(100);
+      runs(function() {
+        expect(i).toEqual(1);
+      });
     });
   });
 
   describe('basic drawing', function() {
-    describe('should draw basic shapes', function() {
-      var draw;
+    describe('draw all the basic shapes', function() {
+      var dt, draw;
       beforeEach(function() {
-        draw = new Draw(ctx());
+        dt = demoTalker();
+        draw = new Draw(ctx(), dt);
       });
 
       it('should draw a triangle', function() {
-        draw.write({ a: { _meta: { type: "triangle" } }});
-      });
-
-      it('should draw a square', function() {
-        draw.write({ a: { _meta: { type: "triangle" } }});
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "triangle" } } });
       });
 
       it('should draw a circle', function() {
-        draw.write({ a: { _meta: { type: "circle" } }});
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "circle" } } });
       });
 
       it('should draw a rectangle', function() {
-        draw.write({ a: { _meta: { type: "rectangle" } }});
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "rectangle" } } });
       });
 
-      it('should draw an oblong', function() {
-        draw.write({ a: { _meta: { type: "oblong" } }});
+      it('should draw a oblong', function() {
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "oblong" } } });
       });
+
+      it('should draw a square', function() {
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "square" } } });
+      });
+
+      // it('should draw a line', function() {
+      //   dt.emit("isla:ctx:new", { a: { _meta: { type: "line" } } });
+      // });
 
       it('should draw a pentagon', function() {
-        draw.write({ a: { _meta: { type: "pentagon" } }});
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "pentagon" } } });
       });
 
       it('should draw a hexagon', function() {
-        draw.write({ a: { _meta: { type: "hexagon" } }});
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "hexagon" } } });
       });
 
       it('should draw a heptagon', function() {
-        draw.write({ a: { _meta: { type: "heptagon" } }});
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "heptagon" } } });
       });
 
-      it('should draw an octagon', function() {
-        draw.write({ a: { _meta: { type: "octagon" } }});
+      it('should draw a octagon', function() {
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "octagon" } } });
       });
 
       afterEach(function() {
-        expect(draw.operations.length).toEqual(1);
+        expect(draw.operations.a).toBeDefined();
         draw.end();
       });
+
     });
 
     it('should not draw an unknown shape', function() {
-      var draw = new Draw(ctx());
-      draw.write({ a: { _meta: { type: "whatevs" } }});
-      expect(draw.operations.length).toEqual(0);
+      var dt = demoTalker();
+      var draw = new Draw(ctx(), dt);
+      dt.emit("isla:ctx:new", {
+        a: { _meta: { type: "circle" }},
+        b: { _meta: { type: "whatevs" }}
+      });
+
+      expect(draw.operations.a).toBeDefined();
+      expect(draw.operations.b).toBeUndefined();
       draw.end();
     });
 
-    it('should allow updating of an existing context with new data for op', function() {
-      var draw = new Draw(ctx());
-      var newCtx = draw.write({ a: { _meta: { type: "square" } }});
-      newCtx.b = { _meta: { type: "circle" } };
-      draw.write(newCtx);
-      expect(draw.operations.length).toEqual(2);
-      draw.end();
+    it('should allow updating of an existing context with new op', function() {
+      var ran;
+      runs(function() {
+        var dt = demoTalker(); // 1
+        var draw = new Draw(ctx(), dt);
+        var self = this;
+        dt.on(self, "demo:ctx:new", function(newCtx) { // 3
+          newCtx.b = { _meta: { type: "circle" } };
+          dt.removeListener(self, "demo:ctx:new");
+          dt.on(this, "demo:ctx:new", function() { // 5
+            expect(draw.operations.a).toBeDefined();
+            expect(draw.operations.b).toBeDefined();
+            ran = true;
+            draw.end();
+          });
+          dt.emit("isla:ctx:new", newCtx); // 4
+        });
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "square" } }}); // 2
+      });
+      runs(function() { expect(ran).toEqual(true); }); // check ran
     });
 
     it('should allow updating of an existing context with data not for op', function() {
-      var draw = new Draw(ctx());
-      var newCtx = draw.write({ a: { _meta: { type: "square" } }});
-      newCtx.b = { };
-      newCtx = draw.write(newCtx);
-      expect(newCtx.b).toEqual({});
-      expect(draw.operations.length).toEqual(1);
-      draw.end();
+      var ran;
+      runs(function() {
+        var dt = demoTalker(); // 1
+        var draw = new Draw(ctx(), dt);
+        var self = this;
+        dt.on(self, "demo:ctx:new", function(newCtx) { // 3
+          newCtx.b = { };
+          dt.removeListener(self, "demo:ctx:new");
+          dt.on(this, "demo:ctx:new", function(newCtx2) { // 5
+            expect(newCtx2.b).toEqual({});
+            expect(draw.operations.a).toBeDefined();
+            expect(draw.operations.b).toBeUndefined();
+            ran = true;
+            draw.end();
+          });
+          dt.emit("isla:ctx:new", newCtx); // 4
+        });
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "square" } }}); // 2
+      });
+      runs(function() { expect(ran).toEqual(true); }); // check ran
     });
 
     it('should overwrite old ops when new ctx written', function() {
-      var draw = new Draw(ctx());
-      draw.write({ a: { _meta: { type: "square" } },
-                   b: { _meta: { type: "square" } }});
-      expect(draw.operations.length).toEqual(2);
-
-      draw.write({ a: { _meta: { type: "square" } }});
-      expect(draw.operations.length).toEqual(1);
-
-      draw.end();
+      var ran;
+      runs(function() {
+        var dt = demoTalker(); // 1
+        var draw = new Draw(ctx(), dt);
+        var self = this;
+        dt.on(self, "demo:ctx:new", function(newCtx) { // 3
+          dt.removeListener(self, "demo:ctx:new");
+          dt.on(this, "demo:ctx:new", function(newCtx2) { // 5
+            expect(draw.operations.a).toBeDefined();
+            expect(draw.operations.b).toBeUndefined();
+            ran = true;
+            draw.end();
+          });
+          dt.emit("isla:ctx:new", { a: { _meta: { type: "square" } }}); // 4
+        });
+        dt.emit("isla:ctx:new", { a: { _meta: { type: "square" } },
+                                  b: { _meta: { type: "square" } }}); // 2
+      });
+      runs(function() { expect(ran).toEqual(true); }); // check ran
     });
 
     it('should correctly write out list in ctx that has been passed back and forth', function() {
@@ -165,12 +219,23 @@ describe('Draw', function() {
       // This meant write listwithobjinit wrote out a ref instead of the
       // obj attributes.  Lists now identified by _meta.type so are resolved
       // correctly.
-      var draw = new Draw(ctx());
-      var initCtx = Interpreter.interpret("basket is a list\nx is a thing\nx y is '1'\nadd x to basket").ctx;
-      var copiedCtx = draw.write(initCtx);
-      var out = Interpreter.interpret("write basket", { ctx: copiedCtx }).ret;
-      expect(out).toEqual("a list\n  a thing\n    y is '1'\n");
-      draw.end();
+      var ran = false;
+      runs(function() {
+        // 1
+        var dt = demoTalker();
+        var draw = new Draw(ctx(), dt);
+        var initCtx = Interpreter.interpret("basket is a list\nx is a thing\nx y is '1'\nadd x to basket").ctx;
+        dt.on(this, "demo:ctx:new", function(ctx) { // 3
+          var out = Interpreter.interpret("write basket", { ctx: ctx }).ret;
+          expect(out).toEqual("a list\n  a thing\n    y is '1'\n");
+          draw.end();
+          ran = true;
+        });
+
+        dt.emit("isla:ctx:new", initCtx); // 2
+      });
+
+      runs(function() { expect(ran).toEqual(true); }); // check ran
     });
   });
 });
