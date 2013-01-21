@@ -13,6 +13,10 @@
       throw "You must provide a canvas context to draw to.";
     }
 
+    if (demoTalker == null) {
+      throw "You must provide a demo talker to communicate with.";
+    }
+
     if (canvasCtx.fillRect === undefined) {
       throw "The variable you passed does not appear to be an actual canvas context.";
     }
