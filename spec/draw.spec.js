@@ -1,6 +1,6 @@
 var _ = require('Underscore');
 
-var Draw = require('../src/plugins/draw').Draw;
+var Draw = require('../src/demos/draw').Draw;
 var Interpreter = require('../node_modules/isla/src/interpreter').Interpreter;
 var Eventer = require('../src/eventer').Eventer;
 

@@ -21,31 +21,14 @@
       throw "The variable you passed does not appear to be an actual canvas context.";
     }
 
-    this.operations;
     this.canvasCtx = canvasCtx;
+    this.operations;
 
-    var self = this;
-    // takes latest Isla execution ctx and makes draw ops from objects
-    demoTalker.on(this, "isla:ctx:new", function(ctx) {
-      // NB: ctx is unresolved so will not wk for complex assocs
-      var retCtx = EnvStore.extend(true, {}, ctx);
-      self.operations = {};
-      for (var i in retCtx) {
-        if (retCtx[i]._meta !== undefined) {
-          var type = retCtx[i]._meta.type;
-          if (shapes[type] !== undefined) {
-            retCtx[i] = shapes[type].defaults(self.canvasCtx, retCtx[i]);
-            self.operations[i] = makeOperation(self.canvasCtx, retCtx[i]);
-          }
-        }
-      }
-
-      demoTalker.emit("demo:ctx:new", retCtx);
-    });
-
+    setupCtxProcessing(demoTalker, this);
     setupHelp(demoTalker, this);
 
     // start drawing
+    var self = this;
     this.interval = setInterval(function() {
       self._draw();
     }, 50);
@@ -67,6 +50,26 @@
         this.operations[i].fn(this.operations[i].indicate);
       }
     }
+  };
+
+  // sets up cb to take latest Isla ctx and make draw ops from objects
+  var setupCtxProcessing = function(demoTalker, demo) {
+    demoTalker.on(demo, "isla:ctx:new", function(ctx) {
+      // NB: ctx is unresolved so will not wk for complex assocs
+      var retCtx = EnvStore.extend(true, {}, ctx);
+      demo.operations = {};
+      for (var i in retCtx) {
+        if (retCtx[i]._meta !== undefined) {
+          var type = retCtx[i]._meta.type;
+          if (shapes[type] !== undefined) {
+            retCtx[i] = shapes[type].defaults(demo.canvasCtx, retCtx[i]);
+            demo.operations[i] = makeOperation(demo.canvasCtx, retCtx[i]);
+          }
+        }
+      }
+
+      demoTalker.emit("demo:ctx:new", retCtx);
+    });
   };
 
   var setupHelp = function(demoTalker, demo) {
