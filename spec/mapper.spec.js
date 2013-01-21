@@ -109,7 +109,7 @@ describe('Mapper', function() {
     });
   });
 
-  describe('getLine', function() {
+  describe('getLineNumber', function() {
     describe('first line', function() {
       it('should get first line in top left', function() {
         expect(m.getLineNumber(t, "a is b", { x:0, y:0 })).toEqual(0);
@@ -148,6 +148,12 @@ describe('Mapper', function() {
       it('should miss second line when below', function() {
         expect(m.getLineNumber(t, "a is b\na is b", { x:0, y:20 })).toBeUndefined();
       });
+    });
+  });
+
+  describe('getLine', function() {
+    it('should return line', function() {
+      expect(m.getLine(t, "a is b", { x:0, y:0 })).toEqual("a is b");
     });
   });
 });
