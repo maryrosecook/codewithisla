@@ -33,7 +33,7 @@ describe('TextGrabber', function() {
     });
 
     describe('sequence of inputs', function() {
-      it('should add mustiple permanents', function() {
+      it('should add multiple permanents', function() {
         tg.write({ event:"permanent", text:"abc" });
         tg.write({ event:"permanent", text:"def" });
         expect(tg.getPlainText()).toEqual("abc\ndef\n");
