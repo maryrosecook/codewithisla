@@ -47,8 +47,8 @@
       return undefined;
     },
 
-    getLine: function(terminal, text, point) {
-      var lineNumber = mapper.getLineNumber(terminal, text, point);
+    getLine: function(terminal, text, relativePoint) {
+      var lineNumber = mapper.getLineNumber(terminal, text, relativePoint);
       return text.split("\n")[lineNumber];
     }
   };
