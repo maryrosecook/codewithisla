@@ -16,9 +16,9 @@
     this.on = this.addListener;
 
     this.removeListener = function(obj, event) {
-      for(var i in callbacks) {
-        if(callbacks[i].obj === obj) {
-          delete callbacks[i];
+      for(var i = 0; i < callbacks[event].length; i++) {
+        if(callbacks[event][i].obj === obj) {
+          callbacks[event].splice(i, 1);
           break;
         }
       }
