@@ -39,7 +39,7 @@ describe('TextGrabber', function() {
         expect(tg.getPlainText()).toEqual("abc\ndef\n");
       });
 
-      it('should include a impermanent with permanentted text', function() {
+      it('should include an impermanent with permanent text', function() {
         tg.write({ event:"permanent", text:"abc" });
         tg.write({ event:"permanent", text:"def" });
         tg.write({ event:"impermanent", text:"ghi" });
@@ -53,6 +53,19 @@ describe('TextGrabber', function() {
         tg.write({ event:"permanent", text:"def" });
         expect(tg.getPlainText()).toEqual("abc\ndef\n");
       });
+    });
+
+   describe('getCategorisedText', function() {
+      it('should categorise impermanent text', function() {
+        tg.write({ event:"impermanent", text:"abc", io:"input" });
+        expect(tg.getCategorisedText()[0]).toEqual({ text: "abc\n", io: "input"});
+      });
+
+      it('should categorise permanent text', function() {
+        tg.write({ event:"permanent", text:"abc", io:"input" });
+        expect(tg.getCategorisedText()[0]).toEqual({ text: "abc\n", io: "input"});
+      });
+
     });
   });
 });
