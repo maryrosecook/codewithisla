@@ -28,9 +28,6 @@ hr { color: #aaa; background-color:#aaa; height:1px; border:0; }
 
 .footer { width:100px; margin-left: auto; margin-right: auto; }
 
-ol { padding-left: 16px; }
-li { padding: 5px 0 5px 0; }
-
 .title a { border-bottom:none; }
 
 .demo { width:400px; }
