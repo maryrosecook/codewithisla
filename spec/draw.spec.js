@@ -126,7 +126,7 @@ describe('Draw', function() {
       });
 
       afterEach(function() {
-        expect(draw.operations.a).toBeDefined();
+        expect(draw.operations()[0]).toBeDefined();
         draw.end();
       });
 
@@ -140,8 +140,8 @@ describe('Draw', function() {
         b: { _meta: { type: "whatevs" }}
       });
 
-      expect(draw.operations.a).toBeDefined();
-      expect(draw.operations.b).toBeUndefined();
+      expect(draw.operations()[0]).toBeDefined();
+      expect(draw.operations()[1]).toBeUndefined();
       draw.end();
     });
 
@@ -155,8 +155,8 @@ describe('Draw', function() {
           newCtx.b = { _meta: { type: "circle" } };
           dt.removeListener(self, "demo:ctx:new");
           dt.on(this, "demo:ctx:new", function() { // 5
-            expect(draw.operations.a).toBeDefined();
-            expect(draw.operations.b).toBeDefined();
+            expect(draw.operations()[0]).toBeDefined();
+            expect(draw.operations()[1]).toBeDefined();
             ran = true;
             draw.end();
           });
@@ -178,8 +178,8 @@ describe('Draw', function() {
           dt.removeListener(self, "demo:ctx:new");
           dt.on(this, "demo:ctx:new", function(newCtx2) { // 5
             expect(newCtx2.b).toEqual({});
-            expect(draw.operations.a).toBeDefined();
-            expect(draw.operations.b).toBeUndefined();
+            expect(draw.operations()[0]).toBeDefined();
+            expect(draw.operations()[1]).toBeUndefined();
             ran = true;
             draw.end();
           });
@@ -199,8 +199,8 @@ describe('Draw', function() {
         dt.on(self, "demo:ctx:new", function(newCtx) { // 3
           dt.removeListener(self, "demo:ctx:new");
           dt.on(this, "demo:ctx:new", function(newCtx2) { // 5
-            expect(draw.operations.a).toBeDefined();
-            expect(draw.operations.b).toBeUndefined();
+            expect(draw.operations()[0]).toBeDefined();
+            expect(draw.operations()[1]).toBeUndefined();
             ran = true;
             draw.end();
           });
@@ -233,6 +233,39 @@ describe('Draw', function() {
         });
 
         dt.emit("isla:ctx:new", initCtx); // 2
+      });
+
+      runs(function() { expect(ran).toEqual(true); }); // check ran
+    });
+  });
+
+  describe('draw order', function() {
+    var withCtx = function(dt, ctx, id, value, cb) {
+      dt.removeListener(dt, "demo:ctx:new");
+      dt.on(dt, "demo:ctx:new", function(newCtx) {
+        cb(newCtx);
+      });
+
+      ctx[id] = value;
+      dt.emit("isla:ctx:new", ctx);
+    };
+
+    it('should order three ops in order of addition', function() {
+      var ran;
+      runs(function() {
+        var dt = demoTalker();
+        var draw = new Draw(ctx(), dt);
+        withCtx(dt, {}, "c", { _meta: { type: "square" }}, function(ctx1) {
+          withCtx(dt, ctx1, "b", { _meta: { type: "square" }}, function(ctx2) {
+            withCtx(dt, ctx2, "a", { _meta: { type: "square" }}, function(ctx3) {
+              expect(draw.operations()[0].name).toEqual("c");
+              expect(draw.operations()[1].name).toEqual("b");
+              expect(draw.operations()[2].name).toEqual("a");
+              ran = true;
+              draw.end();
+            });
+          });
+        });
       });
 
       runs(function() { expect(ran).toEqual(true); }); // check ran

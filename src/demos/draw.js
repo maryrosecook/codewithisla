@@ -22,7 +22,15 @@
     }
 
     this.canvasCtx = canvasCtx;
-    this.operations;
+
+    var operations = [];
+    this.operations = function(inOperations) {
+      if (inOperations !== undefined) {
+        operations = inOperations;
+      } else {
+        return operations.sort(function(a, b) { return a.order - b.order; });
+      }
+    };
 
     setupCtxProcessing(demoTalker, this);
     setupHelp(demoTalker, this);
@@ -50,8 +58,9 @@
       this.canvasCtx.fillStyle = "#fff";
       this.canvasCtx.fillRect(0, 0, this.canvasCtx.canvas.width,
                               this.canvasCtx.canvas.height);
-      for(var i in this.operations) {
-        this.operations[i].fn(this.operations[i].indicate);
+      var operations = this.operations();
+      for(var i = 0; i < operations.length; i++) {
+        operations[i].fn(operations[i].indicate);
       }
     }
   };
@@ -61,34 +70,61 @@
     demoTalker.on(demo, "isla:ctx:new", function(ctx) {
       // NB: ctx is unresolved so will not wk for complex assocs
       var retCtx = EnvStore.extend(true, {}, ctx);
-      demo.operations = {};
+
+      retCtx = order(retCtx);
+      var operations = [];
       for (var i in retCtx) {
         if (retCtx[i]._meta !== undefined) {
           var type = retCtx[i]._meta.type;
           if (shapes[type] !== undefined) {
             retCtx[i] = shapes[type].defaults(demo.canvasCtx, retCtx[i]);
-            demo.operations[i] = makeOperation(demo.canvasCtx, retCtx[i]);
+            operations.push(makeOperation(demo.canvasCtx, retCtx[i], i));
           }
         }
       }
 
+      demo.operations(operations);
       demoTalker.emit("demo:ctx:new", retCtx);
     });
+  };
+
+  // mark new ctx entry w order (can only be one, max)
+  var order = function(ctx) {
+    var retCtx = EnvStore.extend(true, {}, ctx);
+    var newElement = _.find(retCtx, function(x) {
+      return x._meta !== undefined && x._meta.order === undefined;
+    });
+
+    var lastCtxElement = _.max(retCtx, function(x) {
+      return x._meta !== undefined ? x._meta.order : undefined;
+    });
+
+    if (newElement !== undefined) { // got new element of ctx - add order
+      if (lastCtxElement === undefined) {
+        newElement._meta.order = 0;
+      } else {
+        newElement._meta.order = lastCtxElement._meta.order + 1;
+      }
+    }
+    return retCtx;
   };
 
   var setupHelp = function(demoTalker, demo) {
     demoTalker.on(this, "isla:mouse:mouseover", function(data) {
       if (data.thing === "token" && data.syntaxNode.syntax === "variable") {
-        if (demo.operations[data.syntaxNode.code] !== undefined) {
-          // shortcut to var name
-          demo.operations[data.syntaxNode.code].indicate = true;
+        var operations = demo.operations();
+        for (var i = 0; i < operations.length; i++) {
+          if (operations[i].name === data.syntaxNode.code) {
+            operations[i].indicate = true;
+          }
         }
       }
     });
 
     demoTalker.on(this, "isla:mouse:mouseout", function() {
-      for (var i in demo.operations) {
-        demo.operations[i].indicate = false;
+      var operations = demo.operations();
+      for (var i = 0; i < operations.length; i++) {
+        operations[i].indicate = false;
       }
     });
   };
@@ -102,9 +138,11 @@
     consoleIndicator.write({ event: event, data: data, id: id});
   };
 
-  var makeOperation = function(canvasCtx, obj) {
+  var makeOperation = function(canvasCtx, obj, name) {
     return {
       indicate: false,
+      order: obj.order,
+      name: name,
       fn: function(indicate) {
         shapes[obj._meta.type].fn(canvasCtx, obj, indicate);
       }
