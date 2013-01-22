@@ -205,7 +205,7 @@
     return retObj;
   };
 
-  var drawPolygon = function(canvasCtx, obj) {
+  var drawPolygon = function(canvasCtx, obj, indicate) {
     var x = parseFloat(obj.x);
     var y = parseFloat(obj.y);
     var objSize = size(obj.size);
@@ -224,6 +224,10 @@
 
     canvasCtx.closePath();
     canvasCtx.fill();
+    if (indicate) {
+      canvasCtx.lineWidth = 4;
+      canvasCtx.stroke();
+    }
   };
 
   var polygonDefaults = function(canvasCtx, obj, polyConfig) {
@@ -256,11 +260,17 @@
   };
 
   var rectangle = {
-    fn: function(canvasCtx, obj) {
+    fn: function(canvasCtx, obj, indicate) {
       var width = size(obj.width);
       var height = size(obj.height)
       canvasCtx.fillStyle = color(obj.color);
-      canvasCtx.fillRect(obj.x - width / 2, obj.y - height / 2, width, height);
+      canvasCtx.fillRect(obj.x - width / 2, obj.y - height / 2,
+                         width, height);
+      if (indicate) {
+        canvasCtx.lineWidth = 4;
+        canvasCtx.strokeRect(obj.x - width / 2, obj.y - height / 2,
+                             width, height);
+      }
     },
 
     defaults: function(canvasCtx, obj) {
@@ -272,11 +282,16 @@
   };
 
   var square = {
-    fn: function(canvasCtx, obj) {
+    fn: function(canvasCtx, obj, indicate) {
       var objSize = size(obj.size);
       canvasCtx.fillStyle = color(obj.color);
       canvasCtx.fillRect(obj.x - objSize / 2, obj.y - objSize / 2,
                          objSize, objSize);
+      if (indicate) {
+        canvasCtx.lineWidth = 4;
+        canvasCtx.strokeRect(obj.x - objSize / 2, obj.y - objSize / 2,
+                             objSize, objSize);
+      }
     },
 
     defaults: function(canvasCtx, obj) {
@@ -287,7 +302,7 @@
   };
 
   var triangle = {
-    fn: function(canvasCtx, obj) {
+    fn: function(canvasCtx, obj, indicate) {
       var x = parseFloat(obj.x);
       var y = parseFloat(obj.y);
       var objSize = size(obj.size);
@@ -300,6 +315,10 @@
       canvasCtx.lineTo(x, y - h / 2);
       canvasCtx.closePath();
       canvasCtx.fill();
+      if (indicate) {
+        canvasCtx.lineWidth = 4;
+        canvasCtx.stroke();
+      }
     },
 
     defaults: function(canvasCtx, obj) {
@@ -330,8 +349,8 @@
 
   var makePolygonCode = function(polyConfig) {
     return {
-      fn: function(canvasCtx, obj) {
-        drawPolygon(canvasCtx, obj);
+      fn: function(canvasCtx, obj, indicate) {
+        drawPolygon(canvasCtx, obj, indicate);
       },
 
       defaults: function(canvasCtx, obj) {
