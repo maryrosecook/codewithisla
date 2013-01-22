@@ -97,6 +97,7 @@ span.jquery-console-prompt span.function { color: #B0A5FF; }
   float:left;
   font-size: 16px;
   font-family:'courier';
+  margin-bottom:8px;
 }
 
 #console div.jquery-console-inner {
