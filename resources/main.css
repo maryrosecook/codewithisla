@@ -74,13 +74,13 @@ span.jquery-console-prompt span.function { color: #B0A5FF; }
   border:1px solid black;
   height:64px;
   width:388px;
-  padding:5px;
-  text-align: left;
+  padding:6px;
+  text-align:left;
+  margin-top:10px;
 }
 
 .console-canvas-container {
   height:400px;
-  margin-bottom:10px;
 }
 
 #canvas {
@@ -103,7 +103,7 @@ span.jquery-console-prompt span.function { color: #B0A5FF; }
 #console div.jquery-console-inner {
  width:380px;
  height:380px;
- margin: 10px 10px;
+ margin: 6px;
  overflow:auto;
  text-align:left;
  cursor:default;
