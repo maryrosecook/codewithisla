@@ -35,6 +35,10 @@
   }
 
   Draw.prototype = {
+    getTutorSteps: function() {
+      return steps;
+    },
+
     // stop drawing
     end: function() {
       clearInterval(this.interval);
@@ -294,6 +298,22 @@
       }
     };
   }
+
+  var steps = [
+    "cherry is a circle",
+    "melon is a circle",
+    "grape is a circle",
+    "cup is a square",
+    "grape color is 'red'",
+    "grape color is 'green'",
+    "cherry color is 'red'",
+    "melon color is 'yellow'",
+    "cherry size is 'small'",
+    "cup color is 'gray'",
+    "grape size is 'small'",
+    "melon size is 'big'",
+    "pizza is a triangle",
+  ];
 
   var polygons = {
     "pentagon": { rot: 0.94, sides:5 },
