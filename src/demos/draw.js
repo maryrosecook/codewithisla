@@ -18,7 +18,7 @@
     }
 
     if (canvasCtx.fillRect === undefined) {
-      throw "The variable you passed does not appear to be an actual canvas context.";
+      throw "The variable you passed does not appear to be a canvas context.";
     }
 
     this.canvasCtx = canvasCtx;
@@ -216,8 +216,10 @@
                      y + objSize * Math.sin(obj._meta.rot));
 
     for (var i = 1; i <= obj._meta.sides; i += 1) {
-      canvasCtx.lineTo(x + objSize * Math.cos(obj._meta.rot + i * 2 * Math.PI / obj._meta.sides),
-                       y + objSize * Math.sin(obj._meta.rot + i * 2 * Math.PI / obj._meta.sides));
+      canvasCtx.lineTo(x + objSize * Math.cos(obj._meta.rot + i * 2 *
+                                              Math.PI / obj._meta.sides),
+                       y + objSize * Math.sin(obj._meta.rot + i * 2 *
+                                              Math.PI / obj._meta.sides));
     }
 
     canvasCtx.closePath();
@@ -273,7 +275,8 @@
     fn: function(canvasCtx, obj) {
       var objSize = size(obj.size);
       canvasCtx.fillStyle = color(obj.color);
-      canvasCtx.fillRect(obj.x - objSize / 2, obj.y - objSize / 2, objSize, objSize);
+      canvasCtx.fillRect(obj.x - objSize / 2, obj.y - objSize / 2,
+                         objSize, objSize);
     },
 
     defaults: function(canvasCtx, obj) {
