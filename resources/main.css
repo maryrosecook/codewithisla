@@ -54,6 +54,22 @@ span.jquery-console-prompt span.variable { color: #F3AFFF; }
 span.jquery-console-prompt span.attribute { color: #87C4FF; }
 span.jquery-console-prompt span.function { color: #B0A5FF; }
 
+#tutor {
+  color:#666;
+  text-align: left;
+  border:1px solid black;
+  height:17px;
+  width:798px;
+  padding:6px;
+  margin-bottom:10px;
+}
+
+#tutor .code {
+  background-color: #000;
+  color:#fff;
+  padding:6px 12px 7px 12px;
+}
+
 #help {
   border:1px solid black;
   height:64px;
