@@ -200,14 +200,14 @@
   var basicDefaults = function(canvasCtx, obj) {
     var retObj = EnvStore.extend(true, {}, obj);
     retObj.color = retObj.color || randomColor();
-    retObj.x = retObj.x || random(canvasCtx.canvas.width);
-    retObj.y = retObj.y || random(canvasCtx.canvas.height);
+    retObj._x = retObj._x || random(canvasCtx.canvas.width);
+    retObj._y = retObj._y || random(canvasCtx.canvas.height);
     return retObj;
   };
 
   var drawPolygon = function(canvasCtx, obj, indicate) {
-    var x = parseFloat(obj.x);
-    var y = parseFloat(obj.y);
+    var x = parseFloat(obj._x);
+    var y = parseFloat(obj._y);
     var objSize = size(obj.size);
 
     canvasCtx.fillStyle = obj.color;
@@ -243,7 +243,7 @@
       var objSize = size(obj.size);
       canvasCtx.fillStyle = color(obj.color);
       canvasCtx.beginPath();
-      canvasCtx.arc(obj.x, obj.y, objSize / 2, 0, Math.PI * 2, true);
+      canvasCtx.arc(obj._x, obj._y, objSize / 2, 0, Math.PI * 2, true);
       canvasCtx.closePath();
       canvasCtx.fill();
       if (indicate) {
@@ -264,11 +264,11 @@
       var width = size(obj.width);
       var height = size(obj.height)
       canvasCtx.fillStyle = color(obj.color);
-      canvasCtx.fillRect(obj.x - width / 2, obj.y - height / 2,
+      canvasCtx.fillRect(obj._x - width / 2, obj._y - height / 2,
                          width, height);
       if (indicate) {
         canvasCtx.lineWidth = 4;
-        canvasCtx.strokeRect(obj.x - width / 2, obj.y - height / 2,
+        canvasCtx.strokeRect(obj._x - width / 2, obj._y - height / 2,
                              width, height);
       }
     },
@@ -285,11 +285,11 @@
     fn: function(canvasCtx, obj, indicate) {
       var objSize = size(obj.size);
       canvasCtx.fillStyle = color(obj.color);
-      canvasCtx.fillRect(obj.x - objSize / 2, obj.y - objSize / 2,
+      canvasCtx.fillRect(obj._x - objSize / 2, obj._y - objSize / 2,
                          objSize, objSize);
       if (indicate) {
         canvasCtx.lineWidth = 4;
-        canvasCtx.strokeRect(obj.x - objSize / 2, obj.y - objSize / 2,
+        canvasCtx.strokeRect(obj._x - objSize / 2, obj._y - objSize / 2,
                              objSize, objSize);
       }
     },
@@ -303,8 +303,8 @@
 
   var triangle = {
     fn: function(canvasCtx, obj, indicate) {
-      var x = parseFloat(obj.x);
-      var y = parseFloat(obj.y);
+      var x = parseFloat(obj._x);
+      var y = parseFloat(obj._y);
       var objSize = size(obj.size);
       var h = objSize * Math.sqrt(3)/2;
 
