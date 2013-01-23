@@ -78,13 +78,13 @@
     var tokens = $('.jquery-console-prompt').children('span')
                  .not('.jquery-console-cursor');
     _.map(tokens, function(x) {
-      $(x).css({ "background-color": "#000" })
+      $(x).css({ "background-color": "transparent" })
     });
   };
 
   var unindicateAllLines = function() {
     _.map($('.jquery-console-prompt-box'), function(x) {
-      $(x).css({ "background-color": "#000" })
+      $(x).css({ "background-color": "transparent" })
     });
   };
 
