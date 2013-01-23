@@ -47,11 +47,11 @@
     var description = "Has no value, yet.";
     if (val !== undefined) {
       // resolve any refs - non-refs will pass untouched
-      val = Isla.Interpreter.resolve(val, env);
-
-      description = val.toString();
-      if(Isla.Utils.type(val) === "String") {
-        description = "'" + val + "'";
+      resolvedVal = Isla.Interpreter.resolve(val, env);
+      if(Isla.Utils.type(resolvedVal) === "String") {
+        description = "'" + resolvedVal + "'";
+      } else {
+        description = resolvedVal.toString();
       }
     }
 
