@@ -38,9 +38,7 @@
     this.write = function(e) {
       if (e.event === "mousemove") {
         handleHelp(terminal, e.point, envStore);
-      } else if (e.event === "mouseout") {
-        secondaryHelp();
-      } else if (e.event === "text:new") {
+      } else if (e.event === "mouseout" || e.event === "text:new") {
         secondaryHelp();
       }
     };
