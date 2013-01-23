@@ -50,9 +50,18 @@ hr { color: #aaa; background-color:#aaa; height:1px; border:0; }
 span.jquery-console-prompt span.keyword { color: #FFF286; }
 span.jquery-console-prompt span.literal { color: white; }
 span.jquery-console-prompt span.type { color: #89FB95; }
-span.jquery-console-prompt span.variable { color: #F3AFFF; }
-span.jquery-console-prompt span.attribute { color: #87C4FF; }
-span.jquery-console-prompt span.function { color: #B0A5FF; }
+span.jquery-console-prompt span.variable {
+  color: #F3AFFF;
+  border-bottom:1px dotted #926999;
+}
+span.jquery-console-prompt span.attribute {
+  color: #87C4FF;
+  border-bottom:1px dotted #517699;
+}
+span.jquery-console-prompt span.function {
+  color: #B0A5FF;
+  /* border-bottom:1px dotted #6A6399; no help for fns, yet */
+}
 
 #tutor {
   color:#666;
