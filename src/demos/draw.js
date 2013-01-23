@@ -155,7 +155,7 @@
 
   var randomColor = function() {
     var keys = _.keys(COLORS);
-    return COLORS[keys[Math.floor(Math.random() * keys.length)]];
+    return keys[Math.floor(Math.random() * keys.length)];
   };
 
   var randomSize = function() {
@@ -210,7 +210,7 @@
     var y = parseFloat(obj._y);
     var objSize = size(obj.size);
 
-    canvasCtx.fillStyle = obj.color;
+    canvasCtx.fillStyle = color(obj.color);
     canvasCtx.beginPath();
     canvasCtx.moveTo(x + objSize * Math.cos(obj._meta.rot),
                      y + objSize * Math.sin(obj._meta.rot));
