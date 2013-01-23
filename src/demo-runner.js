@@ -20,17 +20,7 @@
       var terminal = setupTerminal(demoTalker, envStore);
       var helper = new Helper(terminal, envStore, demoTalker);
       var tutor = setupTutor(demo, terminal);
-      var tipper = setupTipper(terminal);
     });
-  };
-
-  var setupTipper = function(terminal) {
-    var tipper = new Tipper(terminal, ui.tipper);
-    terminal.events.on(this, "text:new", function(line) {
-      tipper.write("text:new");
-    });
-
-    return tipper;
   };
 
   var setupTutor = function(demo, terminal) {

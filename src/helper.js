@@ -3,8 +3,11 @@
     var consoleIndicator = new ConsoleIndicator(terminal);
     var mouser = new Mouser("div.jquery-console-inner");
 
-    // var textHelper = new TextHelper(terminal, consoleIndicator, envStore);
-    // mouser.events.on(textHelper, "data", textHelper.write);
+    var textHelper = new TextHelper(terminal, consoleIndicator, envStore);
+    mouser.events.on(textHelper, "data", textHelper.write);
+    terminal.events.on(textHelper, "text:new", function() {
+      textHelper.write({ event: "text:new" });
+    });
 
     demoTalker.on(this, "demo:indicator:indicate", function(e) {
       consoleIndicator.write({ event:"indicate", data:data });

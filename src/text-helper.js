@@ -20,14 +20,6 @@
   var id = "textHelper";
 
   var TextHelper = function(terminal, consoleIndicator, envStore) {
-    this.write = function(e) {
-      if (e.event === "mousemove") {
-        handleHelp(terminal, e.point, envStore);
-      } else if (e.event === "mouseout") {
-        clearHelp();
-      }
-    };
-
     var indicate = function(event, data) {
       consoleIndicator.write({ event:event, data:data, id:id });
     };
@@ -35,6 +27,22 @@
     var clearHelp = function() {
       $('#help').text("");
       indicate("clear", {});
+    };
+
+    var secondaryHelp = function() {
+      if (terminal.getCategorisedText().length > 1) {
+        $('#help').text("Hover over underlined words to learn more");
+      }
+    };
+
+    this.write = function(e) {
+      if (e.event === "mousemove") {
+        handleHelp(terminal, e.point, envStore);
+      } else if (e.event === "mouseout") {
+        secondaryHelp();
+      } else if (e.event === "text:new") {
+        secondaryHelp();
+      }
     };
 
     var handleHelp = function(terminal, point, envStore) {
@@ -55,9 +63,10 @@
         displayHelp(getLineHelp(mapper.getLine(terminal, text, point),
                                 envStore));
         return;
+      } else {
+        clearHelp();
+        secondaryHelp();
       }
-
-      clearHelp();
     };
   };
 
