@@ -43,15 +43,25 @@
     return syntaxTokens[syntaxTokenIndex];
   };
 
-  var describeValue = function(val, env) {
+  var describeValue = function(unresolvedVal, env) {
     var description = "Has no value, yet.";
-    if (val !== undefined) {
+    if (unresolvedVal !== undefined) {
       // resolve any refs - non-refs will pass untouched
-      resolvedVal = Isla.Interpreter.resolve(val, env);
-      if(Isla.Utils.type(resolvedVal) === "String") {
-        description = "'" + resolvedVal + "'";
+      val = Isla.Interpreter.resolve(unresolvedVal, env);
+      if(Isla.Utils.type(val) === "String") {
+        description = "'" + val + "'";
       } else {
-        description = resolvedVal.toString();
+        // can't just use Isla's toString - want to exclude _private attrs
+        description = "";
+        var lines = val.toString().split("\n");
+        for (var i = 0; i < lines.length; i++) {
+          if (lines[i].indexOf("_") === -1) { // exclude private attrs
+            description += lines[i];
+            if (i < lines.length - 1) {
+              description += "\n";
+            }
+          }
+        }
       }
     }
 
