@@ -10,12 +10,7 @@
 
   var nodeDescriber = {
     describe: function(text, index, env) {
-      var lineNumber = codeAnalyzer.getLineNumber(text, index);
-      var line = codeAnalyzer.getLine(text, lineNumber);
-      var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
-      var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
-      var syntaxNode = syntaxTokens[syntaxTokenIndex];
-
+      var syntaxNode = getSyntaxNode(text, index);
       if (syntaxNode.syntax === "variable") {
         var val;
         if (syntaxNode.node.tag === "scalar") { // x is a t
@@ -28,6 +23,8 @@
 
         return { body: describeValue(val, env) };
       } else if (syntaxNode.syntax === "attribute") {
+        var lineNumber = codeAnalyzer.getLineNumber(text, index);
+        var line = codeAnalyzer.getLine(text, lineNumber);
         var tokens = codeAnalyzer.expressionTokens(line);
         var objToken = tokens[getTokenIndex(text, index)];
         var val = Isla.Interpreter.evaluateValue(objToken.c[0], env).val;
@@ -35,7 +32,15 @@
       } else {
         return undefined;
       }
-    }
+    },
+  };
+
+  var getSyntaxNode = function(text, index) {
+    var lineNumber = codeAnalyzer.getLineNumber(text, index);
+    var line = codeAnalyzer.getLine(text, lineNumber);
+    var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
+    var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
+    return syntaxTokens[syntaxTokenIndex];
   };
 
   var describeValue = function(val, env) {
