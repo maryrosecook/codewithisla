@@ -13,10 +13,4 @@
       $('#tutor').text(text);
     }
   };
-
-  exports.ui.tipper = {
-    displayMessage: function(text) {
-      $('#tips').text(text);
-    }
-  };
 })(typeof exports === 'undefined' ? this : exports)
