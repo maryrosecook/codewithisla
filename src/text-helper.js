@@ -31,7 +31,7 @@
 
     var secondaryHelp = function() {
       if (terminal.getCategorisedText().length > 1) {
-        $('#help').text("Hover over underlined words");
+        $('#help').text("Hover over underlined words to learn more");
       }
     };
 
