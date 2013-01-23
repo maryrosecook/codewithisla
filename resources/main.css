@@ -88,16 +88,6 @@ span.jquery-console-prompt span.function {
   margin-top:10px;
 }
 
-#tips {
-  border:1px solid black;
-  height:17px;
-  width:386px;
-  padding:6px;
-  text-align:left;
-  margin-top:10px;
-}
-
-
 .console-canvas-container {
   height:400px;
 }
