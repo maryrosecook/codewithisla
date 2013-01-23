@@ -94,7 +94,9 @@
   };
 
   var displayHelp = function(help) {
-    $('#help').text(help.body);
+    var html = help.body.replace(/\n/g, "<br/>");
+    html = html.replace(/  /g, "&nbsp;&nbsp;");
+    $('#help').html(html);
   };
 
   exports.TextHelper = TextHelper;
