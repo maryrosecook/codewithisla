@@ -4,19 +4,24 @@
     consoleController = setUpConsoleController(this);
     this.events = new Eventer();
 
+    var self = this;
     textGrabber = new TextGrabber();
     this.events.on(this, "submit", function(line) {
       textGrabber.write({ event: "permanent", text: line, io:"input" });
+      self.events.emit("text:new");
     });
     this.events.on(this, "keypress", function(line) {
       textGrabber.write({ event: "impermanent", text: line, io:"input" });
+      self.events.emit("text:new");
     });
     this.events.on(this, "history", function(line) {
       textGrabber.write({ event: "impermanent", text: line, io:"input" });
+      self.events.emit("text:new");
     });
     this.events.on(this, "result", function(result) {
       if (result !== "") {
         textGrabber.write({ event: "permanent", text: result, io:"output" });
+        self.events.emit("text:new");
       }
     });
   };
