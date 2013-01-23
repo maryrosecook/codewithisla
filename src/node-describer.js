@@ -17,16 +17,16 @@
       var syntaxNode = syntaxTokens[syntaxTokenIndex];
 
       if (syntaxNode.syntax === "variable") {
-        var val;
-        if (syntaxNode.node.tag === "scalar") { // x is a t
-          val = Isla.Interpreter.evaluateValue(syntaxNode.node, env).val;
-        } else if (syntaxNode.node.tag === "identifier") {
-          // x age is '1' - x not wrapped in scalar tag so can't evaluate
-          // if tried to use tok one level up (in obj tag), would get attr val
-          val = Isla.Interpreter.resolve({ ref:syntaxNode.node.c[0] }, env);
-        }
-
-        return { body: describeValue(val, env) };
+        // var val;
+        // if (syntaxNode.node.tag === "scalar") { // x is a t
+        //   val = Isla.Interpreter.evaluateValue(syntaxNode.node, env).val;
+        // } else if (syntaxNode.node.tag === "identifier") {
+        //   // x age is '1' - x not wrapped in scalar tag so can't evaluate
+        //   // if tried to use tok one level up (in obj tag), would get attr val
+        //   val = Isla.Interpreter.resolve({ ref:syntaxNode.node.c[0] }, env);
+        // }
+        // return { body: describeValue(val, env) };
+        return { body:"" }; // nothing, for now
       } else if (syntaxNode.syntax === "attribute") {
         var tokens = codeAnalyzer.expressionTokens(line);
         var objToken = tokens[getTokenIndex(text, index)];
