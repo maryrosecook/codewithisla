@@ -35,7 +35,7 @@
         });
       } else if (isOverLine(terminal, point)) {
         var lineNumber = mapper.getLineNumber(terminal, text, point);
-        var line = text.split("\n")[lineNumber];
+        var line = codeAnalyzer.getLine(text, lineNumber);
         if (line.length > 0) {
           var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
           demoTalker.emit("isla:mouse:mouseover", {
