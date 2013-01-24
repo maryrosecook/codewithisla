@@ -24,7 +24,8 @@
     };
 
     var secondaryHelp = function() {
-      if (terminal.getCategorisedText().length > 1) {
+      if (terminal.getText().length > 1) {
+        clearHelp();
         ui.displayMessage("Hover over underlined words to learn more");
       }
     };
@@ -59,7 +60,6 @@
                                       envStore));
         return;
       } else {
-        clearHelp();
         secondaryHelp();
       }
     };
