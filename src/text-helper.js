@@ -40,7 +40,7 @@
 
     var handleHelp = function(terminal, point, envStore) {
       var text = terminal.getText();
-      if (isThereHelpForToken(terminal, point, envStore)) {
+      if (isHelpForToken(terminal, point, envStore)) {
         var index = mapper.getIndex(terminal, text, point);
         clearHelp();
         ui.indicate(consoleIndicator, "indicate", {
@@ -49,7 +49,7 @@
 
         ui.displayMessage(getTokenHelp(text, index, envStore));
         return;
-      } else if (isOverLine(terminal, point)) {
+      } else if (isHelpforLine(terminal, point)) {
         clearHelp();
         ui.indicate(consoleIndicator, "indicate", {
           thing:"line",
@@ -65,7 +65,7 @@
     };
   };
 
-  var isThereHelpForToken = function(terminal, point, envStore) {
+  var isHelpForToken = function(terminal, point, envStore) {
     var text = terminal.getText();
     var index = mapper.getIndex(terminal, text, point);
     return index !== undefined &&
@@ -73,7 +73,7 @@
       getTokenHelp(text, index, envStore) !== undefined;
   };
 
-  var isOverLine = function(terminal, point) {
+  var isHelpforLine = function(terminal, point) {
     var text = terminal.getText();
     var line = mapper.getLine(terminal, text, point);
     return mapper.getLineNumber(terminal, text, point) !== undefined &&
