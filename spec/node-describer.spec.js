@@ -12,7 +12,7 @@ describe('nodeDescriber', function() {
       var code = "age is '1'";
       //          ___
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 0, env).body)
+      expect(nodeDescriber.describe(code, 0, env))
         .toEqual("'1'");
     });
 
@@ -20,7 +20,7 @@ describe('nodeDescriber', function() {
       var code = "mary is a person\nmary age is '31'";
       //          ____
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 0, env).body)
+      expect(nodeDescriber.describe(code, 0, env))
         .toEqual("a person\n  age is '31'\n");
     });
 
@@ -28,7 +28,7 @@ describe('nodeDescriber', function() {
       var code = "mary is a person\nmary age is '31'";
       //                            ____
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 17, env).body)
+      expect(nodeDescriber.describe(code, 17, env))
         .toEqual("a person\n  age is '31'\n");
     });
 
@@ -36,7 +36,7 @@ describe('nodeDescriber', function() {
       var code = "mary is a person\nmary age is '31'";
       //                                 ___
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 22, env).body)
+      expect(nodeDescriber.describe(code, 22, env))
         .toEqual("'31'");
     });
   });
@@ -46,7 +46,7 @@ describe('nodeDescriber', function() {
       var code = "x is a guy\ny is a guy\ny age is '1'\nx age is y age";
       //                                                         _
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 44, env).body)
+      expect(nodeDescriber.describe(code, 44, env))
         .toEqual("a guy\n  age is '1'\n");
     });
 
@@ -54,7 +54,7 @@ describe('nodeDescriber', function() {
       var code = "x is a guy\ny is a guy\ny age is '1'\nx age is y age";
       //                                                           ___
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 46, env).body)
+      expect(nodeDescriber.describe(code, 46, env))
         .toEqual("'1'");
     });
   });
@@ -64,7 +64,7 @@ describe('nodeDescriber', function() {
       var code = "x is '1'\nwrite x";
       //                          _
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 15, env).body)
+      expect(nodeDescriber.describe(code, 15, env))
         .toEqual("'1'");
     });
 
@@ -72,7 +72,7 @@ describe('nodeDescriber', function() {
       var code = "x is a guy\nx age is '1'\nwrite x age";
       //                                          _
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 30, env).body)
+      expect(nodeDescriber.describe(code, 30, env))
         .toEqual("a guy\n  age is '1'\n");
     });
 
@@ -80,7 +80,7 @@ describe('nodeDescriber', function() {
       var code = "x is a guy\nx age is '1'\nwrite x age";
       //                                            ___
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 32, env).body)
+      expect(nodeDescriber.describe(code, 32, env))
         .toEqual("'1'");
     });
   });
@@ -90,7 +90,7 @@ describe('nodeDescriber', function() {
       var code = "basket is a list\nx is '1'\nadd x to basket";
       //                                          _
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 30, env).body)
+      expect(nodeDescriber.describe(code, 30, env))
         .toEqual("'1'");
     });
 
@@ -98,7 +98,7 @@ describe('nodeDescriber', function() {
       var code = "basket is a list\nx is a i\nx y is '1'\nadd x y to basket";
       //                                                      _
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 41, env).body)
+      expect(nodeDescriber.describe(code, 41, env))
         .toEqual("a i\n  y is '1'\n");
     });
 
@@ -106,7 +106,7 @@ describe('nodeDescriber', function() {
       var code = "basket is a list\nx is a i\nx y is '1'\nadd x y to basket";
       //                                                        _
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 43, env).body)
+      expect(nodeDescriber.describe(code, 43, env))
         .toEqual("'1'");
     });
   });
@@ -116,7 +116,7 @@ describe('nodeDescriber', function() {
       var code = "basket is a list\nadd '1' to basket";
       //                                       ______
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 28, env).body)
+      expect(nodeDescriber.describe(code, 28, env))
         .toEqual("a list\n  '1'\n");
     });
 
@@ -124,7 +124,7 @@ describe('nodeDescriber', function() {
       var code = "x is a i\nx basket is a list\nadd '1' to x basket";
       //                                                   _
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 39, env).body)
+      expect(nodeDescriber.describe(code, 39, env))
         .toEqual("a i\n  basket is a list\n    '1'\n");
     });
 
@@ -132,7 +132,7 @@ describe('nodeDescriber', function() {
       var code = "x is a i\nx basket is a list\nadd '1' to x basket";
       //                                                     ______
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 41, env).body)
+      expect(nodeDescriber.describe(code, 41, env))
         .toEqual("a list\n  '1'\n");
     });
   });
@@ -142,7 +142,7 @@ describe('nodeDescriber', function() {
       var code = "a is a list\nb is a person\nb a is a";
       //                                        _
       var env = Isla.Interpreter.interpret(code);
-      expect(nodeDescriber.describe(code, 28, env).body)
+      expect(nodeDescriber.describe(code, 28, env))
         .toEqual("an empty list");
     });
   });

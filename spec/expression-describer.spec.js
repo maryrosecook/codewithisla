@@ -9,7 +9,7 @@ describe('expressionDescriber', function() {
       var code = "x is a circle";
       var node = codeAnalyzer.expression(code);
       var env = Isla.Interpreter.interpret(code);
-      expect(expressionDescriber.describe(node, env).body)
+      expect(expressionDescriber.describe(node, env))
         .toEqual("Makes a circle called x.");
     });
 
@@ -17,7 +17,7 @@ describe('expressionDescriber', function() {
       var code = "x is a person\nx y is a circle";
       var node = codeAnalyzer.expression(code.split("\n")[1]);
       var env = Isla.Interpreter.interpret(code);
-      expect(expressionDescriber.describe(node, env).body)
+      expect(expressionDescriber.describe(node, env))
         .toEqual("Makes a circle called x y.");
     });
   });
@@ -27,7 +27,7 @@ describe('expressionDescriber', function() {
       var code = "age is '1'";
       var node = codeAnalyzer.expression(code);
       var env = Isla.Interpreter.interpret(code);
-      expect(expressionDescriber.describe(node, env).body)
+      expect(expressionDescriber.describe(node, env))
         .toEqual("age is now '1'.");
     });
 
@@ -35,7 +35,7 @@ describe('expressionDescriber', function() {
       var code = "x is a person\nx y is '2'";
       var node = codeAnalyzer.expression(code.split("\n")[1]);
       var env = Isla.Interpreter.interpret(code);
-      expect(expressionDescriber.describe(node, env).body)
+      expect(expressionDescriber.describe(node, env))
         .toEqual("x y is now '2'.");
     });
 
@@ -43,7 +43,7 @@ describe('expressionDescriber', function() {
       var code = "age is '2'\nx is a person\nx y is age";
       var node = codeAnalyzer.expression(code.split("\n")[2]);
       var env = Isla.Interpreter.interpret(code);
-      expect(expressionDescriber.describe(node, env).body)
+      expect(expressionDescriber.describe(node, env))
         .toEqual("x y is now age.");
     });
 
@@ -51,7 +51,7 @@ describe('expressionDescriber', function() {
       var code = "x is a person\nx age is '2'\ny is a person\ny age is x age";
       var node = codeAnalyzer.expression(code.split("\n")[3]);
       var env = Isla.Interpreter.interpret(code);
-      expect(expressionDescriber.describe(node, env).body)
+      expect(expressionDescriber.describe(node, env))
         .toEqual("y age is now x age.");
     });
   });
@@ -62,7 +62,7 @@ describe('expressionDescriber', function() {
         var code = "x is a list\nadd '1' to x";
         var node = codeAnalyzer.expression(code.split("\n")[1]);
         var env = Isla.Interpreter.interpret(code);
-        expect(expressionDescriber.describe(node, env).body)
+        expect(expressionDescriber.describe(node, env))
           .toEqual("Puts '1' into the list called x.");
       });
 
@@ -70,7 +70,7 @@ describe('expressionDescriber', function() {
         var code = "x is a list\ny is a person\ny age is '1'\nadd y age to x";
         var node = codeAnalyzer.expression(code.split("\n")[3]);
         var env = Isla.Interpreter.interpret(code);
-        expect(expressionDescriber.describe(node, env).body)
+        expect(expressionDescriber.describe(node, env))
           .toEqual("Puts y age into the list called x.");
       });
     });
@@ -80,7 +80,7 @@ describe('expressionDescriber', function() {
         var code = "x is a list\ntake '1' from x";
         var node = codeAnalyzer.expression(code.split("\n")[1]);
         var env = Isla.Interpreter.interpret(code);
-        expect(expressionDescriber.describe(node, env).body)
+        expect(expressionDescriber.describe(node, env))
           .toEqual("Takes '1' out of the list called x.");
       });
 
@@ -88,7 +88,7 @@ describe('expressionDescriber', function() {
         var code = "x is a list\ny is a person\ny age is '1'\ntake y age from x";
         var node = codeAnalyzer.expression(code.split("\n")[3]);
         var env = Isla.Interpreter.interpret(code);
-        expect(expressionDescriber.describe(node, env).body)
+        expect(expressionDescriber.describe(node, env))
           .toEqual("Takes y age out of the list called x.");
       });
     });
@@ -99,7 +99,7 @@ describe('expressionDescriber', function() {
       var code = "write '1'";
       var node = codeAnalyzer.expression(code);
       var env = Isla.Interpreter.interpret(code);
-      expect(expressionDescriber.describe(node, env).body)
+      expect(expressionDescriber.describe(node, env))
         .toEqual("Writes out '1'.");
     });
 
@@ -107,7 +107,7 @@ describe('expressionDescriber', function() {
       var code = "x is a person\nx age is '1'\nwrite x age";
       var node = codeAnalyzer.expression(code.split("\n")[2]);
       var env = Isla.Interpreter.interpret(code);
-      expect(expressionDescriber.describe(node, env).body)
+      expect(expressionDescriber.describe(node, env))
         .toEqual("Writes out x age.");
     });
   });
