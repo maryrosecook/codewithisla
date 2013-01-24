@@ -1,8 +1,9 @@
 var TextHelper = require('../src/text-helper').TextHelper;
 
 // simple terminal w no padding
-var terminal = function() {
+var term = function(text) {
   return {
+    getText: function() { return text; },
     getOffset: function() { return { l:0, t:0 }; },
     getLineOffset: function() { return { l:0, t:0 }; },
     getWidth: function() { return 400; },
@@ -26,9 +27,7 @@ describe('TextHelper', function() {
 
     it('should clear text and indication prior to new help', function() {
       var displayedMessages = [], events = [];
-      var t = terminal();
-      t.getText = function() { return "age is '1'\n"; };
-      var th = new TextHelper(t, {}, envStore({ age: "1" }), {
+      var th = new TextHelper(term("a is '1'\n"), {}, envStore({ a:"1" }), {
         displayMessage: function(m) { displayedMessages.push(m); },
         indicate: function(__, e, __) {
           events.push(e);
@@ -42,9 +41,7 @@ describe('TextHelper', function() {
 
     it('should display var value in text box when hover over', function() {
       var displayedMessage;
-      var t = terminal();
-      t.getText = function() { return "age is '1'\n"; };
-      var th = new TextHelper(t, {}, envStore({ age: "1" }), {
+      var th = new TextHelper(term("a is '1'\n"), {}, envStore({ a:"1" }), {
         displayMessage: function(m) { displayedMessage = m; },
         indicate:noop
       });
@@ -55,9 +52,7 @@ describe('TextHelper', function() {
 
     it('should indicate var value when hover over', function() {
       var event, data;
-      var t = terminal();
-      t.getText = function() { return "age is '1'\n"; };
-      var th = new TextHelper(t, {}, envStore({ age: "1" }), {
+      var th = new TextHelper(term("a is '1'\n"), {}, envStore({ a:"1" }), {
         displayMessage: noop,
         indicate: function(__, e, d) {
           event = e;
@@ -77,9 +72,7 @@ describe('TextHelper', function() {
 
     it('should clear text and indication prior to new help', function() {
       var displayedMessages = [], events = [];
-      var t = terminal();
-      t.getText = function() { return "age is '1'\n"; };
-      var th = new TextHelper(t, {}, envStore({ age: "1" }), {
+      var th = new TextHelper(term("a is '1'\n"), {}, envStore({ a:"1" }), {
         displayMessage: function(m) { displayedMessages.push(m); },
         indicate: function(__, e, __) {
           events.push(e);
@@ -93,22 +86,18 @@ describe('TextHelper', function() {
 
     it('should display var value in text box when hover over', function() {
       var displayedMessage;
-      var t = terminal();
-      t.getText = function() { return "age is '1'\n"; };
-      var th = new TextHelper(t, {}, envStore({ age: "1" }), {
+      var th = new TextHelper(term("a is '1'\n"), {}, envStore({ a:"1" }), {
         displayMessage: function(m) { displayedMessage = m; },
         indicate:noop
       });
 
       th.write({ event:"mousemove", point:{ x:200, y:5 } }); // line position
-      expect(displayedMessage).toEqual("age is now '1'.");
+      expect(displayedMessage).toEqual("a is now '1'.");
     });
 
     it('should indicate var value when hover over', function() {
       var event, data;
-      var t = terminal();
-      t.getText = function() { return "age is '1'\n"; };
-      var th = new TextHelper(t, {}, envStore({ age: "1" }), {
+      var th = new TextHelper(term("a is '1'\n"), {}, envStore({ a:"1" }), {
         displayMessage: noop,
         indicate: function(__, e, d) {
           event = e;
@@ -126,9 +115,7 @@ describe('TextHelper', function() {
   describe('secondary help', function() {
     it('should clear text and indication prior to new help', function() {
       var displayedMessages = [], events = [];
-      var th = new TextHelper({
-        getText: function() { return ["1", "2"]; }
-      }, {}, {}, {
+      var th = new TextHelper(term("1\n2"), {}, {}, {
         displayMessage: function(m) { displayedMessages.push(m); },
         indicate: function(__, e, __) {
           events.push(e);
@@ -142,9 +129,7 @@ describe('TextHelper', function() {
 
     it('should display if new console text if console has >1 line', function() {
       var displayed = false;
-      var th = new TextHelper({
-        getText: function() { return ["1", "2"]; }
-      }, {}, {}, {
+      var th = new TextHelper(term("1\n2"), {}, {}, {
         displayMessage: function() { displayed = true; },
         indicate:noop
       });
@@ -154,9 +139,7 @@ describe('TextHelper', function() {
 
     it('should display on mouseout if console has >1 line', function() {
       var displayed = false;
-      var th = new TextHelper({
-        getText: function() { return ["1", "2"]; }
-      }, {}, {}, {
+      var th = new TextHelper(term("1\n2"), {}, {}, {
         displayMessage: function() { displayed = true; },
         indicate:noop
       });
@@ -166,9 +149,7 @@ describe('TextHelper', function() {
 
     it('should not display if console has 1 line', function() {
       var displayed = false;
-      var th = new TextHelper({
-        getText: function() { return ["1"]; }
-      }, {}, {}, {
+      var th = new TextHelper(term("1"), {}, {}, {
         displayMessage: function(m) { displayed = true; },
         indicate:noop
       });
