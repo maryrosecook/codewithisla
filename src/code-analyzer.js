@@ -107,6 +107,14 @@
       return index - _.reduce(splitLines(text), function(acc, x, i) {
         return i < lineNumber ? acc + x + "\n" : acc;
       }, "").length;
+    },
+
+    getSyntaxNode: function(text, index) {
+      var lineNumber = codeAnalyzer.getLineNumber(text, index);
+      var line = codeAnalyzer.getLine(text, lineNumber);
+      var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
+      var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
+      return syntaxTokens[syntaxTokenIndex];
     }
   };
 

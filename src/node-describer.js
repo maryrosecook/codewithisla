@@ -10,7 +10,7 @@
 
   var nodeDescriber = {
     describe: function(text, index, env) {
-      var syntaxNode = getSyntaxNode(text, index);
+      var syntaxNode = codeAnalyzer.getSyntaxNode(text, index);
       if (syntaxNode.syntax === "variable") {
         var val;
         if (syntaxNode.node.tag === "scalar") { // x is a t
@@ -33,14 +33,6 @@
         return undefined;
       }
     },
-  };
-
-  var getSyntaxNode = function(text, index) {
-    var lineNumber = codeAnalyzer.getLineNumber(text, index);
-    var line = codeAnalyzer.getLine(text, lineNumber);
-    var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
-    var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
-    return syntaxTokens[syntaxTokenIndex];
   };
 
   var describeValue = function(unresolvedVal, env) {

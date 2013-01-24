@@ -25,11 +25,7 @@
       var text = terminal.getText();
       var index = mapper.getIndex(terminal, text, point);
       if (isOverToken(terminal, point)) {
-        var lineNumber = codeAnalyzer.getLineNumber(text, index);
-        var line = codeAnalyzer.getLine(text, lineNumber);
-        var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
-        var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
-        var syntaxNode = syntaxTokens[syntaxTokenIndex];
+        var syntaxNode = codeAnalyzer.getSyntaxNode(text, index);
         demoTalker.emit("isla:mouse:mouseover", {
           syntaxNode:syntaxNode, thing:"token"
         });
