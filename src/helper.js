@@ -3,7 +3,8 @@
     var consoleIndicator = new ConsoleIndicator(terminal);
     var mouser = new Mouser("div.jquery-console-inner");
 
-    var textHelper = new TextHelper(terminal, consoleIndicator, envStore);
+    var textHelper = new TextHelper(terminal, consoleIndicator,
+                                    envStore, ui.textHelper);
     mouser.events.on(textHelper, "data", textHelper.write);
     terminal.events.on(textHelper, "text:new", function() {
       textHelper.write({ event: "text:new" });

@@ -17,21 +17,15 @@
     mapper = window.mapper;
   }
 
-  var id = "textHelper";
-
-  var TextHelper = function(terminal, consoleIndicator, envStore) {
-    var indicate = function(event, data) {
-      consoleIndicator.write({ event:event, data:data, id:id });
-    };
-
+  var TextHelper = function(terminal, consoleIndicator, envStore, ui) {
     var clearHelp = function() {
-      $('#help').text("");
-      indicate("clear", {});
+      ui.displayMessage("");
+      ui.indicate(consoleIndicator, "clear", {});
     };
 
     var secondaryHelp = function() {
       if (terminal.getCategorisedText().length > 1) {
-        $('#help').text("Hover over underlined words to learn more");
+        ui.displayMessage("Hover over underlined words to learn more");
       }
     };
 
@@ -48,18 +42,21 @@
       if (isThereHelpForToken(terminal, point, envStore)) {
         var index = mapper.getIndex(terminal, text, point);
         clearHelp();
-        indicate("indicate", { thing:"token", index: index });
-        displayHelp(getTokenHelp(text, index, envStore));
+        ui.indicate(consoleIndicator, "indicate", {
+          thing:"token", index:index
+        });
+
+        ui.displayMessage(getTokenHelp(text, index, envStore));
         return;
       } else if (isOverLine(terminal, point)) {
         clearHelp();
-        indicate("indicate", {
+        ui.indicate(consoleIndicator, "indicate", {
           thing:"line",
           lineNumber: mapper.getLineNumber(terminal, text, point)
         });
 
-        displayHelp(getLineHelp(mapper.getLine(terminal, text, point),
-                                envStore));
+        ui.displayMessage(getLineHelp(mapper.getLine(terminal, text, point),
+                                      envStore));
         return;
       } else {
         clearHelp();
@@ -91,12 +88,6 @@
   var getLineHelp = function(line, envStore) {
     var node = codeAnalyzer.expression(line);
     return expressionDescriber.describe(node, envStore.latest());
-  };
-
-  var displayHelp = function(help) {
-    var html = help.body.replace(/\n/g, "<br/>");
-    html = html.replace(/  /g, "&nbsp;&nbsp;");
-    $('#help').html(html);
   };
 
   exports.TextHelper = TextHelper;
