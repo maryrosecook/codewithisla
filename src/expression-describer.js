@@ -39,13 +39,13 @@
     .when("type_assignment", function(node, env) {
       var ref = getReferenceStr(node.c[0].c[0], env);
       var type = Isla.Interpreter.interpretAst(node.c[2], env);
-      return { body: "Makes a " + type + " called " + ref + "." };
+      return "Makes a " + type + " called " + ref + ".";
     })
 
     .when("value_assignment", function(node, env) {
       var assiRef = getReferenceStr(node.c[0].c[0], env);
       var value = getValueStr(node.c[2], env);
-      return { body: assiRef + " is now " + value + "." };
+      return assiRef + " is now " + value + ".";
     })
 
     .when("list_assignment", function(node, env) {
@@ -54,13 +54,9 @@
 
       var operation = Isla.Parser.extract(node.c, 0, "list_operation", 0).tag;
       if (operation === "add") {
-        return {
-          body: "Puts " + value + " into the list called " + listRef + "."
-        };
+        return "Puts " + value + " into the list called " + listRef + ".";
       } else if (operation === "take") {
-        return {
-          body: "Takes " + value + " out of the list called " + listRef + "."
-        };
+        return "Takes " + value + " out of the list called " + listRef + ".";
       }
     })
 
@@ -71,7 +67,7 @@
         ref: fnId
       }, env).description;
       var paramValue = getValueStr(node.c[1], env);
-      return { body: descriptionFn(paramValue) };
+      return descriptionFn(paramValue);
     })
 
   var expressionDescriber = {

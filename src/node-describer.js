@@ -21,14 +21,14 @@
           val = Isla.Interpreter.resolve({ ref:syntaxNode.node.c[0] }, env);
         }
 
-        return { body: describeValue(val, env) };
+        return describeValue(val, env);
       } else if (syntaxNode.syntax === "attribute") {
         var lineNumber = codeAnalyzer.getLineNumber(text, index);
         var line = codeAnalyzer.getLine(text, lineNumber);
         var tokens = codeAnalyzer.expressionTokens(line);
         var objToken = tokens[getTokenIndex(text, index)];
         var val = Isla.Interpreter.evaluateValue(objToken.c[0], env).val;
-        return { body: describeValue(val, env) };
+        return describeValue(val, env);
       } else {
         return undefined;
       }
