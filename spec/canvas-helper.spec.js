@@ -1,4 +1,5 @@
 var CanvasHelper = require('../src/canvas-helper').CanvasHelper;
+var codeAnalyzer = require('../src/code-analyzer').codeAnalyzer;
 
 // simple terminal w no padding
 var term = function(text) {
