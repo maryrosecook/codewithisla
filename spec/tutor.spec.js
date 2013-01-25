@@ -60,5 +60,13 @@ describe('Tutor', function() {
       expect(displayed[1]).toEqual("Make up your own code");
       expect(displayed[2]).toBeUndefined();
     });
+
+    it('should still be writeable even if no steps', function() {
+      var t = new Tutor([], {
+        hide: function() {}
+      });
+
+      t.write({ event:"demo:code:new", code:"a" });
+    });
   });
 });

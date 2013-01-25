@@ -1,5 +1,13 @@
 ;(function(exports) {
   var Tutor = function(steps, ui) {
+    this.write = function(e) {
+      if (e.event = "demo:code:new") {
+        if (isEquivalent(e.code, currentStep)) {
+          nextStep();
+        }
+      }
+    };
+
     if (steps.length === 0) {
       ui.hide();
       return;
@@ -13,14 +21,6 @@
         ui.displayCode(step);
       } else {
         ui.displayMessage("Make up your own code");
-      }
-    };
-
-    this.write = function(e) {
-      if (e.event = "demo:code:new") {
-        if (isEquivalent(e.code, currentStep)) {
-          nextStep();
-        }
       }
     };
 
