@@ -11,12 +11,12 @@ describe('TextGrabber', function() {
     describe('impermanent', function() {
       it('should add text when impermanent', function() {
         tg.write({ event:"impermanent", text:"abc" });
-        expect(tg.getPlainText()).toEqual("abc\n");
+        expect(tg.getPlainText()).toEqual("abc");
       });
 
-      it('should add nnewline after current line inserted following impermanent', function() {
+      it('should not add nnewline after current line inserted following impermanent', function() {
         tg.write({ event:"impermanent", text:"abc" });
-        expect(tg.getPlainText().substring(3)).toEqual("\n");
+        expect(tg.getPlainText()[3]).toBeUndefined();
       });
     });
 
@@ -43,13 +43,13 @@ describe('TextGrabber', function() {
         tg.write({ event:"permanent", text:"abc" });
         tg.write({ event:"permanent", text:"def" });
         tg.write({ event:"impermanent", text:"ghi" });
-        expect(tg.getPlainText()).toEqual("abc\ndef\nghi\n");
+        expect(tg.getPlainText()).toEqual("abc\ndef\nghi");
       });
 
       it('should clear out current line on submission', function() {
         tg.write({ event:"permanent", text:"abc" });
         tg.write({ event:"impermanent", text:"ghi" });
-        expect(tg.getPlainText()).toEqual("abc\nghi\n");
+        expect(tg.getPlainText()).toEqual("abc\nghi");
         tg.write({ event:"permanent", text:"def" });
         expect(tg.getPlainText()).toEqual("abc\ndef\n");
       });
@@ -58,7 +58,7 @@ describe('TextGrabber', function() {
    describe('getCategorisedText', function() {
       it('should categorise impermanent text', function() {
         tg.write({ event:"impermanent", text:"abc", io:"input" });
-        expect(tg.getCategorisedText()[0]).toEqual({ text: "abc\n", io: "input"});
+        expect(tg.getCategorisedText()[0]).toEqual({ text: "abc", io: "input"});
       });
 
       it('should categorise permanent text', function() {

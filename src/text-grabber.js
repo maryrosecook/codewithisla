@@ -15,7 +15,7 @@
         }
         this.currentLine = newLine("", "input");
       } else {
-        this.currentLine = newLine(e.text + "\n", e.io);
+        this.currentLine = newLine(e.text, e.io);
       }
     },
 
