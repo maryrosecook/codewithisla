@@ -65,7 +65,7 @@
 
     getLine: function(text, lineNumber) {
       if (lineNumber !== undefined) {
-        return splitLines(text)[lineNumber];
+        return codeAnalyzer.splitLines(text)[lineNumber];
       }
     },
 
@@ -104,9 +104,14 @@
 
     getLineIndex: function(text, index) {
       var lineNumber = codeAnalyzer.getLineNumber(text, index);
-      return index - _.reduce(splitLines(text), function(acc, x, i) {
-        return i < lineNumber ? acc + x + "\n" : acc;
-      }, "").length;
+      return index - _.reduce(codeAnalyzer.splitLines(text),
+        function(acc, x, i) {
+          return i < lineNumber ? acc + x + "\n" : acc;
+        }, "").length;
+    },
+
+    splitLines: function(text) {
+      return text.split("\n");
     },
 
     getSyntaxNode: function(text, index) {
@@ -116,10 +121,6 @@
       var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
       return syntaxTokens[syntaxTokenIndex];
     }
-  };
-
-  var splitLines = function(text) {
-    return text.split("\n");
   };
 
   var expressionSyntaxTokens = function(tokens, pieces) {
