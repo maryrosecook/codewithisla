@@ -24,7 +24,7 @@
     };
 
     var secondaryHelp = function() {
-      if (terminal.getText().length > 1) {
+      if (codeAnalyzer.splitLines(terminal.getText()).length > 1) {
         clearHelp();
         ui.displayMessage("Hover over underlined words to learn more");
       }
