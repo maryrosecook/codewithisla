@@ -25,58 +25,6 @@ var demoTalker = function() {
 };
 
 describe('Draw', function() {
-  describe('instantiation', function() {
-    it('should complain if no canvas passed', function() {
-      expect(function(){
-        new Draw();
-      }).toThrow("You must provide a canvas context to draw to.");
-    });
-
-    it('should complain if no demoTalker passed', function() {
-      expect(function(){
-        new Draw(ctx());
-      }).toThrow("You must provide a demo talker to communicate with.");
-    });
-
-    it('should not complain if canvas and demoTalker passed', function() {
-      (new Draw(ctx(), demoTalker())).end();
-    });
-  });
-
-  describe('draw loop', function() {
-    it('should start drawing upon instantiation', function() {
-      var ran;
-      runs(function() {
-        var draw = new Draw(ctx(), demoTalker());
-        draw._draw = function() {
-          ran = true;
-          this.end();
-        }
-      });
-
-      waits(100);
-      runs(function() {
-        expect(ran).toEqual(true);
-      });
-    });
-
-    it('should stop drawing when told stream has ended', function() {
-      var i = 0;
-      runs(function() {
-        var draw = new Draw(ctx(), demoTalker());
-        draw._draw = function() {
-          i++;
-          this.end();
-        }
-      });
-
-      waits(100);
-      runs(function() {
-        expect(i).toEqual(1);
-      });
-    });
-  });
-
   describe('basic drawing', function() {
     describe('draw all the basic shapes', function() {
       var dt, draw;
