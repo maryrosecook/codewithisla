@@ -24,6 +24,16 @@ var demoTalker = function() {
   return new Eventer();
 };
 
+var withCtx = function(dt, ctx, id, value, cb) {
+  dt.removeListener(dt, "demo:ctx:new");
+  dt.on(dt, "demo:ctx:new", function(newCtx) {
+    cb(newCtx);
+  });
+
+  ctx[id] = value;
+  dt.emit("isla:ctx:new", ctx);
+};
+
 describe('Draw', function() {
   describe('basic drawing', function() {
     describe('draw all the basic shapes', function() {
@@ -96,21 +106,16 @@ describe('Draw', function() {
     it('should allow updating of an existing context with new op', function() {
       var ran;
       runs(function() {
-        var dt = demoTalker(); // 1
+        var dt = demoTalker();
         var draw = new Draw(ctx(), dt);
-        var self = this;
-        dt.on(self, "demo:ctx:new", function(newCtx) { // 3
-          newCtx.b = { _meta: { type: "circle" } };
-          dt.removeListener(self, "demo:ctx:new");
-          dt.on(this, "demo:ctx:new", function() { // 5
+        withCtx(dt, {}, "a", { _meta: { type: "square" }}, function(ctx1) {
+          withCtx(dt, ctx1, "b", { _meta: { type: "circle" }}, function(ctx2) {
             expect(draw.operations()[0]).toBeDefined();
             expect(draw.operations()[1]).toBeDefined();
             ran = true;
             draw.end();
           });
-          dt.emit("isla:ctx:new", newCtx); // 4
         });
-        dt.emit("isla:ctx:new", { a: { _meta: { type: "square" } }}); // 2
       });
       runs(function() { expect(ran).toEqual(true); }); // check ran
     });
@@ -120,20 +125,15 @@ describe('Draw', function() {
       runs(function() {
         var dt = demoTalker(); // 1
         var draw = new Draw(ctx(), dt);
-        var self = this;
-        dt.on(self, "demo:ctx:new", function(newCtx) { // 3
-          newCtx.b = { };
-          dt.removeListener(self, "demo:ctx:new");
-          dt.on(this, "demo:ctx:new", function(newCtx2) { // 5
-            expect(newCtx2.b).toEqual({});
+        withCtx(dt, {}, "a", { _meta: { type: "square" }}, function(ctx1) {
+          withCtx(dt, ctx1, "b", {}, function(ctx2) {
+            expect(ctx2.b).toEqual({});
             expect(draw.operations()[0]).toBeDefined();
             expect(draw.operations()[1]).toBeUndefined();
             ran = true;
             draw.end();
           });
-          dt.emit("isla:ctx:new", newCtx); // 4
         });
-        dt.emit("isla:ctx:new", { a: { _meta: { type: "square" } }}); // 2
       });
       runs(function() { expect(ran).toEqual(true); }); // check ran
     });
@@ -188,16 +188,6 @@ describe('Draw', function() {
   });
 
   describe('draw order', function() {
-    var withCtx = function(dt, ctx, id, value, cb) {
-      dt.removeListener(dt, "demo:ctx:new");
-      dt.on(dt, "demo:ctx:new", function(newCtx) {
-        cb(newCtx);
-      });
-
-      ctx[id] = value;
-      dt.emit("isla:ctx:new", ctx);
-    };
-
     it('should order three ops in order of addition', function() {
       var ran;
       runs(function() {
