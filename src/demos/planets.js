@@ -250,10 +250,18 @@
     return translateNumberWord(densityStr, DENSITIES);
   };
 
+  var edit = function(obj, removals) {
+    var ret = EnvStore.extend(true, {}, obj);
+    for (var i = 0; i < removals.length; i++) {
+      delete ret[removals[i]];
+    }
+    return ret;
+  };
+
   var planetDefaults = function(canvasCtx, planet) {
     var retPlanet = EnvStore.extend(true, {}, planet);
-    retPlanet.size = retPlanet.size || random(SIZES);
-    retPlanet.color = retPlanet.color || random(COLORS);
+    retPlanet.size = retPlanet.size || random(edit(SIZES, ["huge"]));
+    retPlanet.color = retPlanet.color || random(edit(COLORS, ["yellow"]));
     retPlanet.density = retPlanet.density || random(DENSITIES);
     retPlanet._xSpeed = retPlanet._xSpeed || random(5) - 2.5;
     retPlanet._ySpeed = retPlanet._ySpeed || random(5) - 2.5;
