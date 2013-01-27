@@ -9,7 +9,6 @@
       var envStore = new EnvStore();
       envStore.write({ event:"temp", env:Isla.Library.getInitialEnv() });
       envStore.write({ event:"commit" });
-
       demoTalker.on(this, "demo:ctx:new", function(ctx) {
         var env = Isla.Library.getInitialEnv();
         env.ctx = ctx;
@@ -55,6 +54,7 @@
         demoTalker.emit("isla:ctx:new", env.ctx);
         result = { msg: env.ret || "", error: false };
       } catch(e) {
+        console.log(e.message);
         result = { msg: e.message, error: true };
       }
 
