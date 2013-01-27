@@ -39,8 +39,8 @@
     // main draw loop
     this._draw = function() {
       if (currentCtx() !== undefined) { // no ctx until sent 1st one by runner
-        drawBackground(canvasCtx);
         currentCtx(move(currentCtx()));
+        drawBackground(canvasCtx);
         drawBodies(canvasCtx, currentCtx());
       }
     };
