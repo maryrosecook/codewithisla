@@ -33,15 +33,24 @@
       }
     };
 
-    //setupHelp(demoTalker, this);
-    drawBackground(canvasCtx);
+    var _indications = {};
+    this.indications = function(inIndications) {
+      if (inIndications !== undefined) {
+        _indications = inIndications;
+      } else {
+        return _indications;
+      }
+    };
+
+
+    setupHelp(demoTalker, this);
 
     // main draw loop
     this._draw = function() {
       if (currentCtx() !== undefined) { // no ctx until sent 1st one by runner
         currentCtx(move(currentCtx()));
         drawBackground(canvasCtx);
-        drawBodies(canvasCtx, currentCtx());
+        drawBodies(canvasCtx, currentCtx(), this.indications());
       }
     };
 
@@ -88,10 +97,10 @@
     canvasCtx.fillRect(0, 0, canvasCtx.canvas.width, canvasCtx.canvas.height);
   };
 
-  var drawBodies = function(canvasCtx, ctx) {
+  var drawBodies = function(canvasCtx, ctx, indications) {
     for (var i in ctx) {
       if (isType(ctx[i], "planet") || isType(ctx[i], "star")) {
-        drawBody(canvasCtx, ctx[i]);
+        drawBody(canvasCtx, ctx[i], indications[i]);
       }
     }
   };
@@ -162,32 +171,28 @@
     canvasCtx.beginPath();
     canvasCtx.arc(body._x, body._y, bodySize / 2, 0, Math.PI * 2, true);
     canvasCtx.closePath();
-    if (indicate) {
-      canvasCtx.lineWidth = 4;
+    if (indicate === true) {
+      canvasCtx.lineWidth = 10;
+    } else {
+      canvasCtx.lineWidth = density(body.density);
     }
 
     canvasCtx.stroke();
   };
 
-// var setupHelp = function(demoTalker, demo) {
-//   demoTalker.on(this, "isla:mouse:mouseover", function(data) {
-//     if (data.thing === "token" && data.syntaxNode.syntax === "variable") {
-//       var operations = demo.operations();
-//       for (var i = 0; i < operations.length; i++) {
-//         if (operations[i].name === data.syntaxNode.code) {
-//           operations[i].indicate = true;
-//         }
-//       }
-//     }
-//   });
+  var setupHelp = function(demoTalker, demo) {
+    demoTalker.on(this,  "isla:mouse:mouseover", function(data) {
+      if (data.thing === "token" && data.syntaxNode.syntax === "variable") {
+        var indications = EnvStore.extend(true, {}, demo.indications());
+        indications[data.syntaxNode.code] = true;
+        demo.indications(indications);
+      }
+    });
 
-//   demoTalker.on(this, "isla:mouse:mouseout", function() {
-//     var operations = demo.operations();
-//     for (var i = 0; i < operations.length; i++) {
-//       operations[i].indicate = false;
-//     }
-//   });
-// };
+    demoTalker.on(this, "isla:mouse:mouseout", function() {
+      demo.indications({});
+    });
+  };
 
   var clearHelp = function() {
     indicate("clear");
