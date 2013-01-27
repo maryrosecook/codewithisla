@@ -18,7 +18,8 @@ var canvasCtx = function() {
     lineTo: noop,
     fill: noop,
     arc: noop,
-    moveTo: noop
+    moveTo: noop,
+    stroke:noop
   };
 };
 
