@@ -143,10 +143,10 @@
       retBody._x = pf(retBody._x) + retBody._xSpeed;
       retBody._y = pf(retBody._y) + retBody._ySpeed;
 
-      retBody._xSpeed = (retBody._xSpeed).toString();
-      retBody._ySpeed = (retBody._ySpeed).toString();
-      retBody._x = (retBody._x).toString();
-      retBody._y = (retBody._y).toString();
+      retBody._xSpeed = retBody._xSpeed.toString();
+      retBody._ySpeed = retBody._ySpeed.toString();
+      retBody._x = retBody._x.toString();
+      retBody._y = retBody._y.toString();
     }
 
     return retCtx;
