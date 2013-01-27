@@ -211,6 +211,17 @@
     }
   };
 
+ var translateNumberWord = function(word, words) {
+    var lowerWord = word.toLowerCase();
+    if (words[lowerWord] !== undefined) {
+      return words[lowerWord];
+    } else if(parseFloat(word) !== NaN) {
+      return parseFloat(word);
+    } else {
+      throw "I do not understand this number: " + word;
+    }
+  };
+
   var COLORS = {
     red: "#FF0000",
     yellow: "#FFF700",
@@ -220,25 +231,14 @@
     violet: "#8A6CFF",
   };
 
+  var SIZES = { small:20, medium:30, big:40, huge:80 };
+  var DENSITIES = { low:2, medium:4, high:6 };
+
   var color = function(raw) {
     if (COLORS[raw] !== undefined) {
       return COLORS[raw];
     } else {
       return raw;
-    }
-  };
-
-  var SIZES = { small:20, medium:40, big:80, large:80 };
-  var DENSITIES = { light:1, medium:2, heavy:3 };
-
-  var translateNumberWord = function(word, words) {
-    var lowerWord = word.toLowerCase();
-    if (words[lowerWord] !== undefined) {
-      return words[lowerWord];
-    } else if(parseFloat(word) !== NaN) {
-      return parseFloat(word);
-    } else {
-      throw "I do not understand this number: " + word;
     }
   };
 
