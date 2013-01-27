@@ -263,8 +263,8 @@
     retPlanet.size = retPlanet.size || random(edit(SIZES, ["huge"]));
     retPlanet.color = retPlanet.color || random(edit(COLORS, ["yellow"]));
     retPlanet.density = retPlanet.density || random(DENSITIES);
-    retPlanet._xSpeed = retPlanet._xSpeed || random(5) - 2.5;
-    retPlanet._ySpeed = retPlanet._ySpeed || random(5) - 2.5;
+    retPlanet._xSpeed = retPlanet._xSpeed || random(1) - 0.5;
+    retPlanet._ySpeed = retPlanet._ySpeed || random(1) - 0.5;
     retPlanet._x = retPlanet._x || random(canvasCtx.canvas.width);
     retPlanet._y = retPlanet._y || random(canvasCtx.canvas.height);
     return retPlanet;
