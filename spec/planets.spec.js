@@ -3,20 +3,23 @@ var Eventer = require('../src/eventer').Eventer;
 var Draw = require('../src/demos/planets').Planets;
 var Planets = require('../src/demos/planets').Planets;
 
+var noop = function() {
 
-var ctx = function() {
+};
+
+var canvasCtx = function() {
   return {
     canvas: {
       width: 300,
       height: 300,
     },
-    fillRect: function() {},
-    beginPath: function() {},
-    closePath: function() {},
-    lineTo: function() {},
-    fill: function() {},
-    arc: function() {},
-    moveTo: function() {}
+    fillRect: noop,
+    beginPath: noop,
+    closePath: noop,
+    lineTo: noop,
+    fill: noop,
+    arc: noop,
+    moveTo: noop
   };
 };
 
