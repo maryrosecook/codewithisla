@@ -124,7 +124,7 @@ describe('Planets', function() {
       });
     });
 
-    it('should adjust move planet towards other planet', function() {
+    it('should move planet towards other planet', function() {
       var p, startCtx, ctxes = [];
       runs(function() {
         var dt = demoTalker();
@@ -150,7 +150,7 @@ describe('Planets', function() {
       });
     });
 
-    it('should move planet towards sun', function() {
+    it('should move planet towards star', function() {
       var p, startCtx, ctxes = [];
       runs(function() {
         var dt = demoTalker();
@@ -176,7 +176,7 @@ describe('Planets', function() {
       });
     });
 
-    it('should not move sun', function() {
+    it('should not move star', function() {
       var p, startCtx, ctxes = [];
       runs(function() {
         var dt = demoTalker();
