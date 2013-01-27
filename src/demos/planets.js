@@ -272,9 +272,9 @@
 
   var starDefaults = function(canvasCtx, star) {
     var retStar = EnvStore.extend(true, {}, star);
-    retStar.size = retStar.size || "big";
+    retStar.size = retStar.size || "huge";
     retStar.color = retStar.color || "yellow";
-    retStar.density = retStar.density || "10";
+    retStar.density = retStar.density || 'low';
     retStar._x = retStar._x || canvasCtx.canvas.width / 2;
     retStar._y = retStar._y || canvasCtx.canvas.height / 2;
     return retStar;
