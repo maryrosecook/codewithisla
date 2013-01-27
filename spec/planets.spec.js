@@ -142,10 +142,10 @@ describe('Planets', function() {
 
       waits(50);
       runs(function() {
-        expect(ctxes[0].p1._xSpeed < 0).toEqual(true);
-        expect(ctxes[0].p1._ySpeed < 0).toEqual(true);
-        expect(ctxes[0].p1._x < 5).toEqual(true);
-        expect(ctxes[0].p1._y < 5).toEqual(true);
+        expect(ctxes[1].p1._xSpeed < 0).toEqual(true);
+        expect(ctxes[1].p1._ySpeed < 0).toEqual(true);
+        expect(ctxes[1].p1._x < 5).toEqual(true);
+        expect(ctxes[1].p1._y < 5).toEqual(true);
         p.end();
       });
     });
@@ -168,10 +168,10 @@ describe('Planets', function() {
 
       waits(50);
       runs(function() {
-        expect(ctxes[0].p1._xSpeed < 0).toEqual(true);
-        expect(ctxes[0].p1._ySpeed < 0).toEqual(true);
-        expect(ctxes[0].p1._x < 5).toEqual(true);
-        expect(ctxes[0].p1._y < 5).toEqual(true);
+        expect(ctxes[1].p1._xSpeed < 0).toEqual(true);
+        expect(ctxes[1].p1._ySpeed < 0).toEqual(true);
+        expect(ctxes[1].p1._x < 5).toEqual(true);
+        expect(ctxes[1].p1._y < 5).toEqual(true);
         p.end();
       });
     });
@@ -194,8 +194,9 @@ describe('Planets', function() {
 
       waits(50);
       runs(function() {
-        expect(ctxes[0].sun._x).toEqual("0");
-        expect(ctxes[0].sun._y).toEqual("0");
+        expect(ctxes[1].p1._xSpeed < 0).toEqual(true);
+        expect(ctxes[1].sun._x).toEqual("0");
+        expect(ctxes[1].sun._y).toEqual("0");
         p.end();
       });
     });
@@ -219,7 +220,7 @@ describe('Planets', function() {
 
       waits(50);
       runs(function() {
-        expect(ctxes[0].p1._xSpeed < 0).toEqual(true);
+        expect(ctxes[1].p1._xSpeed < 0).toEqual(true);
         p.end();
       });
     });
