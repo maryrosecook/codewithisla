@@ -105,7 +105,8 @@ describe('Planets', function() {
         p = new Planets(canvasCtx(), dt);
         var startCtx = {
           p1: {
-            _x:"5", _y:"5", size:"big", density:"heavy", _meta:{type:"planet"}
+            _x:"400", _y:"400", _xSpeed:"0", _ySpeed:"0",
+            size:"big", density:"heavy", _meta:{type:"planet"}
           },
           p2: { _x:"0", _y:"0", _meta: { type:"planet"} },
         };
@@ -118,7 +119,7 @@ describe('Planets', function() {
 
       waits(50);
       runs(function() {
-        expect(ctxes[0].p1._xSpeed < 0).toEqual(true);
+        expect(ctxes[1].p1._xSpeed < 0).toEqual(true);
         p.end();
       });
     });
@@ -129,7 +130,7 @@ describe('Planets', function() {
         var dt = demoTalker();
         p = new Planets(canvasCtx(), dt);
         startCtx = {
-          p1: { _x:"5", _y:"5", _meta: { type:"planet"} },
+          p1: { _x:"5", _y:"5", _xSpeed:"0", _ySpeed:"0", _meta: { type:"planet"} },
           p2: { _x:"0", _y:"0", _meta: { type:"planet"} },
         };
 
@@ -155,8 +156,8 @@ describe('Planets', function() {
         var dt = demoTalker();
         p = new Planets(canvasCtx(), dt);
         startCtx = {
-          p1: { _x:"5", _y:"5", _meta: { type:"planet"} },
-          sun: { _x:"0", _y:"0", _meta: { type:"sun"} },
+          p1: { _x:"5", _y:"5", _xSpeed:"0", _ySpeed:"0", _meta: { type:"planet"} },
+          sun: { _x:"0", _y:"0", _meta: { type:"star"} },
         };
 
         dt.on(this, "demo:ctx:new", function(ctx1) { // 3
@@ -181,8 +182,8 @@ describe('Planets', function() {
         var dt = demoTalker();
         p = new Planets(canvasCtx(), dt);
         startCtx = {
-          p1: { _x:"5", _y:"5", _meta: { type:"planet"} },
-          sun: { _x:"0", _y:"0", _meta: { type:"sun"} },
+          p1: { _x:"5", _y:"5", _xSpeed:"0", _ySpeed:"0", _meta: { type:"planet" }},
+          sun: { _x:"0", _y:"0", _meta: { type:"star" }},
         };
 
         dt.on(this, "demo:ctx:new", function(ctx1) { // 3
@@ -205,8 +206,8 @@ describe('Planets', function() {
         var dt = demoTalker();
         p = new Planets(canvasCtx(), dt);
         startCtx = {
-          p1: { _x:"5", _y:"5", _meta: { type:"planet"} },
-          sun: { _x:"0", _y:"0", _meta: { type:"sun"} },
+          p1: { _x:"5", _y:"5", _xSpeed:"0", _ySpeed:"0", _meta: { type:"planet"} },
+          sun: { _x:"0", _y:"0", _meta: { type:"star"} },
           whatevs: {}
         };
 
