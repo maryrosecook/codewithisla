@@ -42,6 +42,11 @@
       this.events.emit("result", result.msg);
     },
 
+    submit: function(line) {
+      consoleController.typer.consoleInsert(line);
+      consoleController.commandTrigger()
+    },
+
     setPromptText: function(data) {
       var markup = data.html;
       if (data.cursor === true) {

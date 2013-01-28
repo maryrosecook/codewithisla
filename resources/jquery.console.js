@@ -411,6 +411,7 @@
                 handleCommand();
             }
         };
+        extern.commandTrigger = commandTrigger; // framechange - added externalisation
 
         // Scroll to the bottom of the view
         function scrollToBottom() {

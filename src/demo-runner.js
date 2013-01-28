@@ -19,7 +19,16 @@
       var terminal = setupTerminal(demoTalker, envStore);
       var helper = new Helper(terminal, envStore, demoTalker);
       var tutor = setupTutor(demo, terminal);
+      runIntro(demo, terminal);
     });
+  };
+
+  var runIntro = function(demo, terminal) {
+    if (demo.intro !== undefined) {
+      for (var i = 0; i < demo.intro().length; i++) {
+        terminal.submit(demo.intro()[i]);
+      }
+    }
   };
 
   var setupTutor = function(demo, terminal) {
