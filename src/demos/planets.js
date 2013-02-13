@@ -95,6 +95,8 @@
     end: function() {
       clearInterval(this.interval);
     },
+
+    init: function() {},
   };
 
   var pf = parseFloat;
