@@ -20,8 +20,13 @@
       var terminal = setupTerminal(demoTalker, envStore);
       var helper = new Helper(terminal, envStore, demoTalker);
       var tutor = setupTutor(demo, terminal);
-      runIntro(demo, terminal);
+      init(demo, terminal);
     });
+  };
+
+  var init = function(demo, terminal) {
+    demo.init();
+    runIntro(demo, terminal);
   };
 
   var runIntro = function(demo, terminal) {
