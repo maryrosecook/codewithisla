@@ -55,8 +55,7 @@
     this._draw = function() {
       drawBackground(canvasCtx);
       if (currentCtx() !== undefined) { // no ctx until sent 1st one by runner
-        currentCtx(move(currentCtx(),
-                        canvasCtx.canvas.width, canvasCtx.canvas.height));
+        currentCtx(move(currentCtx()));
         drawBodies(canvasCtx, currentCtx(), this.indications());
       }
     };
