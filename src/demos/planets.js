@@ -42,6 +42,12 @@
       }
     };
 
+    //////////////////////////////////////!!!!!!!!!!!!!!!!!!!!
+    // add annotations in _meta to explain what attrs do
+
+
+
+    ///////////////////////////////
 
     setupHelp(demoTalker, this);
 
