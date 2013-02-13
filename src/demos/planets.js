@@ -49,7 +49,8 @@
     this._draw = function() {
       drawBackground(canvasCtx);
       if (currentCtx() !== undefined) { // no ctx until sent 1st one by runner
-        currentCtx(move(currentCtx()));
+        currentCtx(move(currentCtx(),
+                        canvasCtx.canvas.width, canvasCtx.canvas.height));
         drawBodies(canvasCtx, currentCtx(), this.indications());
       }
     };
@@ -126,6 +127,14 @@
       x: (body2._x - body1._x) * force,
       y: (body2._y - body1._y) * force
     };
+  };
+
+  var sign = function(x) {
+    if (x >= 0) {
+      return 1;
+    } else if (x < 0) {
+      return -1;
+    }
   };
 
   var move = function(ctx) {
