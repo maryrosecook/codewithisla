@@ -9,6 +9,7 @@
       var envStore = new EnvStore();
       envStore.write({ event:"temp", env:Isla.Library.getInitialEnv() });
       envStore.write({ event:"commit" });
+      demoTalker.emit("isla:ctx:new", envStore.latestCommitted().ctx);
       demoTalker.on(this, "demo:ctx:new", function(ctx) {
         var env = Isla.Library.getInitialEnv();
         env.ctx = ctx;
