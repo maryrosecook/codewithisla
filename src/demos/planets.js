@@ -88,7 +88,7 @@
 
   Planets.prototype = {
     getTutorSteps: function() {
-      return steps;
+      return STEPS;
     },
 
     // stop drawing
@@ -302,7 +302,15 @@
     return retStar;
   };
 
-  var steps = [];
+  var STEPS = [
+    "sun is a star",
+    "mars is a planet",
+    "mars color is 'red'",
+    "mars size is 'medium'",
+    "jupiter is a planet",
+    "jupiter color is 'orange'",
+    "jupiter size is 'large'"
+  ];
 
   exports.Planets = Planets;
 })(typeof exports === 'undefined' ? this : exports)
