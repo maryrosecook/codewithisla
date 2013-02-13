@@ -60,6 +60,16 @@
       }
     };
 
+    var isThereAlreadyAStar = function() {
+      var ctx = currentCtx();
+      for(var i in ctx) {
+        if (isType(ctx[i], "star")) {
+          return true;
+        }
+      }
+      return false;
+    };
+
     // sets up cb to take latest Isla ctx, process planets and issue update
     demoTalker.on(this, "isla:ctx:new", function(ctx) {
       try {
