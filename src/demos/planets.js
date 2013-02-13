@@ -64,11 +64,12 @@
     demoTalker.on(this, "isla:ctx:new", function(ctx) {
       try {
         var retCtx = EnvStore.extend(true, {}, ctx); // ctx unres, refs no wk
+        var gotStar = isThereAlreadyAStar();
         for (var i in retCtx) {
           if (isType(retCtx[i], "planet")) {
             retCtx[i] = planetDefaults(canvasCtx, retCtx[i]);
           } else if (isType(retCtx[i], "star")) {
-            retCtx[i] = starDefaults(canvasCtx, retCtx[i]);
+            retCtx[i] = starDefaults(canvasCtx, retCtx[i], gotStar);
           }
         }
         currentCtx(retCtx);
@@ -284,13 +285,20 @@
     return retPlanet;
   };
 
-  var starDefaults = function(canvasCtx, star) {
+  var starDefaults = function(canvasCtx, star, gotStar) {
     var retStar = EnvStore.extend(true, {}, star);
     retStar.size = retStar.size || "huge";
     retStar.color = retStar.color || "yellow";
-    retStar.density = retStar.density || 'low';
-    retStar._x = retStar._x || canvasCtx.canvas.width / 2;
-    retStar._y = retStar._y || canvasCtx.canvas.height / 2;
+    retStar.density = retStar.density || 'high';
+
+    if (gotStar) {
+      var coords = getRandomBodyCoords(canvasCtx);
+      retStar._x = retStar._x || coords.x;
+      retStar._y = retStar._y || coords.y;
+    } else {
+      retStar._x = retStar._x || canvasCtx.canvas.width / 2;
+      retStar._y = retStar._y || canvasCtx.canvas.height / 2;
+    }
     return retStar;
   };
 
