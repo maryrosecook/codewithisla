@@ -19,7 +19,7 @@
           x += charDimes.x
         }
 
-        if (point.x >= x - charDimes.x && point.x < x &&
+        if (point.x >= 0 && point.x >= x - charDimes.x && point.x < x &&
             point.y >= y - charDimes.y && point.y < y) {
           return i;
         }
