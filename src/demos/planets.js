@@ -218,9 +218,9 @@
     canvasCtx.arc(body._x, body._y, bodySize / 2, 0, Math.PI * 2, true);
     canvasCtx.closePath();
     if (indicate === true) {
-      canvasCtx.lineWidth = 10;
+      canvasCtx.lineWidth = 4;
     } else {
-      canvasCtx.lineWidth = density(body.density);
+      canvasCtx.lineWidth = 1;
     }
 
     canvasCtx.stroke();
