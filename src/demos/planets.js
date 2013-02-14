@@ -304,15 +304,33 @@
     return ret;
   };
 
+  var plusMinus = function(x) {
+    return Math.random() > 0.5 ? x : -x;
+  };
+
+  // don't spawn too near to, or far from, the centre
+  var getRandomBodyCoords = function(canvasCtx) {
+    return {
+      x: plusMinus(canvasCtx.canvas.width / 8 +
+        random(canvasCtx.canvas.width / 6)) + canvasCtx.canvas.width / 2,
+      y: plusMinus(canvasCtx.canvas.height / 8 +
+        random(canvasCtx.canvas.height / 6)) + canvasCtx.canvas.height / 2
+    };
+  };
+
   var planetDefaults = function(canvasCtx, planet) {
     var retPlanet = EnvStore.extend(true, {}, planet);
     retPlanet.size = retPlanet.size || random(edit(SIZES, ["huge"]));
     retPlanet.color = retPlanet.color || random(edit(COLORS, ["yellow"]));
     retPlanet.density = retPlanet.density || random(DENSITIES);
-    retPlanet._xSpeed = retPlanet._xSpeed || random(1) - 0.5;
-    retPlanet._ySpeed = retPlanet._ySpeed || random(1) - 0.5;
-    retPlanet._x = retPlanet._x || random(canvasCtx.canvas.width);
-    retPlanet._y = retPlanet._y || random(canvasCtx.canvas.height);
+    retPlanet._xSpeed = retPlanet._xSpeed || random(0.2) - 0.1;
+    retPlanet._ySpeed = retPlanet._ySpeed || random(0.2) - 0.1;
+
+    if (retPlanet._x === undefined) {
+      var coords = getRandomBodyCoords(canvasCtx);
+      retPlanet._x = coords.x;
+      retPlanet._y = coords.y;
+    }
     return retPlanet;
   };
 
