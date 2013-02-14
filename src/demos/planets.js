@@ -173,16 +173,24 @@
     // apply m to speed, and move
     var retCtx = EnvStore.extend(true, {}, ctx); // ctx unres, refs won't wk
     for (var i = 0; i < m.length; i++) {
-      var retBody = retCtx[m[i].bodyId];
-      retBody._xSpeed = pf(retBody._xSpeed) + m[i].vec.x;
-      retBody._ySpeed = pf(retBody._ySpeed) + m[i].vec.y;
-      retBody._x = pf(retBody._x) + retBody._xSpeed;
-      retBody._y = pf(retBody._y) + retBody._ySpeed;
+      var b = retCtx[m[i].bodyId];
 
-      retBody._xSpeed = retBody._xSpeed.toString();
-      retBody._ySpeed = retBody._ySpeed.toString();
-      retBody._x = retBody._x.toString();
-      retBody._y = retBody._y.toString();
+      b._xSpeed = (pf(b._xSpeed)) + m[i].vec.x;
+      b._ySpeed = (pf(b._ySpeed)) + m[i].vec.y;
+
+      b._x = pf(b._x) + pf(b._xSpeed);
+      b._y = pf(b._y) + pf(b._ySpeed);
+    }
+
+    // to string all vals for Isla
+    for (var i in retCtx) {
+      if (isType(retCtx[i], "planet")) {
+        var b = retCtx[i];
+        b._xSpeed = b._xSpeed.toString();
+        b._ySpeed = b._ySpeed.toString();
+        b._x = b._x.toString();
+        b._y = b._y.toString();
+      }
     }
 
     return retCtx;
