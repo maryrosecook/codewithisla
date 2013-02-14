@@ -144,8 +144,8 @@
   var gravitationalForce = function(body1, body2) {
     var m1 = mass(density(body1.density), size(body1.size) / 2);
     var m2 = mass(density(body2.density), size(body2.size) / 2);
-    var r2 = Math.pow(body2._x - body1._x, 2) +
-             Math.pow(body2._y - body1._y, 2);
+    var r2 = Math.pow(absMax(body2._x - body1._x, 50), 2) +
+             Math.pow(absMax(body2._y - body1._y, 50), 2);
     return (6.673e-11 * m1 * m2) / r2;
   };
 
