@@ -129,6 +129,17 @@
     return density * Math.pow(radius, 3) * Math.PI;
   };
 
+
+  // min param is always pos
+  // makes min work with pos and neg nums
+  var absMax = function(x, max) {
+    if (x < 0) {
+      return x < -max ? x : -max;
+    } else {
+      return Math.max(x, max);
+    }
+  };
+
   // returns the gravitational force between body1 and body2
   var gravitationalForce = function(body1, body2) {
     var m1 = mass(density(body1.density), size(body1.size) / 2);
