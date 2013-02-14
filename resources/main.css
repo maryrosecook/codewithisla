@@ -62,7 +62,6 @@ hr { color: #aaa; background-color:#aaa; height:1px; border:0; }
 .grid {
   width: 810px;
   margin-left:auto; margin-right:auto; text-align:center;
-  margin-top:-20px;
 }
 
 .grid-element{
