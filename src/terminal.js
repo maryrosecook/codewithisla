@@ -34,7 +34,7 @@
         className = "jquery-console-message-error";
       }
 
-      lowlightOldPrompt();
+      lowlightAndAddQuestionMarkToOldPrompt();
       consoleController.commandResult([{
         msg: toHtml(result.msg), className: className
       }]);
@@ -100,7 +100,7 @@
 
   var setUpConsoleController = function(terminal) {
     var consoleController = $("#console").console({
-      promptLabel: '#',
+      promptLabel: '>',
       commandValidate: commandValid,
       commandHandle: function(line) {
         terminal.events.emit('submit', line);
@@ -171,8 +171,9 @@
     return line !== "";
   };
 
-  var lowlightOldPrompt = function() {
+  var lowlightAndAddQuestionMarkToOldPrompt = function() {
     $("span.jquery-console-prompt-label").last().css({ color: "#555" });
+    $("span.jquery-console-prompt-label").text("#");
   };
 
   exports.Terminal = Terminal;
