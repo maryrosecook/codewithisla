@@ -26,7 +26,7 @@
     var secondaryHelp = function() {
       if (codeAnalyzer.splitLines(terminal.getText()).length > 1) {
         clearHelp();
-        ui.displayMessage("Hover over underlined words to learn more");
+        ui.displayMessage("Hover over underlined words or the # signs to learn more");
       }
     };
 

@@ -100,7 +100,7 @@
 
   var setUpConsoleController = function(terminal) {
     var consoleController = $("#console").console({
-      promptLabel: '>',
+      promptLabel: '#',
       commandValidate: commandValid,
       commandHandle: function(line) {
         terminal.events.emit('submit', line);
