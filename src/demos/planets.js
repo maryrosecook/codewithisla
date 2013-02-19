@@ -1,13 +1,11 @@
 ;(function(exports) {
-  var EnvStore, _, Utils;
+  var EnvStore, demoUtils;
   if(typeof module !== 'undefined' && module.exports) { // node
     EnvStore = require('../env-store.js').EnvStore;
-    _ = require("Underscore");
-    Utils = require('../../node_modules/isla/src/utils.js').Utils;
+    demoUtils = require('../demo-utils.js').demoUtils;
   } else { // browser
     EnvStore = window.EnvStore;
-    Utils = window.Isla.Utils;
-    _ = window._;
+    demoUtils = window.demoUtils;
   }
 
   function Planets(canvasCtx, demoTalker) {
@@ -63,7 +61,7 @@
     var isThereAlreadyAStar = function() {
       var ctx = currentCtx();
       for(var i in ctx) {
-        if (isType(ctx[i], "star")) {
+        if (demoUtils.isIslaType(ctx[i], "star")) {
           return true;
         }
       }
@@ -76,9 +74,9 @@
         var retCtx = EnvStore.extend(true, {}, ctx); // ctx unres, refs no wk
         var gotStar = isThereAlreadyAStar();
         for (var i in retCtx) {
-          if (isType(retCtx[i], "planet")) {
+          if (demoUtils.isIslaType(retCtx[i], "planet")) {
             retCtx[i] = planetDefaults(canvasCtx, retCtx[i]);
-          } else if (isType(retCtx[i], "star")) {
+          } else if (demoUtils.isIslaType(retCtx[i], "star")) {
             retCtx[i] = starDefaults(canvasCtx, retCtx[i], gotStar);
           }
         }
@@ -107,6 +105,15 @@
     },
 
     init: function() {},
+
+    intro: function() {
+      return [
+        // "sun is a star",
+        // "a is a planet",
+        // "b is a planet",
+        // "c is a planet"
+      ];
+    }
   };
 
   var pf = parseFloat;
@@ -118,7 +125,7 @@
 
   var drawBodies = function(canvasCtx, ctx, indications) {
     for (var i in ctx) {
-      if (isType(ctx[i], "planet") || isType(ctx[i], "star")) {
+      if (demoUtils.isIslaType(ctx[i], "planet") || demoUtils.isIslaType(ctx[i], "star")) {
         drawBody(canvasCtx, ctx[i], indications[i]);
       }
     }
@@ -129,23 +136,12 @@
     return density * Math.pow(radius, 3) * Math.PI;
   };
 
-
-  // min param is always pos
-  // makes min work with pos and neg nums
-  var absMax = function(x, max) {
-    if (x < 0) {
-      return x < -max ? x : -max;
-    } else {
-      return Math.max(x, max);
-    }
-  };
-
   // returns the gravitational force between body1 and body2
   var gravitationalForce = function(body1, body2) {
     var m1 = mass(density(body1.density), size(body1.size) / 2);
     var m2 = mass(density(body2.density), size(body2.size) / 2);
-    var r2 = Math.pow(absMax(body2._x - body1._x, 50), 2) +
-             Math.pow(absMax(body2._y - body1._y, 50), 2);
+    var r2 = Math.pow(demoUtils.absMax(body2._x - body1._x, 50), 2) +
+             Math.pow(demoUtils.absMax(body2._y - body1._y, 50), 2);
     return (6.673e-11 * m1 * m2) / r2;
   };
 
@@ -158,21 +154,13 @@
     };
   };
 
-  var sign = function(x) {
-    if (x >= 0) {
-      return 1;
-    } else if (x < 0) {
-      return -1;
-    }
-  };
-
   var move = function(ctx) {
     // build list of gravitational pulls on bodies
     var m = [];
     for (var i in ctx) {
       for (var j in ctx) {
-        if ((ctx[i] !== ctx[j] && isType(ctx[i], "planet")) &&
-            (isType(ctx[j], "planet") || isType(ctx[j], "star"))) {
+        if ((ctx[i] !== ctx[j] && demoUtils.isIslaType(ctx[i], "planet")) &&
+            (demoUtils.isIslaType(ctx[j], "planet") || demoUtils.isIslaType(ctx[j], "star"))) {
           m.push({
             bodyId: i,
             vec: gravitationalVector(ctx[i], ctx[j])
@@ -195,7 +183,7 @@
 
     // to string all vals for Isla
     for (var i in retCtx) {
-      if (isType(retCtx[i], "planet")) {
+      if (demoUtils.isIslaType(retCtx[i], "planet")) {
         var b = retCtx[i];
         b._xSpeed = b._xSpeed.toString();
         b._ySpeed = b._ySpeed.toString();
@@ -207,13 +195,9 @@
     return retCtx;
   };
 
-  var isType = function(obj, type) {
-    return obj._meta !== undefined && obj._meta.type === type;
-  };
-
   var drawBody = function(canvasCtx, body, indicate) {
     var bodySize = size(body.size);
-    canvasCtx.strokeStyle = color(body.color);
+    canvasCtx.strokeStyle = demoUtils.color(body.color);
     canvasCtx.beginPath();
     canvasCtx.arc(body._x, body._y, bodySize / 2, 0, Math.PI * 2, true);
     canvasCtx.closePath();
@@ -248,83 +232,38 @@
     consoleIndicator.write({ event: event, data: data, id: id});
   };
 
-  var random = function(guide) {
-    if (Utils.type(guide) === "Object") {
-      var keys = _.keys(guide);
-      return keys[Math.floor(Math.random() * keys.length)];
-    } else {
-      return Math.floor(Math.random() * guide); // random under max
-    }
-  };
-
- var translateNumberWord = function(word, words) {
-    var lowerWord = word.toLowerCase();
-    if (words[lowerWord] !== undefined) {
-      return words[lowerWord];
-    } else if(parseFloat(word) !== NaN) {
-      return parseFloat(word);
-    } else {
-      throw "I do not understand this number: " + word;
-    }
-  };
-
-  var COLORS = {
-    red: "#FF0000",
-    yellow: "#FFF700",
-    green: "#4DFA51",
-    blue: "#009DFE",
-    indigo: "#5669FF",
-    violet: "#8A6CFF",
-  };
-
   var SIZES = { small:20, medium:30, big:40, huge:80 };
   var DENSITIES = { low:2, medium:4, high:6 };
 
-  var color = function(raw) {
-    if (COLORS[raw] !== undefined) {
-      return COLORS[raw];
-    } else {
-      return raw;
-    }
-  };
-
   var size = function(sizeStr) {
-    return translateNumberWord(sizeStr, SIZES);
+    return demoUtils.translateNumberWord(sizeStr, SIZES);
   };
 
   var density = function(densityStr) {
-    return translateNumberWord(densityStr, DENSITIES);
-  };
-
-  var edit = function(obj, removals) {
-    var ret = EnvStore.extend(true, {}, obj);
-    for (var i = 0; i < removals.length; i++) {
-      delete ret[removals[i]];
-    }
-    return ret;
-  };
-
-  var plusMinus = function(x) {
-    return Math.random() > 0.5 ? x : -x;
+    return demoUtils.translateNumberWord(densityStr, DENSITIES);
   };
 
   // don't spawn too near to, or far from, the centre
   var getRandomBodyCoords = function(canvasCtx) {
     return {
-      x: plusMinus(canvasCtx.canvas.width / 8 +
-        random(canvasCtx.canvas.width / 6)) + canvasCtx.canvas.width / 2,
-      y: plusMinus(canvasCtx.canvas.height / 8 +
-        random(canvasCtx.canvas.height / 6)) + canvasCtx.canvas.height / 2
+      x: demoUtils.plusMinus(canvasCtx.canvas.width / 8 +
+        demoUtils.random(canvasCtx.canvas.width / 6)) +
+        canvasCtx.canvas.width / 2,
+      y: demoUtils.plusMinus(canvasCtx.canvas.height / 8 +
+        demoUtils.random(canvasCtx.canvas.height / 6)) +
+        canvasCtx.canvas.height / 2
     };
   };
 
   var planetDefaults = function(canvasCtx, planet) {
     var retPlanet = EnvStore.extend(true, {}, planet);
-    retPlanet.size = retPlanet.size || random(edit(SIZES, ["huge"]));
-    retPlanet.color = retPlanet.color || random(edit(COLORS, ["yellow"]));
-    retPlanet.density = retPlanet.density || random(DENSITIES);
-    retPlanet._xSpeed = retPlanet._xSpeed || random(0.2) - 0.1;
-    retPlanet._ySpeed = retPlanet._ySpeed || random(0.2) - 0.1;
+    retPlanet.size = retPlanet.size ||
+      demoUtils.random(demoUtils.edit(SIZES, ["huge"]));
+    retPlanet.color = retPlanet.color ||
+      demoUtils.random(demoUtils.edit(demoUtils.COLORS, ["yellow"]));
+    retPlanet.density = retPlanet.density || demoUtils.random(DENSITIES);
+    retPlanet._xSpeed = retPlanet._xSpeed || demoUtils.random(0.2) - 0.1;
+    retPlanet._ySpeed = retPlanet._ySpeed || demoUtils.random(0.2) - 0.1;
 
     if (retPlanet._x === undefined) {
       var coords = getRandomBodyCoords(canvasCtx);
@@ -358,7 +297,7 @@
     "mars size is 'medium'",
     "jupiter is a planet",
     "jupiter color is 'orange'",
-    "jupiter size is 'large'"
+    "jupiter size is 'big'"
   ];
 
   exports.Planets = Planets;

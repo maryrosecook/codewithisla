@@ -1,11 +1,13 @@
 ;(function(exports) {
-  var EnvStore, _;
+  var EnvStore, _, demoUtils;
   if(typeof module !== 'undefined' && module.exports) { // node
     EnvStore = require('../env-store.js').EnvStore;
     _ = require("Underscore");
+    demoUtils = require('../demo-utils.js').demoUtils;
   } else { // browser
     EnvStore = window.EnvStore;
     _ = window._;
+    demoUtils = window.demoUtils;
   }
 
   function Draw(canvasCtx, demoTalker) {
@@ -130,7 +132,6 @@
   };
 
   var clearHelp = function() {
-    // clear
     indicate("clear");
   };
 
@@ -149,37 +150,6 @@
     };
   };
 
-  var random = function(max) {
-    return Math.floor(Math.random() * max);
-  };
-
-  var randomColor = function() {
-    var keys = _.keys(COLORS);
-    return keys[Math.floor(Math.random() * keys.length)];
-  };
-
-  var randomSize = function() {
-    var keys = _.keys(SIZES);
-    return keys[Math.floor(Math.random() * keys.length)];
-  };
-
-  var COLORS = {
-    red: "#FF0000",
-    yellow: "#FFF700",
-    green: "#4DFA51",
-    blue: "#009DFE",
-    indigo: "#5669FF",
-    violet: "#8A6CFF",
-  };
-
-  var color = function(raw) {
-    if (COLORS[raw] !== undefined) {
-      return COLORS[raw];
-    } else {
-      return raw;
-    }
-  };
-
   var SIZES = {
     small: 50,
     medium: 100,
@@ -187,21 +157,14 @@
   };
 
   var size = function(sizeStr) {
-    var lowerSizeStr = sizeStr.toLowerCase();
-    if (SIZES[lowerSizeStr] !== undefined) {
-      return SIZES[lowerSizeStr];
-    } else if(parseFloat(sizeStr) !== NaN) {
-      return parseFloat(sizeStr);
-    } else {
-      throw "I do not understand that size.  Try 'small' or 'big'.";
-    }
+    return demoUtils.translateNumberWord(sizeStr, SIZES);
   };
 
   var basicDefaults = function(canvasCtx, obj) {
     var retObj = EnvStore.extend(true, {}, obj);
-    retObj.color = retObj.color || randomColor();
-    retObj._x = retObj._x || random(canvasCtx.canvas.width);
-    retObj._y = retObj._y || random(canvasCtx.canvas.height);
+    retObj.color = retObj.color || demoUtils.random(demoUtils.COLORS);
+    retObj._x = retObj._x || demoUtils.random(canvasCtx.canvas.width);
+    retObj._y = retObj._y || demoUtils.random(canvasCtx.canvas.height);
     return retObj;
   };
 
@@ -210,7 +173,7 @@
     var y = parseFloat(obj._y);
     var objSize = size(obj.size);
 
-    canvasCtx.fillStyle = color(obj.color);
+    canvasCtx.fillStyle = demoUtils.color(obj.color);
     canvasCtx.beginPath();
     canvasCtx.moveTo(x + objSize * Math.cos(obj._meta.rot),
                      y + objSize * Math.sin(obj._meta.rot));
@@ -232,7 +195,7 @@
 
   var polygonDefaults = function(canvasCtx, obj, polyConfig) {
     var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
-    retObj.size = retObj.size || randomSize();
+    retObj.size = retObj.size || demoUtils.random(SIZES);
     retObj._meta.sides = polyConfig.sides;
     retObj._meta.rot = polyConfig.rot;
     return retObj;
@@ -241,7 +204,7 @@
   var circle = {
     fn: function(canvasCtx, obj, indicate) {
       var objSize = size(obj.size);
-      canvasCtx.fillStyle = color(obj.color);
+      canvasCtx.fillStyle = demoUtils.color(obj.color);
       canvasCtx.beginPath();
       canvasCtx.arc(obj._x, obj._y, objSize / 2, 0, Math.PI * 2, true);
       canvasCtx.closePath();
@@ -254,7 +217,7 @@
 
     defaults: function(canvasCtx, obj) {
       var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
-      retObj.size = retObj.size || randomSize();
+      retObj.size = retObj.size || demoUtils.random(SIZES);
       return retObj;
     }
   };
@@ -263,7 +226,7 @@
     fn: function(canvasCtx, obj, indicate) {
       var width = size(obj.width);
       var height = size(obj.height)
-      canvasCtx.fillStyle = color(obj.color);
+      canvasCtx.fillStyle = demoUtils.color(obj.color);
       canvasCtx.fillRect(obj._x - width / 2, obj._y - height / 2,
                          width, height);
       if (indicate) {
@@ -275,8 +238,8 @@
 
     defaults: function(canvasCtx, obj) {
       var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
-      retObj.width = retObj.width || randomSize();
-      retObj.height = retObj.height || randomSize();
+      retObj.width = retObj.width || demoUtils.random(SIZES);
+      retObj.height = retObj.height || demoUtils.random(SIZES);
       return retObj;
     }
   };
@@ -284,7 +247,7 @@
   var square = {
     fn: function(canvasCtx, obj, indicate) {
       var objSize = size(obj.size);
-      canvasCtx.fillStyle = color(obj.color);
+      canvasCtx.fillStyle = demoUtils.color(obj.color);
       canvasCtx.fillRect(obj._x - objSize / 2, obj._y - objSize / 2,
                          objSize, objSize);
       if (indicate) {
@@ -296,7 +259,7 @@
 
     defaults: function(canvasCtx, obj) {
       var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
-      retObj.size = retObj.size || randomSize();
+      retObj.size = retObj.size || demoUtils.random(SIZES);
       return retObj;
     }
   };
@@ -308,7 +271,7 @@
       var objSize = size(obj.size);
       var h = objSize * Math.sqrt(3)/2;
 
-      canvasCtx.fillStyle = color(obj.color);
+      canvasCtx.fillStyle = demoUtils.color(obj.color);
       canvasCtx.beginPath();
       canvasCtx.lineTo(x - objSize / 2, y + h / 2);
       canvasCtx.lineTo(x + objSize / 2, y + h / 2);
@@ -323,7 +286,7 @@
 
     defaults: function(canvasCtx, obj) {
       var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
-      retObj.size = retObj.size || randomSize();
+      retObj.size = retObj.size || demoUtils.random(SIZES);
       return retObj;
     }
   };
