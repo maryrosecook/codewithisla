@@ -1,6 +1,6 @@
 var _ = require('Underscore');
 
-var Draw = require('../src/demos/draw').Draw;
+var Shapes = require('../src/demos/shapes').Shapes;
 var Interpreter = require('../node_modules/isla/src/interpreter').Interpreter;
 var Eventer = require('../src/eventer').Eventer;
 
@@ -34,13 +34,13 @@ var withCtx = function(dt, ctx, id, value, cb) {
   dt.emit("isla:ctx:new", ctx);
 };
 
-describe('Draw', function() {
+describe('Shapes', function() {
   describe('basic drawing', function() {
     describe('draw all the basic shapes', function() {
       var dt, draw;
       beforeEach(function() {
         dt = demoTalker();
-        draw = new Draw(ctx(), dt);
+        shapes = new Shapes(ctx(), dt);
       });
 
       it('should draw a triangle', function() {
@@ -84,36 +84,36 @@ describe('Draw', function() {
       });
 
       afterEach(function() {
-        expect(draw.operations()[0]).toBeDefined();
-        draw.end();
+        expect(shapes.operations()[0]).toBeDefined();
+        shapes.end();
       });
 
     });
 
     it('should not draw an unknown shape', function() {
       var dt = demoTalker();
-      var draw = new Draw(ctx(), dt);
+      var shapes = new Shapes(ctx(), dt);
       dt.emit("isla:ctx:new", {
         a: { _meta: { type: "circle" }},
         b: { _meta: { type: "whatevs" }}
       });
 
-      expect(draw.operations()[0]).toBeDefined();
-      expect(draw.operations()[1]).toBeUndefined();
-      draw.end();
+      expect(shapes.operations()[0]).toBeDefined();
+      expect(shapes.operations()[1]).toBeUndefined();
+      shapes.end();
     });
 
     it('should allow updating of an existing context with new op', function() {
       var ran;
       runs(function() {
         var dt = demoTalker();
-        var draw = new Draw(ctx(), dt);
+        var shapes = new Shapes(ctx(), dt);
         withCtx(dt, {}, "a", { _meta: { type: "square" }}, function(ctx1) {
           withCtx(dt, ctx1, "b", { _meta: { type: "circle" }}, function(ctx2) {
-            expect(draw.operations()[0]).toBeDefined();
-            expect(draw.operations()[1]).toBeDefined();
+            expect(shapes.operations()[0]).toBeDefined();
+            expect(shapes.operations()[1]).toBeDefined();
             ran = true;
-            draw.end();
+            shapes.end();
           });
         });
       });
@@ -124,14 +124,14 @@ describe('Draw', function() {
       var ran;
       runs(function() {
         var dt = demoTalker(); // 1
-        var draw = new Draw(ctx(), dt);
+        var shapes = new Shapes(ctx(), dt);
         withCtx(dt, {}, "a", { _meta: { type: "square" }}, function(ctx1) {
           withCtx(dt, ctx1, "b", {}, function(ctx2) {
             expect(ctx2.b).toEqual({});
-            expect(draw.operations()[0]).toBeDefined();
-            expect(draw.operations()[1]).toBeUndefined();
+            expect(shapes.operations()[0]).toBeDefined();
+            expect(shapes.operations()[1]).toBeUndefined();
             ran = true;
-            draw.end();
+            shapes.end();
           });
         });
       });
@@ -142,15 +142,15 @@ describe('Draw', function() {
       var ran;
       runs(function() {
         var dt = demoTalker(); // 1
-        var draw = new Draw(ctx(), dt);
+        var shapes = new Shapes(ctx(), dt);
         var self = this;
         dt.on(self, "demo:ctx:new", function(newCtx) { // 3
           dt.removeListener(self, "demo:ctx:new");
           dt.on(this, "demo:ctx:new", function(newCtx2) { // 5
-            expect(draw.operations()[0]).toBeDefined();
-            expect(draw.operations()[1]).toBeUndefined();
+            expect(shapes.operations()[0]).toBeDefined();
+            expect(shapes.operations()[1]).toBeUndefined();
             ran = true;
-            draw.end();
+            shapes.end();
           });
           dt.emit("isla:ctx:new", { a: { _meta: { type: "square" } }}); // 4
         });
@@ -171,12 +171,12 @@ describe('Draw', function() {
       runs(function() {
         // 1
         var dt = demoTalker();
-        var draw = new Draw(ctx(), dt);
+        var shapes = new Shapes(ctx(), dt);
         var initCtx = Interpreter.interpret("basket is a list\nx is a thing\nx y is '1'\nadd x to basket").ctx;
         dt.on(this, "demo:ctx:new", function(ctx) { // 3
           var out = Interpreter.interpret("write basket", { ctx: ctx }).ret;
           expect(out).toEqual("a list\n  a thing\n    y is '1'\n");
-          draw.end();
+          shapes.end();
           ran = true;
         });
 
@@ -192,15 +192,15 @@ describe('Draw', function() {
       var ran;
       runs(function() {
         var dt = demoTalker();
-        var draw = new Draw(ctx(), dt);
+        var shapes = new Shapes(ctx(), dt);
         withCtx(dt, {}, "c", { _meta: { type: "square" }}, function(ctx1) {
           withCtx(dt, ctx1, "b", { _meta: { type: "square" }}, function(ctx2) {
             withCtx(dt, ctx2, "a", { _meta: { type: "square" }}, function(ctx3) {
-              expect(draw.operations()[0].name).toEqual("c");
-              expect(draw.operations()[1].name).toEqual("b");
-              expect(draw.operations()[2].name).toEqual("a");
+              expect(shapes.operations()[0].name).toEqual("c");
+              expect(shapes.operations()[1].name).toEqual("b");
+              expect(shapes.operations()[2].name).toEqual("a");
               ran = true;
-              draw.end();
+              shapes.end();
             });
           });
         });

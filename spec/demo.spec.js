@@ -3,7 +3,7 @@ var Eventer = require('../src/eventer').Eventer;
 
 // list all demos to do basic tests on here
 var demos = [
-  require('../src/demos/draw').Draw,
+  require('../src/demos/shapes').Shapes,
   require('../src/demos/planets').Planets
 ]
 

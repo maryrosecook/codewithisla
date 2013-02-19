@@ -10,7 +10,7 @@
     demoUtils = window.demoUtils;
   }
 
-  function Draw(canvasCtx, demoTalker) {
+  function Shapes(canvasCtx, demoTalker) {
     if (canvasCtx == null) {
       throw "You must provide a canvas context to draw to.";
     }
@@ -44,7 +44,7 @@
     }, 50);
   }
 
-  Draw.prototype = {
+  Shapes.prototype = {
     getTutorSteps: function() {
       return steps;
     },
@@ -349,5 +349,5 @@
     shapes[i] = makePolygonCode(polygons[i]);
   }
 
-  exports.Draw = Draw;
+  exports.Shapes = Shapes;
 })(typeof exports === 'undefined' ? this : exports)
