@@ -109,11 +109,7 @@
       promptHistory:true
     });
 
-    // cursor blinking
-
-    consoleController.typer.bind("keyup", function() {
-      $('.jquery-console-cursor').blink();
-    });
+    // cursor blinking for focus
 
     consoleController.typer.bind("focus", function() {
       $('.jquery-console-cursor').blink();
@@ -125,17 +121,18 @@
 
     // syntax highlighting as you type
 
-    consoleController.typer.keypress(function(e) {
+    consoleController.typer.bind("keypress", function(e) {
       terminal.events.emit("keypress", consoleController.promptText());
     });
 
     // extra for backspace because not caught by keydown.
     // Price is that highlight update is delayed until key goes up so
     // get tiny text flash during backspace
-    consoleController.typer.keyup(function(e) {
+    consoleController.typer.bind("keyup", function(e) {
       if (isCursorMovementKey(e)) {
         terminal.events.emit("keypress", consoleController.promptText());
       }
+      $('.jquery-console-cursor').blink();
     });
 
     // tell terminal when history item gets recalled
