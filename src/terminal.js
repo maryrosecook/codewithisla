@@ -133,7 +133,7 @@
     // Price is that highlight update is delayed until key goes up so
     // get tiny text flash during backspace
     consoleController.typer.keyup(function(e) {
-      if (e.keyCode === 8) {
+      if (isCursorMovementKey(e)) {
         terminal.events.emit("keypress", consoleController.promptText());
       }
     });
@@ -144,6 +144,10 @@
     });
 
     return consoleController;
+  };
+
+  var isCursorMovementKey = function(e) {
+    return e.keyCode === 8 || e.keyCode === 37 || e.keyCode === 39;
   };
 
   // prepares execution result for console
