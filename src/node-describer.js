@@ -36,7 +36,7 @@
   };
 
   var describeValue = function(unresolvedVal, env) {
-    var description = "Has no value, yet.";
+    var description = "Has no value.";
     if (unresolvedVal !== undefined) {
       // resolve any refs - non-refs will pass untouched
       val = Isla.Interpreter.resolve(unresolvedVal, env);
