@@ -8,47 +8,47 @@ body {
   text-align: justify;
 }
 
-a {  color:black; }
+a { color:black; }
+.footer a { color:#555; border-bottom:1px solid #555; text-decoration:none; }
 
 .title a { text-decoration:none; border-bottom:1px solid black; color:black;}
-a:hover { color:black; border-bottom:none; }
+a:hover { border-bottom:none; }
 
 h1 a { text-decoration:none; }
 
-
-h1 { font-size: 30px; font-weight:normal;
+h1 { font-size: 46px; font-weight:normal;
      margin-left:auto; margin-right:auto; text-align:center;
      margin-top:5px; margin-bottom:2px;
      padding-bottom:5px;
    }
-h2 { font-size: 30px; font-weight:normal; margin: 16px 0 2px -2px; }
+h2 {
+  font-size: 22px; font-weight:normal; margin: 15px 0 14px -2px;
+   margin-left:auto; margin-right:auto; text-align:center;
+}
 h3 { font-size: 21px; font-weight:normal; margin-top:16px; margin-bottom:16px;}
 h4 { font-size: 15px; font-weight:normal; margin-top:16px; margin-bottom:16px;}
 
 p { line-height:15px; margin:16px 0 16px 0; }
 
-hr { color: #aaa; background-color:#aaa; height:1px; border:0; }
-
 .strapline {
   margin-left:auto; margin-right:auto;
-  width:250px;
+  width:472px;
   text-align:center;
-  margin-top:-5px;
-  font-size:16px;
+  margin-top:-13px;
+  margin-bottom:25px;
+  font-size:13px;
+  padding-bottom:5px;
+  border-bottom:1px solid #555;
 }
 
 .footer {
-  width:160px;
+  width:472px;
   margin-left:auto; margin-right:auto;
+  margin-top:-16px;
   text-align:center;
-  font-size:12px;
-  position:absolute;
-  left: 0;
-  right: 0;
-  bottom:0;
-  text-align:center;
-  margin-bottom:10px;
-  width:100%;
+  font-size:13px;
+  padding-top:5px;
+  border-top:1px solid #555;
 }
 
 .title a { border-bottom:none; }
@@ -60,31 +60,38 @@ hr { color: #aaa; background-color:#aaa; height:1px; border:0; }
 }
 
 .grid {
-  width: 810px;
+  width: 540px;
+  height:300px;
   margin-left:auto; margin-right:auto; text-align:center;
   margin-top:-30px;
 }
 
-.grid-element{
+.grid-element {
   width:200px;
   padding:35px;
   float:left;
 }
 
-span.jquery-console-prompt span.keyword { color: #FFF286; }
-span.jquery-console-prompt span.literal { color: white; }
-span.jquery-console-prompt span.type { color: #89FB95; }
+span.keyword { color: #FFF286; }
+span.literal { color: white; }
+span.type { color: #89FB95; }
+span.variable { color: #F3AFFF; }
+span.attribute { color: #87C4FF; }
+span.function { color: #B0A5FF; }
+
 span.jquery-console-prompt span.variable {
-  color: #F3AFFF;
   border-bottom:1px dotted #926999;
 }
 span.jquery-console-prompt span.attribute {
-  color: #87C4FF;
   border-bottom:1px dotted #517699;
 }
-span.jquery-console-prompt span.function {
-  color: #B0A5FF;
-  /* border-bottom:1px dotted #6A6399; no help for fns, yet */
+
+.code {
+  margin-left:auto; margin-right:auto;
+  background-color:#000;
+  width:420px;
+  padding:20px 24px;
+  color: #fff;
 }
 
 #tutor {
