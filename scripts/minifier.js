@@ -8,19 +8,6 @@ demosPath = __dirname + '/../src/demos/';
 packer({
   log : true,
   input : [
-    resourcesPath + "jquery-blink.js",
-    resourcesPath + "jquery.console.js",
-  ],
-  minify: true,
-  output : resourcesPath + 'console.min.js',
-  callback: function ( err, code ){
-    err && console.log( err );
-  }
-});
-
-packer({
-  log : true,
-  input : [
     srcPath + "ui.js",
     srcPath + "tutor.js",
     srcPath + "env-store.js",
