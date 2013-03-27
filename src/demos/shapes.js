@@ -64,7 +64,9 @@
       for(var i = 0; i < operations.length; i++) {
         operations[i].fn(operations[i].indicate);
       }
-    }
+    },
+
+    init: function() {}
   };
 
   // sets up cb to take latest Isla ctx and make draw ops from objects
