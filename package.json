@@ -12,7 +12,8 @@
     "isla": "0.1.9"
   },
   "devDependencies": {
-    "jasmine-node": "1.0.26"
+    "jasmine-node": "1.0.26",
+    "node.packer": "2.0.0"
   }
 }
 
