@@ -22,23 +22,27 @@ h1 { font-size: 46px; font-weight:normal;
      padding-bottom:5px;
    }
 h2 {
-  font-size: 22px; font-weight:normal; margin: 15px 0 14px -2px;
-   margin-left:auto; margin-right:auto; text-align:center;
+  font-size: 20px; font-weight:normal; margin: 8px 0 14px 0;
 }
-h3 { font-size: 21px; font-weight:normal; margin-top:16px; margin-bottom:16px;}
+h3 { font-size: 15px; font-weight:normal; margin-top:16px; margin-bottom:16px;}
 h4 { font-size: 15px; font-weight:normal; margin-top:16px; margin-bottom:16px;}
 
-p { line-height:15px; margin:16px 0 16px 0; }
+p { line-height:15px; margin:16px 0 16px 0; font-size:12px; }
 
 .strapline {
   margin-left:auto; margin-right:auto;
   width:472px;
   text-align:center;
   margin-top:-13px;
-  margin-bottom:25px;
   font-size:13px;
   padding-bottom:5px;
   border-bottom:1px solid #555;
+}
+
+.main-text {
+  width:472px;
+  margin-left:auto; margin-right:auto;
+  margin-bottom:25px;
 }
 
 .footer {
@@ -63,7 +67,6 @@ p { line-height:15px; margin:16px 0 16px 0; }
   width: 540px;
   height:300px;
   margin-left:auto; margin-right:auto; text-align:center;
-  margin-top:-30px;
 }
 
 .grid-element {
