@@ -30,8 +30,9 @@
 
   exports.Highlighter.highlight = function(str) {
     var markupPieces = codeAnalyzer.expressionSyntaxTokens(str);
+
     if (markupPieces === undefined) {
-      return undefined;
+      return spaceToNbsp(str);
     } else {
       // reintroduce spaces from orig code between marked up tokens
       var spacedMarkup = markupPieces.reduce(function(a, x) {

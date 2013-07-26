@@ -50,14 +50,14 @@
     var terminal = new Terminal();
     terminal.events.on(this, 'keypress', function(line) {
       terminal.setPromptText({
-        html: getHighlightedSyntax(line),
+        html: Highlighter.highlight(line),
         cursor: true
       });
     });
 
     terminal.events.on(this, 'history', function(line) {
       terminal.setPromptText({
-        html: getHighlightedSyntax(line),
+        html: Highlighter.highlight(line),
         cursor: true
       });
     });
@@ -74,7 +74,7 @@
       }
 
       terminal.setPromptText({
-        html: getHighlightedSyntax(line),
+        html: Highlighter.highlight(line),
         cursor: false
       });
 
@@ -82,15 +82,6 @@
     });
 
     return terminal;
-  };
-
-  var getHighlightedSyntax = function(code) {
-    var markup = Highlighter.highlight(code);
-    if (markup === undefined) {
-      markup = code;
-    }
-
-    return markup;
   };
 
   exports.DemoRunner = DemoRunner;
