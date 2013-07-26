@@ -2,9 +2,9 @@ var highlighter = require('../src/highlighter').Highlighter;
 
 describe('Highlighter', function() {
   describe('highlighting', function() {
-    it('should return undefined for unparseable markup', function() {
-      var markup = highlighter.highlight("x is");
-      expect(markup).toBeUndefined();
+    it('should return nbsped text for unparseable input', function() {
+      var markup = highlighter.highlight("x  is");
+      expect(markup).toEqual("x&nbsp;&nbsp;is");
     });
 
     it('should mark up token where syntax annotation on top level', function() {
