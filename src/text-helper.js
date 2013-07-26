@@ -56,9 +56,7 @@
           lineNumber: mapper.getLineNumber(terminal, text, point)
         });
 
-        ui.displayMessage(getLineHelp(mapper.getLine(terminal, text, point),
-                                      envStore));
-        return;
+        ui.displayMessage(getLineHelp(mapper.getLine(terminal, text, point), envStore));
       } else {
         secondaryHelp();
       }
@@ -82,12 +80,20 @@
   };
 
   var getTokenHelp = function(text, index, envStore) {
-    return nodeDescriber.describe(text, index, envStore.latest());
+    try {
+      return nodeDescriber.describe(text, index, envStore.latest());
+    } catch (e) {
+      return e.message;
+    }
   };
 
   var getLineHelp = function(line, envStore) {
     var node = codeAnalyzer.expression(line);
-    return expressionDescriber.describe(node, envStore.latest());
+    try {
+      return expressionDescriber.describe(node, envStore.latest());
+    } catch (e) {
+      return e.message;
+    }
   };
 
   exports.TextHelper = TextHelper;

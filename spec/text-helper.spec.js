@@ -25,6 +25,18 @@ describe('TextHelper', function() {
   describe('token help', function() {
     // just some integration tests
 
+    it('should display var value in text box when hover over', function() {
+      var displayedMessage, events = [];
+      var th = new TextHelper(term("a is a\n"), {}, envStore({}), {
+        displayMessage: function(m) { displayedMessage = m; },
+        indicate: function(__, e, __) { events.push(e); }
+      });
+
+      th.write({ event:"mousemove", point:{ x:5, y:5 } }); // in a
+      expect(displayedMessage).toEqual("I have not heard of a.");
+      expect(events[1]).toEqual("indicate");
+    });
+
     it('should clear text and indication prior to new help', function() {
       var displayedMessages = [], events = [];
       var th = new TextHelper(term("a is '1'\n"), {}, envStore({ a:"1" }), {
@@ -69,6 +81,18 @@ describe('TextHelper', function() {
 
   describe('line help', function() {
     // just some integration tests
+
+    it('should display var value in text box when hover over', function() {
+      var displayedMessage, events = [];
+      var th = new TextHelper(term("a is a\n"), {}, envStore({}), {
+        displayMessage: function(m) { displayedMessage = m; },
+        indicate: function(__, e, __) { events.push(e); }
+      });
+
+      th.write({ event:"mousemove", point:{ x:200, y:5 } }); // line position
+      expect(displayedMessage).toEqual("I have not heard of a.");
+      expect(events[1]).toEqual("indicate");
+    });
 
     it('should clear text and indication prior to new help', function() {
       var displayedMessages = [], events = [];
