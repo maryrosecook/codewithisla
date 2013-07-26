@@ -8,6 +8,24 @@
     codeAnalyzer = window.codeAnalyzer;
   }
 
+  var spaceToNbsp = function(str) {
+    return str.replace(/ /g, "&nbsp;");
+  };
+
+  var toSpan = function(t) {
+    return "<span class='" + t.syntax + "'>" + spaceToNbsp(t.code) + "</span>";
+  };
+
+  var addSpaceToken = function(tokens, spaceLen) {
+    return spaceLen > 0 ? tokens.concat({ code: new Array(spaceLen).join(" ") }) : tokens;
+  };
+
+  var codeLen = function(tokens) {
+    return tokens.reduce(function(a, x) {
+      return a + x.code.length;
+    }, 0);
+  };
+
   exports.Highlighter = {};
 
   exports.Highlighter.highlight = function(str) {
@@ -15,35 +33,15 @@
     if (markupPieces === undefined) {
       return undefined;
     } else {
-      var markup = "";
-      for (var i = 0, iStr = 0; i < markupPieces.length; i++) {
-        var piece = markupPieces[i];
-        markup += "<span class='" + piece.syntax + "'>";
+      // reintroduce spaces from orig code between marked up tokens
+      var spacedMarkup = markupPieces.reduce(function(a, x) {
+        return addSpaceToken(a, x.index + 1 - codeLen(a)).concat(x);
+      }, []);
+      spacedMarkup = addSpaceToken(spacedMarkup, str.length + 1 - codeLen(spacedMarkup));
 
-        var tokenCapped = false;
-        var iToken = 0;
-        while (true) {
-          if (iToken < piece.code.length && piece.code[iToken] === " ") {
-            markup += "&nbsp;";
-            iStr++;
-            iToken++;
-          } else if (!tokenCapped && iToken === piece.code.length) {
-            markup += "</span>";
-            tokenCapped = true;
-          } else if (str[iStr] === " ") {
-            markup += "&nbsp;";
-            iStr++;
-          } else if(iToken < piece.code.length) {
-            markup += piece.code[iToken];
-            iStr++;
-            iToken++;
-          } else {
-            break; // end of tok or end of code
-          }
-        }
-      }
-
-      return markup;
+      return spacedMarkup.reduce(function(a, x) {
+        return a + (x.syntax === undefined ? spaceToNbsp(x.code) : toSpan(x));
+      }, "");
     }
   };
 })(typeof exports === 'undefined' ? this : exports)
