@@ -63,19 +63,15 @@
   // hacky fn that returns mhich of main expr tokens the index falls in
   // does not dive below surface into sub tokens
   var getTokenIndex = function(text, index) {
-    var tokenIndex = undefined;
+    var tokenIndex;
     var lineNumber = codeAnalyzer.getLineNumber(text, index);
     var line = codeAnalyzer.getLine(text, lineNumber);
     var tokens = codeAnalyzer.expressionTokens(line);
     if (tokens !== undefined) {
       var lineIndex = codeAnalyzer.getLineIndex(text, index);
-      tokenIndex = 0;
-      for (var i = 0; i < tokens.length; i++) {
-        var tok = tokens[i];
-        if(lineIndex >= tok.index) {
-          tokenIndex = i;
-        }
-      }
+      tokenIndex = tokens.reduce(function(a, x, i) {
+        return lineIndex >= x.index ? i : a;
+      }, 0);
     }
 
     return tokenIndex;
