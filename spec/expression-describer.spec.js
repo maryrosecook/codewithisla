@@ -13,12 +13,12 @@ describe('expressionDescriber', function() {
         .toEqual("Makes a circle called x.");
     });
 
-    it('should print right help for object assignee', function() {
-      var code = "x is a person\nx y is a circle";
-      var node = codeAnalyzer.expression(code.split("\n")[1]);
+    it('should print right help for deep object assignee', function() {
+      var code = "x is a d\nx y is a d\nx y z is a d";
+      var node = codeAnalyzer.expression(code.split("\n")[2]);
       var env = Isla.Interpreter.interpret(code);
       expect(expressionDescriber.describe(node, env))
-        .toEqual("Makes a circle called x y.");
+        .toEqual("Makes a d called x y z.");
     });
   });
 
@@ -47,12 +47,12 @@ describe('expressionDescriber', function() {
         .toEqual("x y is now age.");
     });
 
-    it('should print ref when assigning obj attribute', function() {
-      var code = "x is a person\nx age is '2'\ny is a person\ny age is x age";
-      var node = codeAnalyzer.expression(code.split("\n")[3]);
+    it('should print ref when assigning deep obj attribute', function() {
+      var code = "x is a d\nx y is a d\nx y z is '1'";
+      var node = codeAnalyzer.expression(code.split("\n")[2]);
       var env = Isla.Interpreter.interpret(code);
       expect(expressionDescriber.describe(node, env))
-        .toEqual("y age is now x age.");
+        .toEqual("x y z is now '1'.");
     });
   });
 
@@ -66,12 +66,12 @@ describe('expressionDescriber', function() {
           .toEqual("Puts '1' into the list called x.");
       });
 
-      it('should print right help for var', function() {
-        var code = "x is a list\ny is a person\ny age is '1'\nadd y age to x";
-        var node = codeAnalyzer.expression(code.split("\n")[3]);
+      it('should print right help for deeply nested obj attr', function() {
+        var code = "a is a d\na b is '1'\nx is a d\nx y is a d\nx y z is a list\nadd a b to x y z";
+        var node = codeAnalyzer.expression(code.split("\n")[5]);
         var env = Isla.Interpreter.interpret(code);
         expect(expressionDescriber.describe(node, env))
-          .toEqual("Puts y age into the list called x.");
+          .toEqual("Puts a b into the list called x y z.");
       });
     });
 
@@ -90,6 +90,14 @@ describe('expressionDescriber', function() {
         var env = Isla.Interpreter.interpret(code);
         expect(expressionDescriber.describe(node, env))
           .toEqual("Takes y age out of the list called x.");
+      });
+
+      it('should print right help for deeply nested obj attr', function() {
+        var code = "a is a d\na b is '1'\nx is a d\nx y is a d\nx y z is a list\ntake a b from x y z";
+        var node = codeAnalyzer.expression(code.split("\n")[5]);
+        var env = Isla.Interpreter.interpret(code);
+        expect(expressionDescriber.describe(node, env))
+          .toEqual("Takes a b out of the list called x y z.");
       });
     });
   });
