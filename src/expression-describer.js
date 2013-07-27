@@ -18,7 +18,9 @@
     if (Isla.Utils.type(refId) === "String") {
       return refId;
     } else {
-      return refId[0] + " " + refId[1];
+      return refId.reduce(function(a, x) {
+        return a + " " + x;
+      });
     }
   };
 
