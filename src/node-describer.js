@@ -3,36 +3,35 @@
   if(typeof module !== 'undefined' && module.exports) { // node
     Isla = require('../node_modules/isla/src/isla.js').Isla;
     codeAnalyzer = require('../src/code-analyzer').codeAnalyzer;
+    _ = require("Underscore");
   } else { // browser
     Isla = window.Isla;
     codeAnalyzer = window.codeAnalyzer;
+    _ = window._;
   }
 
   var nodeDescriber = {
     describe: function(text, index, env) {
       var syntaxNode = codeAnalyzer.getSyntaxNode(text, index);
-      if (syntaxNode.syntax === "variable") {
-        var val;
-        if (syntaxNode.node.tag === "scalar") { // x is a t
-          val = Isla.Interpreter.evaluateValue(syntaxNode.node, env).val;
-        } else if (syntaxNode.node.tag === "identifier") {
-          // x age is '1' - x not wrapped in scalar tag so can't evaluate
-          // if tried to use tok one level up (in obj tag), would get attr val
-          val = Isla.Interpreter.resolve({ ref:syntaxNode.node.c[0] }, env);
-        }
+      if (syntaxNode.node.syntax === "variable" || syntaxNode.node.syntax === "attribute") {
+        var token = codeAnalyzer.getExpressionTokenFromWholeCode(text, index);
+        var objToken = Isla.Parser.find(token, "variable");
+        var indexOnLine = codeAnalyzer.getLineIndex(text, index);
+        objToken.c = getVariablePart(objToken.c, indexOnLine); // hack off trailing idents
+        var val = Isla.Interpreter.evaluateValue(objToken, env).val;
 
-        return describeValue(val, env);
-      } else if (syntaxNode.syntax === "attribute") {
-        var lineNumber = codeAnalyzer.getLineNumber(text, index);
-        var line = codeAnalyzer.getLine(text, lineNumber);
-        var tokens = codeAnalyzer.expressionTokens(line);
-        var objToken = tokens[getTokenIndex(text, index)];
-        var val = Isla.Interpreter.evaluateValue(objToken.c[0], env).val;
         return describeValue(val, env);
       } else {
         return undefined;
       }
-    },
+    }
+  };
+
+  // takes full variable token (a b c) and returns part up to index
+  var getVariablePart = function(token, index) {
+    return _.reduce(token, function(a, x) {
+      return index >= x.index ? a.concat(x) : a;
+    }, []);
   };
 
   var describeValue = function(unresolvedVal, env) {
@@ -59,23 +58,6 @@
 
     return description;
   }
-
-  // hacky fn that returns mhich of main expr tokens the index falls in
-  // does not dive below surface into sub tokens
-  var getTokenIndex = function(text, index) {
-    var tokenIndex;
-    var lineNumber = codeAnalyzer.getLineNumber(text, index);
-    var line = codeAnalyzer.getLine(text, lineNumber);
-    var tokens = codeAnalyzer.expressionTokens(line);
-    if (tokens !== undefined) {
-      var lineIndex = codeAnalyzer.getLineIndex(text, index);
-      tokenIndex = tokens.reduce(function(a, x, i) {
-        return lineIndex >= x.index ? i : a;
-      }, 0);
-    }
-
-    return tokenIndex;
-  };
 
   exports.nodeDescriber = nodeDescriber;
 })(typeof exports === 'undefined' ? this : exports)

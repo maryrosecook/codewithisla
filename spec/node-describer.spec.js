@@ -24,6 +24,37 @@ describe('nodeDescriber', function() {
         .toEqual("a person\n  age is '31'\n");
     });
 
+    describe('subsets of variables', function() {
+      it('should describe obj type assignee', function() {
+        var code = "a is a m\na b is a m\na b c is a m\na b c d is '1'\n";
+        //          _
+        expect(nodeDescriber.describe(code, 0, Isla.Interpreter.interpret(code)))
+          .toEqual("a m\n  b is a m\n    c is a m\n      d is '1'\n");
+      });
+
+      it('should describe obj type assignee', function() {
+        var code = "a is a m\na b is a m\na b c is a m\na b c d is '1'\n";
+        //                      _
+        expect(nodeDescriber.describe(code, 11, Isla.Interpreter.interpret(code)))
+          .toEqual("a m\n  c is a m\n    d is '1'\n");
+      });
+
+      it('should describe obj type assignee', function() {
+        var code = "a is a m\na b is a m\na b c is a m\na b c d is '1'\n";
+        //                                    _
+        expect(nodeDescriber.describe(code, 24, Isla.Interpreter.interpret(code)))
+          .toEqual("a m\n  d is '1'\n");
+      });
+
+      it('should describe obj type assignee', function() {
+        var code = "a is a m\na b is a m\na b c is a m\na b c d is '1'\n";
+        //                                                    _
+        expect(nodeDescriber.describe(code, 39, Isla.Interpreter.interpret(code)))
+          .toEqual("'1'");
+      });
+    });
+
+
     it('should describe obj assignee', function() {
       var code = "mary is a person\nmary age is '31'";
       //                            ____
@@ -56,6 +87,15 @@ describe('nodeDescriber', function() {
       var env = Isla.Interpreter.interpret(code);
       expect(nodeDescriber.describe(code, 46, env))
         .toEqual("'1'");
+    });
+  });
+
+  describe('type in assignment', function() {
+    it('should not describe type', function() {
+      var code = "x is a guy";
+      //                 ___
+      var env = Isla.Interpreter.interpret(code);
+      expect(nodeDescriber.describe(code, 7, env)).toBeUndefined();
     });
   });
 

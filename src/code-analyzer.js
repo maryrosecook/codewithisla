@@ -120,6 +120,19 @@
       var syntaxTokens = codeAnalyzer.expressionSyntaxTokens(line);
       var syntaxTokenIndex = codeAnalyzer.getSyntaxTokenIndex(text, index);
       return syntaxTokens[syntaxTokenIndex];
+    },
+
+    getExpressionTokenFromWholeCode: function(text, index) {
+      var lineNumber = codeAnalyzer.getLineNumber(text, index);
+      var line = codeAnalyzer.getLine(text, lineNumber);
+      var tokens = codeAnalyzer.expressionTokens(line);
+      var lineIndex = codeAnalyzer.getLineIndex(text, index);
+
+      var tokenIndex = _.reduce(tokens, function(a, x, i) {
+        return lineIndex >= x.index ? i : a;
+      }, 0);
+
+      return tokens[tokenIndex];
     }
   };
 
