@@ -3,9 +3,11 @@
   if(typeof module !== 'undefined' && module.exports) { // node
     Isla = require('../node_modules/isla/src/isla.js').Isla;
     codeAnalyzer = require('../src/code-analyzer').codeAnalyzer;
+    _ = require("Underscore");
   } else { // browser
     Isla = window.Isla;
     codeAnalyzer = window.codeAnalyzer;
+    _ = window._;
   }
 
   var spaceToNbsp = function(str) {
@@ -21,7 +23,7 @@
   };
 
   var codeLen = function(tokens) {
-    return tokens.reduce(function(a, x) {
+    return _.reduce(tokens, function(a, x) {
       return a + x.code.length;
     }, 0);
   };
@@ -35,12 +37,12 @@
       return spaceToNbsp(str);
     } else {
       // reintroduce spaces from orig code between marked up tokens
-      var spacedMarkup = markupPieces.reduce(function(a, x) {
+      var spacedMarkup = _.reduce(markupPieces, function(a, x) {
         return addSpaceToken(a, x.index + 1 - codeLen(a)).concat(x);
       }, []);
       spacedMarkup = addSpaceToken(spacedMarkup, str.length + 1 - codeLen(spacedMarkup));
 
-      return spacedMarkup.reduce(function(a, x) {
+      return _.reduce(spacedMarkup, function(a, x) {
         return a + (x.syntax === undefined ? spaceToNbsp(x.code) : toSpan(x));
       }, "");
     }
