@@ -34,42 +34,47 @@
   };
 
   var describe = multimethod()
-    .dispatch(function(node) {
-      return node.tag;
+    .dispatch(function(line) {
+      return codeAnalyzer.expression(line).tag;
     })
 
-    .when("type_assignment", function(node, env) {
-      var ref = getReferenceStr(node.c[0].c[0], env);
+    .when("type_assignment", function(line, env) {
+      var node = codeAnalyzer.expression(line);
+      var assigneeNode = node.c[0].c[0];
+      var ref = getVariableNameStr(assigneeNode, env);
       var type = Isla.Interpreter.interpretAst(node.c[2], env);
       return "Makes a " + type + " called " + ref + ".";
     })
 
-    .when("value_assignment", function(node, env) {
-      var assiRef = getReferenceStr(node.c[0].c[0], env);
-      var value = getValueStr(node.c[2], env);
-      return assiRef + " is now " + value + ".";
+    .when("value_assignment", function(line, env) {
+      var node = codeAnalyzer.expression(line);
+      var assigneeNode = node.c[0].c[0];
+      return
+        getVariableNameStr(assigneeNode, env) + " is now " +
+        getValueStr(node.c[2], env) + ".";
     })
 
-    .when("list_assignment", function(node, env) {
-      var listRef = getReferenceStr(node.c[3].c[0], env);
-      var value = getValueStr(node.c[1], env);
+    .when("list_assignment", function(line, env) {
+        var node = codeAnalyzer.expression(line);
+        var listNode = node.c[3].c[0];
+        var listName = getVariableNameStr(listNode, env);
+        var value = getValueStr(node.c[1], env);
 
-      var operation = Isla.Parser.extract(node.c, 0, "list_operation", 0).tag;
-      if (operation === "add") {
-        return "Puts " + value + " into the list called " + listRef + ".";
-      } else if (operation === "take") {
-        return "Takes " + value + " out of the list called " + listRef + ".";
+        var operation = Isla.Parser.extract(node.c, 0, "list_operation", 0).tag;
+        if (operation === "add") {
+          return "Puts " + value + " into the list called " + listName + ".";
+        } else if (operation === "take") {
+          return "Takes " + value + " out of the list called " + listName + ".";
+        }
       }
     })
 
-    .when("invocation", function(node, env) {
-      var fnNameNode = Isla.Parser.extract(node, "invocation", 0);
-      var fnId = Isla.Interpreter.interpretAst(fnNameNode, env);
-      var descriptionFn = Isla.Interpreter.resolve({
-        ref: fnId
-      }, env).description;
-      var paramValue = getValueStr(node.c[1], env);
-      return descriptionFn(paramValue);
+    .when("invocation", function(line, env) {
+        var node = codeAnalyzer.expression(line);
+        var fnNameNode = Isla.Parser.extract(node, "invocation", 0);
+        var fn = Isla.Interpreter.evaluateValue(fnNameNode, env);
+        var paramValue = getValueStr(node.c[1], env);
+        return fn.description(paramValue);
     })
 
   var expressionDescriber = {

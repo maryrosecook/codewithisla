@@ -18,7 +18,7 @@
         var objToken = Isla.Parser.find(token, "variable");
         var indexOnLine = codeAnalyzer.getLineIndex(text, index);
         objToken.c = getVariablePart(objToken.c, indexOnLine); // hack off trailing idents
-        var val = Isla.Interpreter.evaluateValue(objToken, env).val;
+        var val = Isla.Interpreter.evaluateValue(objToken, env);
 
         return describeValue(val, env);
       } else {
@@ -34,11 +34,9 @@
     }, []);
   };
 
-  var describeValue = function(unresolvedVal, env) {
+  var describeValue = function(val, env) {
     var description = "Has no value.";
-    if (unresolvedVal !== undefined) {
-      // resolve any refs - non-refs will pass untouched
-      val = Isla.Interpreter.resolve(unresolvedVal, env);
+    if (val !== undefined) {
       if(Isla.Utils.type(val) === "String") {
         description = "'" + val + "'";
       } else {
