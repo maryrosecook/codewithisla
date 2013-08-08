@@ -88,12 +88,7 @@
   };
 
   var getLineHelp = function(line, envStore) {
-    var node = codeAnalyzer.expression(line);
-    try {
-      return expressionDescriber.describe(node, envStore.latest());
-    } catch (e) {
-      return e.message;
-    }
+    return expressionDescriber.describe(line, envStore.latest());
   };
 
   exports.TextHelper = TextHelper;

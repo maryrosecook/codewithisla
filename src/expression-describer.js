@@ -12,24 +12,27 @@
     codeAnalyzer = window.codeAnalyzer;
   }
 
-  // returns full reference as str - 'age' or 'mary age'
-  var getReferenceStr = function(node, env) {
-    var refId = Isla.Interpreter.evaluateValue(node, env).ref;
-    if (Isla.Utils.type(refId) === "String") {
-      return refId;
-    } else {
-      return _.reduce(refId, function(a, x) {
-        return a + " " + x;
-      });
-    }
+  // returns var name as str - 'age' or 'mary age'
+  var getVariableNameStr = function(node, env) {
+    return _.reduce(Isla.Parser.extract(node, "variable"), function(a, x) {
+      return a + x.c + " ";
+    }, "").slice(0, -1);
   };
 
-  // returns literal if literal or ref if variable
+  // returns literal if literal or var name if variable
   var getValueStr = function(node, env) {
     if (node.c[0].tag === "literal") { // print actual value
       return codeAnalyzer.getCode(node);
     } else {
-      return getReferenceStr(node.c[0], env);
+      return getVariableNameStr(node.c[0], env);
+    }
+  };
+
+  var errorMessage = function(line, env) {
+    try {
+      Isla.Interpreter.interpret(line, env.clone());
+    } catch (e) {
+      return e.message;
     }
   };
 
@@ -49,12 +52,16 @@
     .when("value_assignment", function(line, env) {
       var node = codeAnalyzer.expression(line);
       var assigneeNode = node.c[0].c[0];
-      return
+      return errorMessage(line, env) ||
         getVariableNameStr(assigneeNode, env) + " is now " +
         getValueStr(node.c[2], env) + ".";
     })
 
     .when("list_assignment", function(line, env) {
+      var error = errorMessage(line, env);
+      if (error !== undefined) {
+        return error;
+      } else {
         var node = codeAnalyzer.expression(line);
         var listNode = node.c[3].c[0];
         var listName = getVariableNameStr(listNode, env);
@@ -70,11 +77,16 @@
     })
 
     .when("invocation", function(line, env) {
+      var error = errorMessage(line, env);
+      if (error !== undefined) {
+        return error;
+      } else {
         var node = codeAnalyzer.expression(line);
         var fnNameNode = Isla.Parser.extract(node, "invocation", 0);
         var fn = Isla.Interpreter.evaluateValue(fnNameNode, env);
         var paramValue = getValueStr(node.c[1], env);
         return fn.description(paramValue);
+      }
     })
 
   var expressionDescriber = {
