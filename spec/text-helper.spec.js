@@ -1,4 +1,5 @@
 var TextHelper = require('../src/text-helper').TextHelper;
+var library = require('../node_modules/isla/src/library').Library;
 
 // simple terminal w no padding
 var term = function(text) {
@@ -12,8 +13,10 @@ var term = function(text) {
 };
 
 var envStore = function(ctx) {
+  var env = library.getInitialEnv();
+  env.ctx = ctx;
   return {
-    latest: function() { return { ctx:ctx }; }
+    latest: function() { return env; }
   };
 };
 
