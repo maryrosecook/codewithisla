@@ -90,4 +90,16 @@ describe('EnvStore', function() {
       expect(e.latestCommitted()).toEqual({ a:1 });
     });
   });
+
+  describe('reference preservation', function() {
+    it('should not preserve refs when write env', function() {
+      var originalEnv = { a:{} };
+      originalEnv.b = originalEnv.a;
+      expect(originalEnv.a === originalEnv.b).toEqual(true);
+      e.write({ event:"temp", env:originalEnv });
+      e.write({ event:"commit" });
+      var extendedEnv = e.latest();
+      expect(extendedEnv.a !== extendedEnv.b).toEqual(true);
+    });
+  });
 });
