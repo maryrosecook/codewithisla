@@ -1,19 +1,19 @@
 ;(function(exports) {
-  var _, Utils, EnvStore;
+  var _, EnvStore, Isla;
   if(typeof module !== 'undefined' && module.exports) { // node
     _ = require("Underscore");
-    Utils = require('../node_modules/isla/src/utils.js').Utils;
     EnvStore = require('./env-store.js').EnvStore;
+    Isla = require('../node_modules/isla/src/isla.js').Isla;
   } else { // browser
     _ = window._;
-    Utils = window.Isla.Utils;
     EnvStore = window.EnvStore;
+    Isla = window.Isla;
   }
 
   demoUtils = {};
 
   demoUtils.random = function(guide) {
-    if (Utils.type(guide) === "Object") {
+    if (Isla.Utils.type(guide) === "Object") {
       var keys = _.keys(guide);
       return keys[Math.floor(Math.random() * keys.length)];
     } else {
@@ -47,7 +47,7 @@
   };
 
   demoUtils.edit = function(obj, removals) {
-    var ret = EnvStore.extend(true, {}, obj);
+    var ret = Isla.Library.clone(obj);
     for (var i = 0; i < removals.length; i++) {
       delete ret[removals[i]];
     }

@@ -1,11 +1,13 @@
 ;(function(exports) {
-  var EnvStore, demoUtils;
+  var EnvStore, demoUtils, Isla;
   if(typeof module !== 'undefined' && module.exports) { // node
     EnvStore = require('../env-store.js').EnvStore;
     demoUtils = require('../demo-utils.js').demoUtils;
+    Isla = require('../../node_modules/isla/src/isla.js').Isla;
   } else { // browser
     EnvStore = window.EnvStore;
     demoUtils = window.demoUtils;
+    Isla = window.Isla;
   }
 
   function Planets(canvasCtx, demoTalker) {
