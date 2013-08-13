@@ -72,34 +72,30 @@
   // sets up cb to take latest Isla ctx and make draw ops from objects
   var setupCtxProcessing = function(demoTalker, demo) {
     demoTalker.on(demo, "isla:ctx:new", function(ctx) {
-      // NB: ctx is unresolved so will not wk for complex assocs
-      var retCtx = EnvStore.extend(true, {}, ctx);
-
-      retCtx = order(retCtx);
+      var ctx = order(ctx);
       var operations = [];
-      for (var i in retCtx) {
-        if (retCtx[i]._meta !== undefined) {
-          var type = retCtx[i]._meta.type;
+      for (var i in ctx) {
+        if (ctx[i]._meta !== undefined) {
+          var type = ctx[i]._meta.type;
           if (shapes[type] !== undefined) {
-            retCtx[i] = shapes[type].defaults(demo.canvasCtx, retCtx[i]);
-            operations.push(makeOperation(demo.canvasCtx, retCtx[i], i));
+            ctx[i] = shapes[type].defaults(demo.canvasCtx, ctx[i]);
+            operations.push(makeOperation(demo.canvasCtx, ctx[i], i));
           }
         }
       }
 
       demo.operations(operations);
-      demoTalker.emit("demo:ctx:new", retCtx);
+      demoTalker.emit("demo:ctx:new", ctx);
     });
   };
 
   // mark new ctx entry w order (can only be one, max)
   var order = function(ctx) {
-    var retCtx = EnvStore.extend(true, {}, ctx);
-    var newElement = _.find(retCtx, function(x) {
+    var newElement = _.find(ctx, function(x) {
       return x._meta !== undefined && x._meta.order === undefined;
     });
 
-    var lastCtxElement = _.max(retCtx, function(x) {
+    var lastCtxElement = _.max(ctx, function(x) {
       return x._meta !== undefined ? x._meta.order : undefined;
     });
 
@@ -110,7 +106,7 @@
         newElement._meta.order = lastCtxElement._meta.order + 1;
       }
     }
-    return retCtx;
+    return ctx;
   };
 
   var setupHelp = function(demoTalker, demo) {
@@ -163,7 +159,7 @@
   };
 
   var basicDefaults = function(canvasCtx, obj) {
-    var retObj = EnvStore.extend(true, {}, obj);
+    var retObj = obj;
     retObj.color = retObj.color || demoUtils.random(demoUtils.COLORS);
     retObj._x = retObj._x || demoUtils.random(canvasCtx.canvas.width);
     retObj._y = retObj._y || demoUtils.random(canvasCtx.canvas.height);
@@ -196,7 +192,7 @@
   };
 
   var polygonDefaults = function(canvasCtx, obj, polyConfig) {
-    var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
+    var retObj = basicDefaults(canvasCtx, obj);
     retObj.size = retObj.size || demoUtils.random(SIZES);
     retObj._meta.sides = polyConfig.sides;
     retObj._meta.rot = polyConfig.rot;
@@ -218,7 +214,7 @@
     },
 
     defaults: function(canvasCtx, obj) {
-      var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
+      var retObj = basicDefaults(canvasCtx, obj);
       retObj.size = retObj.size || demoUtils.random(SIZES);
       return retObj;
     }
@@ -239,7 +235,7 @@
     },
 
     defaults: function(canvasCtx, obj) {
-      var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
+      var retObj = basicDefaults(canvasCtx, obj);
       retObj.width = retObj.width || demoUtils.random(SIZES);
       retObj.height = retObj.height || demoUtils.random(SIZES);
       return retObj;
@@ -260,7 +256,7 @@
     },
 
     defaults: function(canvasCtx, obj) {
-      var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
+      var retObj = basicDefaults(canvasCtx, obj);
       retObj.size = retObj.size || demoUtils.random(SIZES);
       return retObj;
     }
@@ -287,7 +283,7 @@
     },
 
     defaults: function(canvasCtx, obj) {
-      var retObj = basicDefaults(canvasCtx, EnvStore.extend(true, {}, obj));
+      var retObj = basicDefaults(canvasCtx, obj);
       retObj.size = retObj.size || demoUtils.random(SIZES);
       return retObj;
     }

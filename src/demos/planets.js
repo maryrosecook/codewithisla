@@ -73,16 +73,15 @@
     // sets up cb to take latest Isla ctx, process planets and issue update
     demoTalker.on(this, "isla:ctx:new", function(ctx) {
       try {
-        var retCtx = EnvStore.extend(true, {}, ctx); // ctx unres, refs no wk
         var gotStar = isThereAlreadyAStar();
-        for (var i in retCtx) {
-          if (demoUtils.isIslaType(retCtx[i], "planet")) {
-            retCtx[i] = planetDefaults(canvasCtx, retCtx[i]);
-          } else if (demoUtils.isIslaType(retCtx[i], "star")) {
-            retCtx[i] = starDefaults(canvasCtx, retCtx[i], gotStar);
+        for (var i in ctx) {
+          if (demoUtils.isIslaType(ctx[i], "planet")) {
+            ctx[i] = planetDefaults(canvasCtx, ctx[i]);
+          } else if (demoUtils.isIslaType(ctx[i], "star")) {
+            ctx[i] = starDefaults(canvasCtx, ctx[i], gotStar);
           }
         }
-        currentCtx(retCtx);
+        currentCtx(ctx);
       } catch(e) {
         console.log(e.message);
         throw e;
@@ -172,9 +171,8 @@
     }
 
     // apply m to speed, and move
-    var retCtx = EnvStore.extend(true, {}, ctx); // ctx unres, refs won't wk
     for (var i = 0; i < m.length; i++) {
-      var b = retCtx[m[i].bodyId];
+      var b = ctx[m[i].bodyId];
 
       b._xSpeed = (pf(b._xSpeed)) + m[i].vec.x;
       b._ySpeed = (pf(b._ySpeed)) + m[i].vec.y;
@@ -184,9 +182,9 @@
     }
 
     // to string all vals for Isla
-    for (var i in retCtx) {
-      if (demoUtils.isIslaType(retCtx[i], "planet")) {
-        var b = retCtx[i];
+    for (var i in ctx) {
+      if (demoUtils.isIslaType(ctx[i], "planet")) {
+        var b = ctx[i];
         b._xSpeed = b._xSpeed.toString();
         b._ySpeed = b._ySpeed.toString();
         b._x = b._x.toString();
@@ -194,7 +192,7 @@
       }
     }
 
-    return retCtx;
+    return ctx;
   };
 
   var drawBody = function(canvasCtx, body, indicate) {
@@ -215,7 +213,7 @@
   var setupHelp = function(demoTalker, demo) {
     demoTalker.on(this,  "isla:mouse:mouseover", function(data) {
       if (data.thing === "token" && data.syntaxNode.syntax === "variable") {
-        var indications = EnvStore.extend(true, {}, demo.indications());
+        var indications = Isla.Library.clone(demo.indications());
         indications[data.syntaxNode.code] = true;
         demo.indications(indications);
       }
@@ -258,7 +256,7 @@
   };
 
   var planetDefaults = function(canvasCtx, planet) {
-    var retPlanet = EnvStore.extend(true, {}, planet);
+    var retPlanet = planet;
     retPlanet.size = retPlanet.size ||
       demoUtils.random(demoUtils.edit(SIZES, ["huge"]));
     retPlanet.color = retPlanet.color ||
@@ -276,7 +274,7 @@
   };
 
   var starDefaults = function(canvasCtx, star, gotStar) {
-    var retStar = EnvStore.extend(true, {}, star);
+    var retStar = star;
     retStar.size = retStar.size || "huge";
     retStar.color = retStar.color || "yellow";
     retStar.density = retStar.density || 'high';

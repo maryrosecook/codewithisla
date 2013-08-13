@@ -9,11 +9,11 @@
       var envStore = new EnvStore();
       envStore.write({ event:"temp", env:Isla.Library.getInitialEnv() });
       envStore.write({ event:"commit" });
-      demoTalker.emit("isla:ctx:new", envStore.latestCommitted().ctx);
+      demoTalker.emit("isla:ctx:new", envStore.latestCommitted().clone().ctx);
       demoTalker.on(this, "demo:ctx:new", function(ctx) {
         var env = Isla.Library.getInitialEnv();
         env.ctx = ctx;
-        envStore.write({ event:"temp", env: env });
+        envStore.write({ event:"temp", env: env.clone() });
         envStore.write({ event:"commit" });
       });
 
