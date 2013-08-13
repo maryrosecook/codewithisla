@@ -21,7 +21,7 @@ describe('EnvStore', function() {
 
     it('should clone env committed', function() {
       var env = { a:1 };
-      e.write({ event:"temp", env:{ a:1 } });
+      e.write({ event:"temp", env:env });
       e.write({ event:"commit" });
       expect(e.latest()).toEqual({ a:1 }); // added it
       expect(e.latest() !== env).toEqual(true);
