@@ -127,7 +127,7 @@ describe('EnvStore', function() {
       e.write({ event:"temp", env:originalEnv });
       e.write({ event:"commit" });
       var extendedEnv = e.latest();
-      expect(extendedEnv.a !== extendedEnv.b).toEqual(true);
+      expect(extendedEnv.a === extendedEnv.b).toEqual(true);
     });
   });
 });
