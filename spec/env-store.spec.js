@@ -1,4 +1,5 @@
 var EnvStore = require('../src/env-store').EnvStore;
+var library = require('../node_modules/isla/src/library').Library;
 
 describe('EnvStore', function() {
   var e;
@@ -14,24 +15,29 @@ describe('EnvStore', function() {
     });
 
     it('should commit temp on commit event', function() {
-      e.write({ event:"temp", env:{ a:1 } });
+      var env = library.getInitialEnv();
+      env.ctx.a = 1;
+      e.write({ event:"temp", env:env });
       e.write({ event:"commit" });
-      expect(e.latest()).toEqual({ a:1 });
+      expect(e.latest()).toEqual(env);
     });
 
     it('should clone env committed', function() {
-      var env = { a:1 };
+      var env = library.getInitialEnv();
+      env.ctx.a = 1;
       e.write({ event:"temp", env:env });
       e.write({ event:"commit" });
-      expect(e.latest()).toEqual({ a:1 }); // added it
+      expect(e.latest()).toEqual(env); // added it
       expect(e.latest() !== env).toEqual(true);
     });
   });
 
   describe('temp', function() {
     it('should add an env on temp event', function() {
-      e.write({ event:"temp", env:{ a:1 } });
-      expect(e.latest()).toEqual({ a:1 });
+      var env = library.getInitialEnv();
+      env.ctx.a = 1;
+      e.write({ event:"temp", env:env });
+      expect(e.latest()).toEqual(env);
     });
 
     it('should reject undefined and null envs', function() {
@@ -45,55 +51,77 @@ describe('EnvStore', function() {
     });
 
     it('should clone temp env', function() {
-      var env = { a:1 };
+      var env = library.getInitialEnv();
+      env.ctx.a = 1;
       e.write({ event:"temp", env:env });
-      expect(e.latest()).toEqual({ a:1 }); // added it
+      expect(e.latest()).toEqual(env); // added it
       expect(e.latest() !== env).toEqual(true);
     });
 
     it('should overwrite temp', function() {
-      e.write({ event:"temp", env:{ a:1 } });
-      e.write({ event:"temp", env:{ b:2 } });
-      expect(e.latest()).toEqual({ b:2 });
+      var envA = library.getInitialEnv();
+      envA.ctx.a = 1;
+      var envB = library.getInitialEnv();
+      envB.ctx.b = 2;
+      e.write({ event:"temp", env:envA });
+      e.write({ event:"temp", env:envB });
+      expect(e.latest()).toEqual(envB);
     });
   });
 
   describe('latest', function() {
     it('should return temp if that was latest added', function() {
-      e.write({ event:"temp", env:{ a:1 } });
+      var envA = library.getInitialEnv();
+      envA.ctx.a = 1;
+      var envB = library.getInitialEnv();
+      envB.ctx.b = 2;
+      e.write({ event:"temp", env:envA });
       e.write({ event:"commit" });
-      e.write({ event:"temp", env:{ b:2 } });
-      expect(e.latest()).toEqual({ b:2 });
+      e.write({ event:"temp", env:envB });
+      expect(e.latest()).toEqual(envB);
     });
 
     it('should return committed if no temp', function() {
-      e.write({ event:"temp", env:{ a:1 } });
+      var envA = library.getInitialEnv();
+      envA.ctx.a = 1;
+      e.write({ event:"temp", env:envA });
       e.write({ event:"commit" });
-      expect(e.latest()).toEqual({ a:1 });
+      expect(e.latest()).toEqual(envA);
     });
   });
 
   describe('latestCommitted', function() {
     it('should return latest committed', function() {
-      e.write({ event:"temp", env:{ a:1 } });
+      var envA = library.getInitialEnv();
+      envA.ctx.a = 1;
+      var envB = library.getInitialEnv();
+      envB.ctx.b = 2;
+
+      e.write({ event:"temp", env:envA });
       e.write({ event:"commit" });
-      expect(e.latestCommitted()).toEqual({ a:1 });
-      e.write({ event:"temp", env:{ b:2 } });
+      expect(e.latestCommitted()).toEqual(envA);
+      e.write({ event:"temp", env:envB });
       e.write({ event:"commit" });
-      expect(e.latestCommitted()).toEqual({ b:2 });
+      expect(e.latestCommitted()).toEqual(envB);
     });
 
     it('should return latest committed even if newer temp', function() {
-      e.write({ event:"temp", env:{ a:1 } });
+      var envA = library.getInitialEnv();
+      envA.ctx.a = 1;
+      var envB = library.getInitialEnv();
+      envB.ctx.b = 2;
+
+      e.write({ event:"temp", env:envA });
       e.write({ event:"commit" });
-      e.write({ event:"temp", env:{ b:2 } });
-      expect(e.latestCommitted()).toEqual({ a:1 });
+      e.write({ event:"temp", env:envB });
+      expect(e.latestCommitted()).toEqual(envA);
     });
   });
 
   describe('reference preservation', function() {
-    it('should not preserve refs when write env', function() {
-      var originalEnv = { a:{} };
+    it('should preserve refs when write env', function() {
+      var originalEnv = library.getInitialEnv();
+      originalEnv.a = {};
       originalEnv.b = originalEnv.a;
       expect(originalEnv.a === originalEnv.b).toEqual(true);
       e.write({ event:"temp", env:originalEnv });
